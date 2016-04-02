@@ -27,6 +27,43 @@ int		expose_hook(t_env *e)
 	return (0);
 }
 
+int		julia_interact(int keycode, t_env *e)
+{
+	keycode == 124 ? e->esc_right += 1 : keycode;
+	keycode == 8 ? e->c1 += 0.1 : keycode;
+	keycode == 9 ? e->c2 += 0.1 : keycode;
+	keycode == 11 ? e->c1 -= 0.1 : keycode;
+	keycode == 7 ? e->c2 -= 0.1 : keycode;
+	keycode == 123 ? e->esc_right -= 1 : keycode;
+	keycode == 125 ? e->esc_up += 1 : keycode;
+	keycode == 126 ? e->esc_up -= 1 : keycode;
+	keycode == 24 ? e->it_max += 1 : keycode;
+/*	keycode == 1 ? e->start = 1 : keycode;
+	keycode == 35 ? e->start = 0 : keycode;
+*/	keycode == 27 ? e->zoom -= 1 : keycode;
+	keycode == 24 ? e->zoom += 1 : keycode;
+	keycode == 49 ? e_initialize(e) : keycode;
+	return (0);
+}
+
+int		mandelterract(int keycode, t_env *e)
+{
+	keycode == 124 ? e->esc_right += 10 : keycode;
+	keycode == 8 ? e->c1 += 0.1 : keycode;
+	keycode == 9 ? e->c2 += 0.1 : keycode;
+	keycode == 11 ? e->c1 -= 0.1 : keycode;
+	keycode == 7 ? e->c2 -= 0.1 : keycode;
+	keycode == 123 ? e->esc_right -= 10 : keycode;
+	keycode == 125 ? e->esc_up += 10 : keycode;
+	keycode == 126 ? e->esc_up -= 10 : keycode;
+	keycode == 24 ? e->it_max += 10 : keycode;
+/*	keycode == 1 ? e->start = 1 : keycode;
+	keycode == 35 ? e->start = 0 : keycode;
+*/	keycode == 27 ? e->zoom -= 10 : keycode;
+	keycode == 24 ? e->zoom += 10 : keycode;
+	keycode == 49 ? e_initialize(e) : keycode;
+	return (0);
+}
 int		key_interact(int keycode, t_env *e)
 {
 	if (keycode == 53)
@@ -35,22 +72,10 @@ int		key_interact(int keycode, t_env *e)
 		exit(0);
 	}
 //	printf("keycode = %d\n", keycode);
-/*	keycode == 69 ? e->height += 1 : keycode;
-	keycode == 78 ? e->height -= 1 : keycode;
-*/	keycode == 124 ? e->esc_right += 10 : keycode;
-	keycode == 8 ? e->c1 += 0.1 : keycode;
-	keycode == 9 ? e->c2 += 0.1 : keycode;
-	keycode == 11 ? e->c1 -= 0.1 : keycode;
-	keycode == 7 ? e->c2 -= 0.1 : keycode;
-	keycode == 123 ? e->esc_right -= 10 : keycode;
-	keycode == 125 ? e->esc_up += 10 : keycode;
-	keycode == 126 ? e->esc_up -= 10 : keycode;
-	keycode == 24 ? e->it_max += 1 : keycode;
-/*	keycode == 1 ? e->start = 1 : keycode;
-	keycode == 35 ? e->start = 0 : keycode;
-*/	keycode == 27 ? e->zoom -= 10 : keycode;
-	keycode == 24 ? e->zoom += 10 : keycode;
-	keycode == 49 ? e_initialize(e) : keycode;
+	if (e->frac == 'J')
+		julia_interact(keycode, e);
+	else if (e->frac == 'M')
+		mandelterract(keycode, e);
 	look_put(e);
 	return (0);
 }
