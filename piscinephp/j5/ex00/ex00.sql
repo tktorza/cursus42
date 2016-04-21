@@ -1,0 +1,1 @@
+CREATE DATABASE db_tktorza CHARACTER SET 'utf8';

@@ -1,0 +1,68 @@
+<!-- *********************************************************************** -->
+<!--                                                                         -->
+<!--                                                      :::      ::::::::  -->
+<!-- doft.html                                          :+:      :+:    :+:  -->
+<!--                                                  +:+ +:+         +:+    -->
+<!-- By: tktorza <marvin@42.fr>                     +#+  +:+       +#+       -->
+<!--                                              +#+#+#+#+#+   +#+          -->
+<!-- Created: 2016/04/05 20:28:06 by tktorza           #+#    #+#            -->
+<!-- Updated: 2016/04/05 20:30:00 by tktorza          ###   ########.fr      -->
+<!--                                                                         -->
+<!-- *********************************************************************** -->
+
+<!DOCTYPE html>
+<HTML>
+	<META charset="UTF-8" />
+	<HEAD>
+		<TITLE>Day of the 42</TITLE>
+		<LINK rel="stylesheet" href="doft.css" />
+	</HEAD>
+	<BODY>
+		<BR />
+		<DIV class="block header">
+			<IMG id="doft" SRC="./resources/day_of_the_42.png" width="400" />
+			<IMG id="loupe" title="Loupe" SRC="./resources/loupe.png" width="200" />
+			<DIV id="icone">
+				<A href="http://www.disney.com" ><IMG title="Recommencer au début" SRC="./resources/reload.png" id="reload" /></A>
+				<A href="http://www.relaischateaux.com"> <IMG title="Déconnecter" SRC="./resources/close.gif" id="close" /></A>
+			</DIV>
+		</DIV>
+		<BR />
+		<DIV class="global">
+			<DIV class="block left">
+				<IMG alt="Avencer"  title="Avencer" SRC="./resources/arrow.png" /> <BR />
+				<IMG alt="Prendre" title="Prendre" SRC="./resources/main.png" /> <BR />
+				<IMG alt="Regarder"  title="Regarder" id="oeil" SRC="./resources/oeil.png" /> <BR />
+				<IMG alt="Utiliser"  title="Utiliser" SRC="./resources/outil.png" /> <BR />
+				<IMG alt="Parler" title="Parler" SRC="./resources/chat-icon.png" />
+			</DIV>
+			<DIV class="block center">
+				<IMG id="cluster" title="Cluster" SRC="./resources/cluster.jpg" usemap="#panneau" />
+				<MAP name="panneau">
+				<AREA shape="rect" coords="320, 320, 480, 550" href="http://www.ikea.com">
+				<AREA shape="rect" coords="800, 300, 1010, 500" href="http://www.apple.com">
+			</DIV>
+			<DIV class="block right">
+				<IMG id="cluster" title="Book" SRC="./resources/book.png" /> <BR />
+				<IMG id="cluster" title="Towel" SRC="./resources/towel.png" /> <BR />
+				<DIV id="brick" title="Brick">
+				</DIV>
+			</DIV>
+				<BR />
+				<BR />
+				<BR />
+				<BR />
+			<DIV class="ban">
+				<P>Vous <FONT size=6>entrez</FONT> alors dans une grande piece remplie <BR / ><Span id="ordi"> d'ordinateurs</SPAN>...
+				<BR />- Bonjour vous êtes nouveau ici ?</P>
+				<FORM id="chat-box" action="demo_form.asp">
+					<INPUT type="text">
+					<INPUT type="submit" value="Répondre">
+				</FORM>
+				<BR />
+				<BR />
+			</DIV>
+		</DIV>
+		<BR />
+	</BODY>
+</HTML>

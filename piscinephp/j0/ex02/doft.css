@@ -1,0 +1,144 @@
+BODY
+{
+	background-color: #424242;
+}
+
+.block
+{
+	border-radius: 10px; 
+	box-shadow: 10px 10px 10px black;
+	background-color: #909090;
+}
+
+.header
+{
+	width:80%;
+	margin:auto;
+}
+
+.global
+{
+	width:75%;
+	margin: auto;
+	position: relative;
+
+}
+
+#brick
+{
+	background-image: url(./resources/brick.jpg);
+	width: 50%;
+	height: 100px;
+	margin:auto;
+}
+
+.right IMG
+{
+	width: 100px;
+	height: 100px;
+}
+
+.right
+{
+	text-align: center;
+	min-height: 500px;
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 12%;
+}
+
+.left IMG
+{
+	width: 100px;
+	height: 100px;
+}
+
+.left
+{
+	min-height: 500px;
+	text-align: center;
+	position: absolute;
+	left: 0;
+	width: 12%;
+}
+
+.center
+{
+	text-align: center;
+	width: 70%;
+	margin: auto;
+	min-height: 600px;
+}
+
+#loupe
+{
+	position: absolute;
+	right: 13%;
+	top: 44px;
+}
+
+#oeil
+{
+	border: 4px solid red; 
+	border-radius: 10px;
+}
+
+#doft
+{
+	margin: 5px;
+}
+
+.ban FONT
+{
+	font-family: serif;
+}
+.ban P
+{
+	margin: 10px;
+	font-family: sans-serif;
+}
+
+.ban
+{
+	background: #58FA82;
+	border-radius: 10px;
+	width: 40%;
+	position: absolute;
+	top: 540px;
+	left: -50px;
+}
+
+.ban INPUT[type="text"]
+{
+	margin-left: 10px;
+	width: 60%;
+}
+
+#ordi
+{
+	text-shadow: 4px 4px 6px red;
+}
+
+#icone
+{
+	position: absolute;
+	right: 11%;
+	top: 28px;
+}
+
+#icone IMG
+{
+	width: 20px;
+	display: block;
+}
+#cluster
+{
+	margin: 10px;
+}
+
+#close
+{
+	position:relative;
+	top: 70px;
+}

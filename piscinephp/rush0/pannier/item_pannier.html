@@ -1,0 +1,13 @@
+<tr>
+	<td class="article">
+		<img class="img_item" src=<?php echo '"../img/'.$value['img'].'"'; ?> alt="img" title="img"></img>
+		<p class="name_item"><?php echo $value['name']; ?></p>
+		<p class="description_item"><?php echo $value['description']; ?></p>
+		<p class="price_item"><?php echo $value['price'].'$'; ?></p>
+	</td>
+	<td class="button">
+		<form method="post" action="../pannier/del_pannier.php?val=<?php echo $value['name']; ?>">
+			<input id="bouton" value="Retirer du pannier" type="submit" name="pannier" />
+		</form>
+	</td>
+</tr>

@@ -1,0 +1,20 @@
+h1 {color:red;}
+td {line-height:80%; width:5%}
+table {font-size:1vw;}
+.group {border:0px;}
+.period {border:0px;}
+.num {text-align:left;}
+.symb {text-align:center;}
+.mass {text-align:right;}
+.noble {background: #7FFFD4}
+.hallo {background: #FFD700}
+.alc {background:pink}
+.alc-t {background:purple}
+.nmet {background: green;}
+.acti {background: #7B68EE}
+.lant {background: #4B0082}
+.met {background: #C0C0C0}
+.poormet {background: #E6E6FA}
+.nmet {background: #4169E1}
+.mloid {background: #66CDAA}
+#title {font-size:3vw;}

@@ -1,0 +1,25 @@
+<body>
+		<h1>Modif/del item</h1>
+		<br />
+		<form method="post">
+			name: <select name="item" size="1">
+				<option>Choisir Item
+				<?php include('list_item.php'); ?>
+			</select>
+			<input id="bouton" value="rechercher" type="submit" name="submit" />
+		</form>
+		<br />
+		<form method="post" action="modif_item.php">
+			name: <input type="text" name="name" value="<?php echo selectioned_item($_POST['item'], $data, 'name'); ?>" />
+		<br />
+			description: <input type="text" name="description" value ="<?php echo selectioned_item($_POST['item'], $data, 'description'); ?>" />
+		<br />
+			Price: <input type="text" name="price" value="<?php echo selectioned_item($_POST['item'], $data, 'price'); ?>" />
+		<br />
+			img: <input type="text" name="img" value="<?php echo selectioned_item($_POST['item'], $data, 'img'); ?>" />
+		<br />
+		<input id="bouton" value="MODIF" type="submit" name="modif" />
+		<input id="bouton" value="DELETE" type="submit" name="delete" />
+		</form>
+		<HR size="3%" align=center width="95%">
+</body>

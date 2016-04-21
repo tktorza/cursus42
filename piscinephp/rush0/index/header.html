@@ -1,0 +1,29 @@
+<header>
+	<div class="rectangle_head" id="header">
+		<h1 id="title">E-SLAVE</h1>
+	</div>
+	<div class="rectangle_user" id="user">
+		<?php if ($_SESSION['log'] == ""){ ?>
+		<form method="post" action="../users/login.php">
+			<p id="user_id"> Identifiant </p><center><input id="user_id_txtbox" type="text" name="login" value="" /></center>
+			<p id="user_pw"> Mot de passe: </p><center><input id="user_mdp_txtbox" type="password" name="passwd" value ="" /></center></br>
+			<center><input id="bouton" value="Connexion" type="submit" name="co" /></center>
+		</form>
+			<a id="new_user" href="../users/create.html" title="Create Passwd">inscription</a></br>
+			<a id="mdp" href="../users/modif.html" title="Change Passwd">Changer de mots de passe</a></br>
+			<a id="pannier_unconnect" href="../pannier/pannier.php" title="pannier">Panier</a>
+		<?php }if($_SESSION['log'] != ""){ ?>
+			<p id="user_co">Bonjour <?php echo $_SESSION['log'].'...'; ?></p>
+				<div id="panier">
+					<a href="../pannier/pannier.php"><img src="../img/panier.png" height="80" alt="panier" title="panier"></img></a>
+					<p>Mon panier</p>
+				</div>
+			<form method="post" action="../users/logout.php">
+				<center><input id="bouton" value="Deconnexion" type="submit" name="deco" /></center>
+			</form>
+		<?php }; ?>
+	</div>
+	<?php if($_SESSION['droit'] == 1){ ?>
+		<a href="../root/admin.php" title="admin">administration</a></br>
+		<?php } ?>
+<header>

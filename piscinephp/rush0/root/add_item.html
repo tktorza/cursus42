@@ -1,0 +1,27 @@
+<body>
+		<h1>Add item</h1>
+		<form method="post" action="add_item.php">
+			name: <input type="text" name="name" value="" />
+		<br />
+			description: <input type="text" name="description" value ="" />
+		<br />
+			Price: <input type="text" name="price" value="" />
+		<br />
+			img: <input type="text" name="img" value="" />
+		<br />
+		cat1: <select name="cat1" size="1">
+		<option>Choisir cat
+		<?php include('list_cat.php'); ?>
+		</select></br>
+		cat2: <select name="cat2" size="1">
+		<option>Choisir cat
+		<?php include('list_cat.php'); ?>
+		</select></br>
+		cat3: <select name="cat3" size="1">
+		<option>Choisir cat
+		<?php include('list_cat.php'); ?>
+		</select></br>
+		<input id="bouton" value="ADD" type="submit" name="submit" />
+		</form>
+		<HR size="3%" align=center width="95%">
+</body>

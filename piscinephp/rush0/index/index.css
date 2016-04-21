@@ -1,0 +1,292 @@
+#title
+{
+	color: black;
+	font-size: 50px;
+	text-align: center;
+}
+#header
+{
+	top: 75px;
+	left: 10%;
+	width: 70%;
+	height: 100px;
+}
+#user
+{
+	top: 3%;
+	left: 75%;
+	width: 200px;
+	height: 200px;
+}
+#footer
+{
+	top: 60%;
+	left: 80%;
+	width: 200px;
+	height: 200px;
+}
+#user_id
+{
+	position:relative;
+	top: -10px;
+	text-align: center;
+}
+#user_id_txtbox
+{
+	position:relative;
+	top: -20px;
+}
+#user_pw
+{
+	position:relative;
+	top: -20px;
+	text-align: center;
+}
+#new_user
+{
+	position:relative;
+	margin-left: 65px;
+	top: -25px;
+	font-size: 15px;
+}
+#user_mdp_txtbox
+{
+	position: relative;
+	top: -20px;
+}
+#user_co
+{
+	text-align: center;
+}
+#mdp
+{
+	position:relative;
+	margin-left: 30px;
+	top: -25px;
+	font-size: 15px;
+}
+#panier
+{
+	position:relative;
+	margin-left: 55px;
+	margin-top: 20px;
+}
+#tot_price
+{
+	text-align: center;
+	font-size: 25px;
+}
+#pannier_unconnect
+{
+	position:relative;
+	margin-left: 70px;
+	top: -25px;
+	font-size: 15px;
+}
+#body
+{
+	top: 230px;
+	left: 10%;
+	width: 70%;
+	height: 70%;
+}
+#item
+{
+	position: relative;
+	top: 240px;
+	left: 10%;
+	width: 70%;
+	height: 10%;
+}
+input[name=deco]
+{
+	position: relative;
+	top: 0px;
+	width:90px;
+	font-size: 25px;
+}
+input[name=co]
+{
+	position: relative;
+	top: -25px;
+	width:90px;
+	height: 50px;
+	font-size: 25px;
+}
+.rectangle_body
+{
+	position:absolute;
+	border-radius:10px;
+	border-color: #000000;
+	border-width: 5px;
+	background: #f9f9f9;
+	box-shadow: 10px 10px 10px black;
+}
+.rectangle_head
+{
+	position:absolute;
+	border-radius:10px;
+	border-color: #000000;
+	border-width: 5px;
+	background: #f9f9f9;
+	box-shadow: 10px 10px 10px black;
+}
+.rectangle_item
+{
+	position:absolute;
+	border-radius:10px;
+	border-color: #000000;
+	border-width: 5px;
+	background: #a9a9a9;
+}
+.rectangle_user
+{
+	position:absolute;
+	border-radius:10px;
+	background: #18A55F;
+	box-shadow: 10px 10px 10px black;
+}
+.rectangle_footer
+{
+	position:absolute;
+	border-radius:10px;
+	background: #18A55F;
+	box-shadow: 10px 10px 10px black;
+}
+#menu-deroulant, #menu-deroulant li
+{
+	padding : 0;
+	margin : 0;
+	list-style : none;
+	line-height : 21px;
+	text-align : center;
+}
+#menu-deroulant
+{
+	position:absolute;
+	top: 200px;
+	left: 10%;
+	width: 70%;
+	font-weight: bold;
+	font-family: Arial;
+	font-size: 12px;
+}
+#menu-deroulant a
+{
+	display : block;
+	padding : 0;
+	background : #000;
+	color : #fff;
+	text-decoration : none;
+	width : 144px;
+}
+#menu-deroulant li
+{
+	float : left;
+	border-right : 1px solid #fff;
+}
+
+#menu-deroulant li ul
+{
+	position: absolute;
+	width: 144px;
+	left: -999em;
+}
+#menu-deroulant li ul ul
+{
+	margin: -22px 0 0 144px ;
+	border-left: 1px solid #fff;
+}
+#menu-deroulant a:hover
+{
+	color: #000;
+	background: #fff;
+}
+#menu-deroulant li:hover ul ul
+{
+	position: relative;
+	left: -999em;
+}
+
+#menu-deroulant li:hover ul, #menu-deroulant li li:hover ul
+{
+	left: auto;
+	padding : 0;
+	min-height: 0;
+}
+.img_item
+{
+	float: left;
+	margin: 0;
+	width: 30%;
+}
+.item_img
+{
+	position: absolute;
+	top: 10px;
+	left: 20px;
+}
+.item_name
+{
+	position: absolute;
+	width: 50vw;
+	top: -10px;
+	left: 50px;
+}
+.footer
+{
+	position: absolute;
+	bottom: 25px;
+	color: black;
+	right: 25px;
+	font-style: italic;
+	font-family: monospace;
+}
+table
+{
+	margin-top: 200px;
+	margin-left: 10%;
+	width: 70%;
+	height: 50%;
+	border-spacing: 5px;
+	background-color: #f5f5f5;
+}
+td
+{
+	width: 5%;
+	border: 2px solid white;
+}
+.article
+{
+	width:50%;
+}
+.name_item
+{
+	font-weight: bold;
+	position: relative;
+	font-size: 25px;
+	left: 20px;
+}
+.description_item
+{
+	text-align: left;
+	position: relative;
+	width: 70%;
+	margin-top: -25px;
+	margin-left: 70px;
+}
+.price_item
+{
+	position: relative;
+	top: -50px;
+	left: 50%;
+	font-size: 25px;
+}
+p
+{
+	font-family:monospace;
+}
+body
+{
+	background-color: #ffffff;
+}

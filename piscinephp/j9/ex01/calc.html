@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<meta Content-Type: text/html; charset=UTF-8>
+<head>
+    <title>Calc</title>
+    <style>
+
+    </style>
+    </head>
+
+<body bgcolor="pink">
+<table bgcolor="grey" >
+<tbody>
+  <tr>
+    <td colspan="3"><h1 align="center">Calc</h1></td>
+</tr>
+<tr>
+  <td>
+  <input type="text" id="first" name="first">
+</td>
+  <td>
+    <select name="operators" id="operators">
+    <option value="+">+</option>
+    <option value="-">-</option>
+    <option value="*">*</option>
+    <option value="/">/</option>
+    <option value="%">%</option>
+  </select>
+</td>
+<td>
+  <input type="text" id="second" name="second">
+</td>
+</tr>
+<tr>
+<td colspan="3" >
+  <input type="submit" value="Try me!" onclick="calcul()" >
+</td>
+</tr>
+</tbody>
+</table>
+  <script>
+
+  setInterval("alert('Please, use me...')", 30000);
+
+  function calcul(){
+    var a = document.getElementById('first').value;
+    var b = document.getElementById('second').value;
+    var ope = document.getElementById('operators').value;
+
+    if (parseInt(a) >= 0 && parseInt(b) >= 0)
+    {
+      if ((ope == '%' || ope == '/') && parseInt(b) == 0)
+        {
+          var err = "It’s over 9000!";
+          console.log(err);
+          alert(err);
+        }
+      else {
+        console.log(eval(a + ope + b));
+        alert(eval(a + ope + b));
+      }
+    }
+    else {
+      alert('Error :(');
+    }
+  }
+  </script>
+
+</body>
+
+</html>

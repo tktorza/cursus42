@@ -1,0 +1,13 @@
+<body>
+		<h1>del user</h1>
+		<br />
+		<form method="post" action="del_user.php">
+			login: <select name="login" size="1">
+				<option>choisir qui tuer
+				<?php include('list_user.php'); ?>
+			</select>
+		<br />
+			<input id="bouton" value="DELETE" type="submit" name="delete" />
+		</form>
+		<HR size="3%" align=center width="95%">
+</body>

@@ -1,0 +1,15 @@
+<body>
+		<h1>add/delete categorie</h1>
+		<br />
+		<form method="post" action="add_cat.php">
+			name: <select name="item" size="1">
+				<option>Choisir cat
+				<?php include('list_cat.php'); ?>
+			</select></br>
+			new: <input type="text" name="name" value="" />
+		<br />
+		<input id="bouton" value="ADD" type="submit" name="add" />
+		<input id="bouton" value="DELETE" type="submit" name="delete" />
+		</form>
+		<HR size="3%" align=center width="95%">
+</body>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Balloon</title>
+    <style>
+    #balloon{
+          background:red;
+          border-radius:50%;
+          width:200px;
+          height:200px;
+          }
+    </style>
+    </head>
+
+<body>
+  <div id="balloon" onclick="Color()" onmouseout="Reduce()">
+
+
+  </div>
+
+  <script>
+
+  var i = 0;
+  var val = 200;
+  var tab = new Array('red', 'green', 'blue');
+
+  function Reduce() {
+    if (val > 200)
+      val -= 5;
+    var string = val + "px";
+    if (i < 0)
+      i = 2;
+    else
+      i--;
+    document.getElementById('balloon').style.backgroundColor = tab[i % 3];
+    document.getElementById('balloon').style.width = string;
+    document.getElementById('balloon').style.height = string;
+
+  }
+
+  function Color() {
+
+
+    i++;
+    if (val >= 420)
+      val = 200;
+    else {
+      val += 10;
+    }
+    var s = val + "px"
+          document.getElementById('balloon').style.backgroundColor = tab[i % 3];
+          document.getElementById('balloon').style.width = s;
+          document.getElementById('balloon').style.height = s;
+  }
+  </script>
+
+</body>
+
+</html>
