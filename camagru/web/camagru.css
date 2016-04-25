@@ -14,12 +14,12 @@ border-radius: 10px;
 
 .fond{
 	font-size:1vw;
-	background-image: url("images/clound.jpg");
+	background-image: url("images/fond1.jpg");
 }
 
 .new{
 	font-size:1vw;
-	background-image: url("images/Cosmos06.jpg");
+	background-image: url("images/fondlog.jpg");
 }
 
 table {font-size:1vw;}
@@ -65,7 +65,17 @@ width: 50%;
 }
 
 .inscription {
+-moz-box-shadow: 5px 5px 5px 0px #9b9b9b;
+-webkit-box-shadow: 5px 5px 5px 0px #9b9b9b;
+-o-box-shadow: 5px 5px 5px 0px #9b9b9b;
+box-shadow: 5px 5px 5px 0px #9b9b9b;
+filter:progid:DXImageTransform.Microsoft.Shadow(color=#9b9b9b, Direction=134, Strength=5);
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
 	color: #59117B;
+	background-image: url("images/iphone1.jpg");
+	height:: 30%;
 	position: absolute;
 	left: 50%;
 	bottom: 20%;
