@@ -1,7 +1,7 @@
 	<main>
 	<SPAN class="test">
-			
-			
+
+
 		<table class="logun">
 			<tr>
 				<td>
@@ -9,20 +9,20 @@
 				</td><td></td>
 			</tr>
 			<tr>
-				<form type="post" action="users/login.php">
+				<form method="post" action="users/login.php">
 				<td>	<h2 class="pseudo">Login: </h2>
 			</td>
 					<td>
-			<input type="text" required placeholder="noname" id="login">
+			<input type="text" required placeholder="noname" name="login" id="login">
 </td>
 </tr>
 <tr><td>					<h2 class="pseudo">Password: </h2>
-		</td><td>			
-			<input type="password" id="passwd" required>
-			</td>	
+</td><td>
+			<input type="password" name="passwd" id="passwd" required>
+			</td>
 			</tr>
-			<tr><td>	
-			<input type="submit" value="login">
+			<tr><td>
+			<input type="submit" value="OK" name="submit" id="submit">
 </td></tr>				</form>
 		</table>
 		</span>

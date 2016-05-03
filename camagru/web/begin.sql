@@ -1,0 +1,9 @@
+CREATE DATABASE camagru ;
+CREATE TABLE camagru . users (
+	id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+	login VARCHAR(255) NOT NULL,
+	passwd VARCHAR(255),
+	email VARCHAR(255),
+	PRIMARY KEY (id)
+	);
+use camagru;

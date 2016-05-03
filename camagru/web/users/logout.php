@@ -1,4 +1,7 @@
 <?php
 session_start();
-	$_SESSION["loggued_on_user"] = "";
+	include_once('../PDO.class.php');
+	$users = new users();
+	$users->logout();
+	$users->redirect('../camagru.php');
 ?>

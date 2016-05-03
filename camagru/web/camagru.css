@@ -17,6 +17,10 @@ border-radius: 10px;
 	background-image: url("images/fond1.jpg");
 }
 
+.com{
+	color: green;
+	font-size:50%;
+}
 .new{
 	font-size:1vw;
 	background-image: url("images/fondlog.jpg");
