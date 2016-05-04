@@ -9,8 +9,8 @@
 		<?php if ($_SESSION["loggued_on_user"] == "") {
 				include('begin.php'); }
 			if ($_SESSION["loggued_on_user"] != ""){
-			include('principale.php');}
-			print_r($_SESSION);
+			include('main.php');}
+//			print_r($_SESSION);
 			include('footer.html');
 		?>
 

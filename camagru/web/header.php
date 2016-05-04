@@ -7,10 +7,10 @@
 			<td align="center">
 				<h1 class="title">Camagru</h1>
 			</td>
-			<td align="right">
+			<td align="center" class="infos">
 				<?php if($_SESSION['loggued_on_user'] != ""){ ?>
 
-					<p>Bonjour <?php echo $_SESSION['user_session'];?></p>
+					<p>Bonjour <?php echo $_SESSION['user_session'];?>
 					<form method="post" action="users/modif.html">
 						<input id="button" value="change password" type="submit">
 					</form>
@@ -21,6 +21,7 @@
 						<input id="button" value="delete profile" type="submit">
 					</form>
 					<?php }?>
+				</p>
 			</td>
 		</tr>
 		</table>

@@ -8,8 +8,19 @@ filter:progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=134, St
 -webkit-border-radius: 10px;
 border-radius: 10px;
 	background-color: #59117B;
-	width: 100%;
+	width: 98%;
 	height: 10%;
+}
+
+.webcam{
+	position: absolute;
+	width: 50%;
+	height: 70%;
+	left: 0.5%;
+	bottom: 5%;
+}
+.other{
+	width:10%;
 }
 
 .fond{
@@ -52,6 +63,12 @@ color: white;
 }
 .logo{
 	width: 20%;
+}
+
+.infos{
+	color: #E68600;
+	font-family: "Comic Sans MS", "Comic Sans", cursive;
+	font-size: 50%;
 }
 
 .title{

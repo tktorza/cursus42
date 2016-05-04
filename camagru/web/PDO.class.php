@@ -16,6 +16,16 @@
      die();
           }
         }
+      function start(){
+        $this->_db->query('use sql5118032');
+        $this->_db->query('CREATE TABLE users (
+            id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+            login VARCHAR(255) NOT NULL,
+            passwd VARCHAR(255),
+            email VARCHAR(255),
+            PRIMARY KEY (id)
+          )');
+      }
   }
   $dbase = new database();
 
@@ -30,11 +40,13 @@
     public function register($login, $passwd, $mail)
     {
       $pass_hash = hash("whirlpool", $passwd);
-      $control = $this->db->query('SELECT login FROM users WHERE login = \'' . $login . '\'');
+      $control = $this->db->prepare('SELECT login FROM users WHERE login = :login');
+      $control->execute(array(':login' => $login));
       $result = $control->fetchAll(PDO::FETCH_ASSOC);
       if (!$result)
         {
-        $this->db->query("INSERT INTO users VALUES (NULL, '$login', '$pass_hash', '$mail')");
+        $control = $this->db->prepare("INSERT INTO users VALUES (NULL, :login, :pass_hash, :mail)");
+        $control->execute(array(':login' => $login, ':pass_hash' => $pass_hash, ':mail' => $mail));
         mail("$mail", "INSCRIPTION REUSSIE", "Bonjour,\nVotre inscription au site Camagru s'est parfaitement deroulee.\nVotre login:" . "$login" . PHP_EOL . "Votre mot de pass :" . "$passwd" . "\nBienvenue de la part de toute l'equipe Camagru!");
         }
       else
@@ -45,7 +57,7 @@
       $base = $this->db->query('SELECT * FROM users');
       $new = $base->fetchAll(PDO::FETCH_ASSOC);
     foreach ($new as $value) {
-      if ($value['login'] == $login && hash("whirlpool", $passwd) == $value['passwd'])
+      if ($value['login'] === $login && hash("whirlpool", $passwd) === $value['passwd'])
       {
         $_SESSION['user_session'] = $login;
         return true;
@@ -56,15 +68,17 @@
   }
 
   function modif($login, $oldpw, $newpw){
-    $base = $this->db->query('SELECT * FROM users WHERE login = "' . $login . '"');
+    $base = $this->db->prepare('SELECT * FROM users WHERE login = :login');
     if ($base){
+    $base->execute(array(':login' => $login));
     $result = $base->fetchAll(PDO::FETCH_ASSOC);
     $passwdagain = hash("whirlpool", $newpw);
     if ($result)
     {
       if (hash("whirlpool", $oldpw) == $result[0]['passwd'])
       {
-         $this->db->query('UPDATE users SET passwd = \'' . $passwdagain . '\' WHERE login = \'' . $login . '\'');
+         $base = $this->db->prepare('UPDATE users SET passwd = :passwdagain WHERE login = :login');
+         $base->execute(array(':passwdagain' => $passwdagain, ':login' => $login));
          return true;
     }
   }}
@@ -72,7 +86,8 @@
 }
 
   function delete($login){
-    $result = $this->db->query('DELETE FROM users WHERE login = \'' . $login . '\'');
+    $result = $this->db->prepare('DELETE FROM users WHERE login = :login');
+    $result->execute(array(':login' => $login));
     return ($result);
   }
 
