@@ -12,6 +12,34 @@ border-radius: 10px;
 	height: 10%;
 }
 
+.tall{
+	width: 33%;
+}
+
+.item{
+	width: 40%;
+	position: absolute;
+	left:40%;
+	bottom: 55%;
+}
+
+.side{
+	-moz-box-shadow: 10px 10px 5px 0px #000000;
+-webkit-box-shadow: 10px 10px 5px 0px #000000;
+-o-box-shadow: 10px 10px 5px 0px #000000;
+box-shadow: 10px 10px 5px 0px #000000;
+filter:progid:DXImageTransform.Microsoft.Shadow(color=#000000, Direction=134, Strength=5);
+-moz-border-radius: 10px;
+-webkit-border-radius: 10px;
+border-radius: 10px;
+	background-color: #59117B;
+	position: absolute;
+	width: 20%;
+	height: 80%;
+	right: 1%;
+	bottom: 5%;
+}
+
 .webcam{
 	position: absolute;
 	width: 50%;
@@ -25,7 +53,7 @@ border-radius: 10px;
 
 .fond{
 	font-size:1vw;
-	background-image: url("images/fond1.jpg");
+	background-image: url("images/style/fond1.jpg");
 }
 
 .com{
@@ -34,7 +62,7 @@ border-radius: 10px;
 }
 .new{
 	font-size:1vw;
-	background-image: url("images/fondlog.jpg");
+	background-image: url("images/style/fondlog.jpg");
 }
 
 table {font-size:1vw;}

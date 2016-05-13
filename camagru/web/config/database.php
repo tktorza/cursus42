@@ -1,5 +1,5 @@
 <?php
-$DB_DSN = "mysql:host=sql5.freemysqlhosting.net;dbname=sql5118032;";
-$DB_USER = "sql5118032";
-$DB_PASSWORD = "QTL9QMNbDr";
+$DB_DSN = "mysql:host=sql7.freemysqlhosting.net;dbname=sql7119094;";
+$DB_USER = "sql7119094";
+$DB_PASSWORD = "mQfs17G2vd";
 ?>

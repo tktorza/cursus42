@@ -17,7 +17,7 @@
           }
         }
       function start(){
-        $this->_db->query('use sql5118032');
+        $this->_db->query('use sql7119094');
         $this->_db->query('CREATE TABLE users (
             id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
             login VARCHAR(255) NOT NULL,
@@ -25,6 +25,14 @@
             email VARCHAR(255),
             PRIMARY KEY (id)
           )');
+        $this->_db->query('CREATE TABLE galery (
+          id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+          login VARCHAR(255) NOT NULL,
+          src VARCHAR(255) NOT NULL,
+          likes INT UNSIGNED,
+          loginwholike MEDIUMTEXT,
+          PRIMARY KEY (id)
+        )');
       }
   }
   $dbase = new database();
@@ -111,5 +119,36 @@ function is_loggedin()
        return true;
   }
 }
+
+/**
+ * class who done all pictures and items of site.
+ */
+/*class galery extends users
+{
+  private $db;
+
+  function __construct()
+  {
+    global $dbase;
+    $this->db = $dbase->_db;
+  }
+
+  function add($login, $src)
+  {
+    $control = $this->db->prepare('INSERT INTO galery VALUES (NULL, :login, :src, NULL, NULL)');
+    $control->execute(array(':login' => $login, ':src' => $src));
+  }
+
+  function delete($login, $src)
+  {
+
+  }
+
+  function like(){
+
+  }
+
+}
+*/
 
  ?>

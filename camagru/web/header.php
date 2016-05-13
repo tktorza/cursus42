@@ -2,7 +2,7 @@
 	<table class="header">
 			<tr>
 			<td align="left" class="logo">
-				<IMG class="logo" SRC="images/logo.png">
+				<IMG class="logo" SRC="images/style/logo.png">
 			</td>
 			<td align="center">
 				<h1 class="title">Camagru</h1>
