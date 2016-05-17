@@ -18,12 +18,20 @@
 </tr>
 <tr><td>					<h2 class="pseudo">Password: </h2>
 </td><td>
-			<input type="password" name="passwd" id="passwd" required>
+			<input type="password" name="passwd" id="passwd">
 			</td>
 			</tr>
 			<tr><td>
 			<input type="submit" value="OK" name="submit" id="submit">
-</td></tr>				</form>
+</td>
+<tr>
+	<td>
+		<input type="submit" name="submit" id="submit" value="forgot password?">
+	</td>
+</tr>
+</form>
+
+</tr>
 		</table>
 		</span>
 		<span class="signup">

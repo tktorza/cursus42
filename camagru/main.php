@@ -1,4 +1,3 @@
-<?php include('users/user_connect.php'); ?>
 <main>
 	<table class="item">
 		<tr>
@@ -130,11 +129,41 @@
 	elem.setRequestHeader("Content-type", "application/upload");
 	var sending = [sender, itm, width, height];
 	elem.send(sending);
+
+showImg('test');
+
 	elem.onreadystatechange = function() {
   if (elem.readyState == 4 && elem.status == 200) {
 		console.log(elem.responseText);
 }
 };
 }})();
+
+function showImg(str) {
+    if (str == "") {
+        document.getElementById("galery").innerHTML = "";
+        return;
+    } else {
+        if (window.XMLHttpRequest) {
+            // code for IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp = new XMLHttpRequest();
+        } else {
+            // code for IE6, IE5
+            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        xmlhttp.onreadystatechange = function() {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                document.getElementById("galery").innerHTML = xmlhttp.responseText;
+            }
+        };
+        xmlhttp.open("GET","sidewest.php?pseudo="+str,true);
+        xmlhttp.send();
+    }
+}
+
+function deleteImg(tab){
+			alert(tab[0]);
+
+}
 		</script>
 	</main>

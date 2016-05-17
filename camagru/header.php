@@ -6,6 +6,18 @@
 			</td>
 			<td align="center">
 				<h1 class="title">Camagru</h1>
+				<ul id="menu">
+
+        <li>
+                <a href="camagru.php">Accueil</a>
+        </li>
+
+        <li>
+                <a href="galery.php">Galery</a>
+        </li>
+
+</ul>
+
 			</td>
 			<td align="center" class="infos">
 				<?php if($_SESSION['loggued_on_user'] != ""){ ?>
@@ -28,6 +40,20 @@
 		<script style="text/javascript">
 		function sure(){
 			return (confirm('Sure?'))
+
+			sfHover = function() {
+			        var sfEls = document.getElementById("menu").getElementsByTagName("LI");
+			        for (var i=0; i<sfEls.length; i++) {
+			                sfEls[i].onmouseover=function() {
+			                        this.className+=" sfhover";
+			                }
+			                sfEls[i].onmouseout=function() {
+			                        this.className=this.className.replace(new RegExp(" sfhover\\b"), "");
+			                }
+			        }
+			}
+			if (window.attachEvent) window.attachEvent("onload", sfHover);
+
 		}
 		</script>
 </header>

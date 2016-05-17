@@ -1,6 +1,7 @@
 <?php include('users/user_connect.php'); $_POST['error'] == 0;?>
 <HTML>
 	<HEAD>
+
 		<TITLE>Camagru</TITLE>
  <link rel="stylesheet" type="text/css" href="camagru.css" media="screen">
 	</HEAD>

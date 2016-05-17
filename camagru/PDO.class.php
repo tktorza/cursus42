@@ -1,5 +1,5 @@
 <?php
-  include('users/user_connect.php');
+
   include('config/database.php');
 
   class database{
@@ -31,6 +31,7 @@
           src VARCHAR(255) NOT NULL,
           likes INT UNSIGNED,
           loginwholike MEDIUMTEXT,
+          com MEDIUMTEXT,
           PRIMARY KEY (id)
         )');
       }
@@ -64,6 +65,22 @@
         }
       else
         return NULL;
+     }
+
+     function forgot($login)
+     {
+       if ($login)
+       {
+         $passwd = uniqid();
+       $this->db->query('UPDATE users SET passwd =\'' . $passwd . '\' WHERE login =\'' . $login . '\'');
+       $base = $this->db->query('SELECT email FROM users WHERE login =\'' . $login . '\'');
+       $mail = $base->fetchAll(PDO::FETCH_ASSOC);
+       mail("$mail[0]", "NEW PASSWORD", "Bonjour,\nVoici votre nouveau mot de passe:" . $passwd . ".\nNous vous invitons a le changer en vous connectant et choisissant le bouton modifier le mot de passe.\nA bientot, l'equipe Camagru.");
+       return true;
+     }
+     else {
+       return false;
+     }
      }
 
   function login($login, $passwd){
@@ -104,6 +121,8 @@
     return ($result);
   }
 
+
+
 function is_loggedin()
   {
      if(isset($_SESSION['user_session']))
@@ -140,11 +159,11 @@ class galery extends users
 
   function post($login, $src)
   {
-    $control = $this->db->prepare('INSERT INTO galery VALUES (NULL, :login, :src, 0, NULL)');
+    $control = $this->db->prepare('INSERT INTO galery VALUES (NULL, :login, :src, 0, NULL, NULL)');
     $control->execute(array(':login' => $login, ':src' => $src));
   }
 
-  function delete($login, $src)
+  function deleting($login, $src)
   {
     $result = $this->db->prepare('DELETE FROM galery WHERE login = :login && src = :src');
     $result->execute(array(':login' => $login, ':src' => $src));
