@@ -47,18 +47,54 @@
 		<SPAN id="cover" class="webcam">
 			<video id="video"></video>
 			<button id="startbutton">Prendre une photo</button>
+			<input type="text" id="upload" placeholder="if u want to upload ur image" name="upload"/>
+			<input type="submit" id="verify" value="exist?" name="verify" onclick="checking()"/>
 			<canvas id="canvas"></canvas>
 		</span>
 		<img src="http://img0.mxstatic.com/wallpapers/b95b28b4e31057e253aac3472c0aed41_large.jpeg" class="other" id="photo" alt="photo">
 		<script type="text/javascript">
 
 		var itm = "cadre";
+		var upload = document.querySelector('#uploadfile');
 
 		function Item(word){
 			itm = word;
 			if (word == "lapin")
 				alert("Positionnez vous au centre le l'ecran svp")
 			console.log(itm);
+		}
+
+var truc = "";
+		function checking(){
+			var upload			 = document.querySelector('#upload'),
+					verify			 = document.querySelector('#verify');
+
+			if (upload.value != "")
+			{
+				console.log(upload.value);
+				var ajax = new XMLHttpRequest();
+				var link = "verify.php";
+				ajax.open("POST", link, true);
+				ajax.send(upload.value);
+				ajax.onreadystatechange = function() {
+				if (ajax.readyState == 4 && ajax.status == 200) {
+					console.log(ajax.responseText);
+					if (ajax.responseText == "true")
+					{
+							verify.style.backgroundColor = "green";
+							verify.value = "Exists";
+							truc = upload.value;
+					}
+				else {
+					verify.style.backgroundColor = "red";
+					verify.value = "No exists";
+					upload.placeholder = "Try again";
+					upload.value = "";
+					return;
+				}	}
+			};
+		}
+
 		}
 
 		(function(){
@@ -127,10 +163,18 @@
 	var url = "screen_create.php";
 	elem.open("POST", url, true);
 	elem.setRequestHeader("Content-type", "application/upload");
-	var sending = [sender, itm, width, height];
+	console.log("le truc a pour valeur:[");
+	console.log(truc);
+	console.log("]");
+	if (truc != "")
+		var sending = [truc, itm, width, height];
+	else
+		var sending = [sender, itm, width, height];
+	console.log("voici ce que j'envoie");
+	console.log(sending);
 	elem.send(sending);
 
-showImg('test');
+      																																								showImg('test');
 
 	elem.onreadystatechange = function() {
   if (elem.readyState == 4 && elem.status == 200) {
@@ -162,7 +206,7 @@ function showImg(str) {
 }
 
 function deleteImg(tab){
-			alert(tab[0]);
+			alert(tab);
 
 }
 		</script>

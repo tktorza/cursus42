@@ -17,7 +17,7 @@
           }
         }
       function start(){
-        $this->_db->query('use sql7119094');
+        $this->_db->query('use sql7120072');
         $this->_db->query('CREATE TABLE users (
             id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
             login VARCHAR(255) NOT NULL,
@@ -31,9 +31,16 @@
           src VARCHAR(255) NOT NULL,
           likes INT UNSIGNED,
           loginwholike MEDIUMTEXT,
+          PRIMARY KEY (id)
+        )');
+        $this->_db->query('CREATE TABLE com (
+          id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
+          login VARCHAR(255) NOT NULL,
+          src VARCHAR(255) NOT NULL,
           com MEDIUMTEXT,
           PRIMARY KEY (id)
         )');
+        return true;
       }
 
       function query($sentence){
@@ -170,7 +177,7 @@ class galery extends users
   }
 
   function like($login, $src){
-    $base = $this->db->query('SELECT * FROM galery WHERE src = \'$src\'');
+    $base = $this->db->query('SELECT * FROM galery WHERE src = \'' . $src . '\'');
     $new = $base->fetchAll(PDO::FETCH_ASSOC);
     if ($new)
     {
@@ -192,10 +199,48 @@ class galery extends users
       $value = $control->execute(array(':login' => $tmp, ':src' => $src));
       return $value;
     }
+    else {
+      return false;
+    }
 
   }
 
+  function liked($src, $login){
+    $base = $this->db->query('SELECT loginwholike FROM galery WHERE src = \'$src\'');
+    $string = $base->fetchAll(PDO::FETCH_ASSOC);
+    $tab = explode(' ', $string[0]);
+    foreach ($tab as $value) {
+      if ($value == $login)
+        return "true";
+    }
+    return "false";
+  }
+
+  function comment($src, $login, $com){
+    $base = $this->db->prepare('INSERT INTO com VALUE (NULL, :login, :src, :com)');
+    $result = $base->execute(array(':login' => $login, ':src' => $src, ':com' => $com));
+    if ($result){
+      $base = $this->db->query('SELECT mail FROM users WHERE login = \'' . $login . "'");
+      mail("$mail", "NOUVEAU COM", "Camagru, \nNouveau com sur l'une de vos photo!");
+    }
+    return $result;
+  }
+
+function del($src, $login){
+  $base = $this->db->prepare('SELECT login FROM galery WHERE src = :src');
+  $same = $base->execute(array(':src' => $src));
+  if ($same == $login){
+    $base = $this->db->prepare('DELETE FROM galery WHERE src = :src');
+    $same = $base->execute(array(':src' => $src));
+    if ($same){
+      $base = $this->db->prepare('DELETE FROM com WHERE src = :src');
+      $same = $base->execute(array(':src' => $src));
+      if ($same)
+        return true;
+    }
+  }
+  return false;
 }
 
-
+}
  ?>
