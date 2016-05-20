@@ -28,7 +28,12 @@
 			}
 			 ?>
 		</div>
-		<button class="heart" id="heart" <?php echo "name=\"" . $value['src'] . "cousin\" " . "onclick=\"recup('" . $source . "')\"" ?> >
+		<button id="heart" <?php
+														$toub = explode("/", $source);
+														$var = explode('.', $toub[2])[0];
+														echo "class=\"heart\" name=\"" . $var . "\" " . "onclick=\"recup('" . $source . "')\"";
+														?> >
+														<?php echo "Likes : " . $value['like']; ?>
 		</button>
 		<button class="comment" id="comment" value="comment?" onclick=<?php echo "\"comment(['" . $_SESSION['loggued_on_user'] . "', '" . $source . "'])\"" ?> >
 		</button>
@@ -144,37 +149,37 @@ function liker(src){
 	var ajaxi = new XMLHttpRequest();
 	console.log("slt les aminches!");
 	console.log(src);
-	ajaxi.open("POST", "like.php", true)
+	ajaxi.open("POST", "like.php", false)
 	ajaxi.send(src);
 
 	if (ajaxi.readyState == 4 && ajaxi.status == 200) {
 			var like = ajaxi.responseText;
-			console.log("retour fonction");
-			console.log(like);
-			return true;
+			return like;
 }
 else {
-	return false;
+	return "false";
 }
 }
-
-function recup(src){
+// # d _
+function recup(src) {
 	console.log(src);
 	var ret = liker(src);
-	var name = src + "cousin";
-	//alert(name);
-	var image = document.querySelector(name);
-	console.log(image);
-	if (ret == true){
-		image.style.value = "red";
+	var name = (src.split('/')[2]).split('.')[0];
+	//console.log("button[name=\""+name+"\"]");
+	var image = document.querySelector("button[name=\""+name+"\"]");
+	//console.log(image);
+
+	if ("" + ret === "bool(true)\n") {
+		image.style.backgroundColor = "red";
+		image.style.color = "red";
 		//colorier l'image en rouge;
 
-	}
-	else {
+	} else {
 		image.style.backgroundColor = "grey";
+		image.style.color = "grey";
 		//colorier l'image en gris;
 	}
-		};
+};
 
 
 

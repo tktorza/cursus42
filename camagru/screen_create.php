@@ -101,6 +101,7 @@ $files = UPLOAD_DIR . uniqid() . '.png';
     imagecopy($data, $item, 50, 30, 0, 0, $width, $heigth);
     imagepng($data, $files);
     $galery = new galery();
+    var_dump("slt");
     $galery->post($_SESSION['user_session'], $files);
     $successi = "SUCCESS\n";
 }

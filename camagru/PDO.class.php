@@ -151,6 +151,7 @@ function is_loggedin()
   }
 }
 
+//si il y a une PDO ERREUR regarde nombre arg de galery
 
  /* class who done all pictures and items of site.
 */
@@ -166,7 +167,7 @@ class galery extends users
 
   function post($login, $src)
   {
-    $control = $this->db->prepare('INSERT INTO galery VALUES (NULL, :login, :src, 0, NULL, NULL)');
+    $control = $this->db->prepare('INSERT INTO galery VALUES (NULL, :login, :src, 0, NULL)');
     $control->execute(array(':login' => $login, ':src' => $src));
   }
 
@@ -220,8 +221,9 @@ class galery extends users
     $base = $this->db->prepare('INSERT INTO com VALUE (NULL, :login, :src, :com)');
     $result = $base->execute(array(':login' => $login, ':src' => $src, ':com' => $com));
     if ($result){
-      $base = $this->db->query('SELECT mail FROM users WHERE login = \'' . $login . "'");
-      mail("$mail", "NOUVEAU COM", "Camagru, \nNouveau com sur l'une de vos photo!");
+      $data = $this->db->query('SELECT email FROM users WHERE login = \'' . $login . "'");
+      $mail = $data->fetchAll(PDO::FETCH_ASSOC);
+      mail($mail[0]['email'], "NOUVEAU COM", "Camagru, \nNouveau com sur l'une de vos photo!");
     }
     return $result;
   }
