@@ -189,14 +189,14 @@ class galery extends users
             $result = str_replace($login, "", $tab);
             $result = implode(" ", $result);
             $control = $this->db->prepare('UPDATE galery
-            SET loginwholike = :login WHERE src = :src');
+            SET loginwholike = :login, likes = likes - 1 WHERE src = :src');
             $value = $control->execute(array(':login' => $result, ':src' => $src));
             return false;
           }
       }
       $tmp = $new[0]['loginwholike'] . " " . $login;
       $control = $this->db->prepare('UPDATE galery
-      SET loginwholike = :login WHERE src = :src');
+      SET loginwholike = :login, likes = likes + 1 WHERE src = :src');
       $value = $control->execute(array(':login' => $tmp, ':src' => $src));
       return $value;
     }

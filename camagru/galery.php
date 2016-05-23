@@ -1,4 +1,4 @@
-<?php include('users/user_connect.php'); $_POST['error'] == 0;?>
+<?php include('users/user_connect.php'); $_POST['error'] = 0; $_GET['idmin'] = 0; $_GET['idmax'] = 10;?>
 <HTML>
 	<HEAD>
 		<TITLE>Camagru</TITLE>
@@ -6,11 +6,14 @@
 	</HEAD>
 	<BODY >
 	<?php include('header.php');?>
+
 	<div  id="galery">
+		<input id="idmin" value=<?php echo "\"" . $_GET['idmin'] . "\""; ?> />
+		<input id="idmax" value=<?php echo "\"" . $_GET['idmax'] . "\""; ?> />
 	  <?php
 	include_once('PDO.class.php');
 	$db = New database();
-	$data = $db->query('SELECT * FROM galery');
+	$data = $db->query('SELECT * FROM galery WHERE id < ' . $_GET['idmax'] . ' && id >= ' . $_GET['idmin']);
 	  foreach ($data as $value) {
 	    ?>
 	    <div id="plus">
@@ -28,7 +31,16 @@
 			}
 			 ?>
 		</div>
+		<h1>L'id est <?php echo $value['id']; ?></h1>
 		<button id="heart" <?php
+//ce qui fait beuguer
+		$table = explode(" ", $value['loginwholike']);
+		foreach ($table as $value) {
+			if ($value == $_SESSION['loggued_on_user'])
+				echo "background-color=\"red\" ";
+		}
+		//jusquici
+
 														$toub = explode("/", $source);
 														$var = explode('.', $toub[2])[0];
 														echo "class=\"heart\" name=\"" . $var . "\" " . "onclick=\"recup('" . $source . "')\"";
@@ -48,14 +60,72 @@
 	      <?php
 	  }
 	  ?>
+		<?php if ($_GET['idmin'] > 0){ ?>
+	<button class="previous" id="previous" <?php echo "onclick=\"previouspage([" . $_GET['idmin'] . ", " . $_GET['idmax'] . "])\"";  ?> >Previous page</button>
+	<?php }
+	$max = ($db->query('SELECT MAX(id) FROM galery'))->fetchAll(PDO::FETCH_ASSOC)[0]['MAX(id)'];
+	if ($_GET['idmax'] <= $max){
+
+	 ?>
+	 <button class="next" id="next" <?php echo "onclick=\"nextpage([" . $_GET['idmin'] . ", " . $_GET['idmax'] . "])\"";  ?> >Next page</button>
 	</div>
 
-		<?php	include('footer.html');?>
+
+		<?php	}include('footer.html');?>
 
 <script>
 
+
+
+	function previouspage(tab){
+		var idmin = document.querySelector('#idmin').value,
+				idmax = document.querySelector('#idmax').value;
+
+		var min = tab[0] - 10,
+		 		max = tab[1] - 10;
+
+		var str = "idmin=" + min + "&idmax=" + max;
+		showImg(str);
+	}
+
+	function nextpage(tab){
+		var idmin = document.querySelector('#idmin').value,
+				idmax = document.querySelector('#idmax').value;
+	var min = tab[0] + 10,
+	 		max = tab[1] + 10;
+
+	var str = "idmin=" + min + "&idmax=" + max;
+
+	showImg(str);
+	}
+
+	function showImg(str) {
+	    if (str == "") {
+	        document.getElementById("galery").innerHTML = "";
+	        return;
+	    } else {
+	        if (window.XMLHttpRequest) {
+	            // code for IE7+, Firefox, Chrome, Opera, Safari
+	            xmlhttp = new XMLHttpRequest();
+	        } else {
+	            // code for IE6, IE5
+	            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	        }
+	        xmlhttp.onreadystatechange = function() {
+	            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+	                document.getElementById("galery").innerHTML = xmlhttp.responseText;
+	            }
+	        };
+	        xmlhttp.open("GET","refreachgalery.php?" + str ,true);
+	        xmlhttp.send();
+	    }
+	}
+
+
 function deletepic(src){
 	alert(src);
+	var idmin = document.querySelector('#idmin').value,
+			idmax = document.querySelector('#idmax').value;
 
 	var reponse = confirm("are your sur to want to delete this picture?");
 	if (reponse){
@@ -71,10 +141,14 @@ function deletepic(src){
 	else {
 		console.log("action annulee");
 	}
+	showImg("idmin=" + idmin + "&idmax=" + idmax);
+
 }
 
 
 function comment(tab){
+	var idmin = document.querySelector('#idmin').value,
+			idmax = document.querySelector('#idmax').value;
 	var login = tab[0],
 			src		= tab[1];
 	var com = prompt("Enter com");
@@ -89,30 +163,11 @@ function comment(tab){
 					console.log(ajax.responseText);
 			}
 	};
-	//refreach js webpage
+	console.log("idmin = " + idmin + "idmax = " + idmax);
+	showImg("idmin=" + idmin + "&idmax=" + idmax);
 }
 
-function showImg(str) {
-    if (str == "") {
-        document.getElementById("galery").innerHTML = "";
-        return;
-    } else {
-        if (window.XMLHttpRequest) {
-            // code for IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp = new XMLHttpRequest();
-        } else {
-            // code for IE6, IE5
-            xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-        }
-        xmlhttp.onreadystatechange = function() {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                document.getElementById("galery").innerHTML = xmlhttp.innerHTML;
-            }
-        };
-        xmlhttp.open("GET","refreachgalery.php?pseudo="+str,true);
-        xmlhttp.send();
-    }
-}
+
 
 //var image = document.querySelector('#img');
 //var heart = document.querySelector("#heart");
@@ -122,30 +177,9 @@ function showImg(str) {
 //	showImg(str);
 //}, false);
 
-function showImg(str) {
-		if (str == "") {
-				document.getElementById("galery").innerHTML = "";
-				return;
-		} else {
-				if (window.XMLHttpRequest) {
-						// code for IE7+, Firefox, Chrome, Opera, Safari
-						xmlhttp = new XMLHttpRequest();
-				} else {
-						// code for IE6, IE5
-						xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-				}
-				xmlhttp.onreadystatechange = function() {
-						if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-								document.getElementById("galery").innerHTML = xmlhttp.responseText;
-						}
-				};
-				xmlhttp.open("GET","sidewest.php?pseudo="+str,true);
-				xmlhttp.send();
-		}
-
-}
-
 function liker(src){
+	var idmin = document.querySelector('#idmin').value,
+			idmax = document.querySelector('#idmax').value;
 	var ajaxi = new XMLHttpRequest();
 	console.log("slt les aminches!");
 	console.log(src);
