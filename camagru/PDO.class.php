@@ -17,7 +17,7 @@
           }
         }
       function start(){
-        $this->_db->query('use sql7120072');
+        $this->_db->query('use camagru');
         $this->_db->query('CREATE TABLE users (
             id SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
             login VARCHAR(255) NOT NULL,
@@ -79,10 +79,11 @@
        if ($login)
        {
          $passwd = uniqid();
-       $this->db->query('UPDATE users SET passwd =\'' . $passwd . '\' WHERE login =\'' . $login . '\'');
+           $pass_hash = hash("whirlpool", $passwd);
+       $this->db->query('UPDATE users SET passwd =\'' . $pass_hash . '\' WHERE login =\'' . $login . '\'');
        $base = $this->db->query('SELECT email FROM users WHERE login =\'' . $login . '\'');
        $mail = $base->fetchAll(PDO::FETCH_ASSOC);
-       mail("$mail[0]", "NEW PASSWORD", "Bonjour,\nVoici votre nouveau mot de passe:" . $passwd . ".\nNous vous invitons a le changer en vous connectant et choisissant le bouton modifier le mot de passe.\nA bientot, l'equipe Camagru.");
+       mail($mail[0]['email'], "NEW PASSWORD", "Bonjour,\nVoici votre nouveau mot de passe:" . $passwd . ".\nNous vous invitons a le changer en vous connectant et choisissant le bouton modifier le mot de passe.\nA bientot, l'equipe Camagru.");
        return true;
      }
      else {

@@ -6,6 +6,7 @@
 			</td>
 			<td align="center">
 				<h1 class="title">Camagru</h1>
+				<?php if ($_SESSION['loggued_on_user']){ ?>
 				<ul id="menu">
 
         <li>
@@ -17,7 +18,7 @@
         </li>
 
 </ul>
-
+<?php } ?>
 			</td>
 			<td align="center" class="infos">
 				<?php if($_SESSION['loggued_on_user'] != ""){ ?>

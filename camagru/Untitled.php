@@ -1,5 +1,7 @@
-<?php session_start(); ?>
-<div  id="galery" class="galerie">
+
+<div  id="galery">
+  <input id="idmin" value=<?php echo "\"" . $_GET['idmin'] . "\""; ?> />
+	<input id="idmax" value=<?php echo "\"" . $_GET['idmax'] . "\""; ?> />
   <?php
 include_once('PDO.class.php');
 $db = New database();
@@ -7,33 +9,34 @@ $data = $db->query('SELECT * FROM galery WHERE id < ' . $_GET['idmax'] . ' && id
   foreach ($data as $value) {
     ?>
     <div id="plus">
-    <div align="left">  <img id="imge" value= <?php echo "\"" . $value['src'] . "\""; ?> onclick=<?php
+      <img id="img" value= <?php echo "\"" . $value['src'] . "\""; ?> onclick=<?php
  $source = $value['src'];
   print "\"deleteImg(" . "[" . $value['src'] . ", " . $value['login'] . "])\"";
   ?>
-  <?php print "src=\"" . $value['src'] . '"';?> ></div>
-  <div id="com" align="right">
+  <?php print "src=\"" . $value['src'] . '"';?> >
+  <div id="comment" >
     <?php
     $source = $value['src'];
     $com = $db->query('SELECT login, com FROM com WHERE src = \'' . $source . '\'');
-    foreach ($com as $val) {
-      echo "<i>" . $val['login'] . ":</i>\n" . $val['com'] . "</br>";
+    foreach ($com as $value) {
+      echo "<h3>" . "<i>" . $value['login'] . ":</i>\n" . $value['com'] . "</h3>";
     }
      ?>
   </div>
+  <h1>L'id est <?php echo $value['id']; ?></h1>
   <button id="heart" <?php
-                            if ($value['loginwholike']){
+                          /*  if ($value['loginwholike']){
                             $tableau = explode(" ", $value['loginwholike']);
-                            foreach ($tableau as $valeur) {
-                              if ($valeur == $_SESSION['loggued_on_user'])
-                              echo "style=\"background-color: red;\" color=\"red\" ";
+                            foreach ($tableau as $value) {
+                              if ($value == $_SESSION['loggued_on_user'])
+                                echo "background-color=\"red\" ";
                             }
-                          }
+                          }*/
                           $toub = explode("/", $source);
                           $var = explode('.', $toub[2])[0];
                           echo "class=\"heart\" name=\"" . $var . "\" " . "onclick=\"recup('" . $source . "')\"";
                           ?> >
-                          <?php echo "Likes : " . $value['likes'] . "aminches"; ?>
+                          <?php echo "Likes : " . $value['like']; ?>
   </button>
   <button class="comment" id="comment" value="comment?" onclick=<?php echo "\"comment(['" . $_SESSION['loggued_on_user'] . "', '" . $source . "'])\"" ?> >
   </button>
@@ -56,5 +59,6 @@ if ($_GET['idmax'] <= $max){
 
  ?>
  <button class="next" id="next" <?php echo "onclick=\"nextpage([" . $_GET['idmin'] . ", " . $_GET['idmax'] . "])\"";  ?> >Next page</button>
-<?php } ?>
-</div>
+
+		<?php	}
+?></div>

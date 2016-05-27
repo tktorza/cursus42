@@ -44,12 +44,12 @@
 		</td>
 	</tr>
 	</table>
-		<SPAN id="cover" class="webcam">
-			<video id="video"></video>
-			<button id="startbutton">Prendre une photo</button>
-			<input type="text" id="upload" placeholder="if u want to upload ur image" name="upload"/>
-			<input type="submit" id="verify" value="exist?" name="verify" onclick="checking()"/>
-			<canvas id="canvas"></canvas>
+		<SPAN id="cover" class="webcam responsive">
+			<video id="video" class="responsive"></video>
+			<button id="startbutton" class="responsive">Prendre une photo</button>
+			<input type="text" id="upload" class="responsive" placeholder="if u want to upload ur image" name="upload"/>
+			<input type="submit" id="verify" class="responsive" value="exist?" name="verify" onclick="checking()"/>
+			<canvas id="canvas" class="responsive"></canvas>
 		</span>
 		<img src="http://img0.mxstatic.com/wallpapers/b95b28b4e31057e253aac3472c0aed41_large.jpeg" class="other" id="photo" alt="photo">
 		<script type="text/javascript">

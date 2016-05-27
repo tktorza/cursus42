@@ -1,5 +1,4 @@
 <?php
-header("Location:../camagru.php");
 
 session_start();
 include_once('../PDO.class.php');
@@ -8,10 +7,10 @@ include_once('../PDO.class.php');
 		if($user->forgot($_POST['login']))
 	    {
 				$var = "passwd=true";
-			echo "ok!";
+			//echo "ok!";
 	  }else {
 			$var = "passwd=false";
-			  echo "error!";
+			  //echo "error!";
 	}}
 	else{
 
@@ -24,8 +23,10 @@ include_once('../PDO.class.php');
 	{
 		$var = "";
 		$_SESSION["loggued_on_user"] = "";
-		echo "ERROR\n" . $user->login($_POST["login"], $_POST["passwd"]) . 'bad\n';
+		//echo "ERROR\n" . $user->login($_POST["login"], $_POST["passwd"]) . 'bad\n';
 	}
 
 }
+header("Location:../camagru.php?" . $var);
+
 ?>
