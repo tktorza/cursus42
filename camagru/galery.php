@@ -7,7 +7,7 @@
 	<BODY class="fond">
 	<?php include('header.php');
 	include('refreachgalery.php');
-	include('footer.html');?>
+	include('footer.php');?>
 
 <script>
 
@@ -61,7 +61,6 @@
 
 
 function deletepic(src){
-	alert(src);
 	var idmin = "<?php echo $_GET['idmin']; ?>",
 			idmax = "<?php echo $_GET['idmax']; ?>";
 
@@ -70,11 +69,6 @@ function deletepic(src){
 			var ajax = new XMLHttpRequest();
 			ajax.open("POST", "deleteimage.php", true);
 			ajax.send(src);
-			ajax.onreadystatechange = function() {
-				if (ajax.readyState == 4 && ajax.status == 200){
-					alert(ajax.responseText);
-				}
-			}
 	}
 	else {
 		console.log("action annulee");
@@ -91,17 +85,10 @@ function comment(tab){
 			src		= tab[1];
 	var com = prompt("Enter com");
 	var all = [login, src, com];
-	console.log(all);
 	var ajax = new XMLHttpRequest();
 	ajax.open("POST", "comment.php", true);
 	ajax.send(all);
 //	showImg("frf");------------------------------------------> to refreah when i do.
-	ajax.onreadystatechange = function() {
-			if (ajax.readyState == 4 && ajax.status == 200) {
-					console.log(ajax.responseText);
-			}
-	};
-	console.log("idmin = " + idmin + "idmax = " + idmax);
 	showImg("idmin=" + idmin + "&idmax=" + idmax);
 }
 
@@ -119,8 +106,6 @@ function liker(src){
 	var idmin = "<?php echo $_GET['idmin']; ?>",
 			idmax = "<?php echo $_GET['idmax']; ?>";
 	var ajaxi = new XMLHttpRequest();
-	console.log("slt les aminches!");
-	console.log(src);
 	ajaxi.open("POST", "like.php", false)
 	ajaxi.send(src);
 
@@ -134,7 +119,6 @@ else {
 }
 // # d _
 function recup(src) {
-	console.log(src);
 	var ret = liker(src);
 	var name = (src.split('/')[2]).split('.')[0];
 	//console.log("button[name=\""+name+"\"]");

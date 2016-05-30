@@ -6,6 +6,7 @@
  <link rel="stylesheet" type="text/css" href="camagru.css" media="screen">
 	</HEAD>
 	<BODY class="fond">
+		<div>
 	<?php include('header.php'); ?>
 		<?php if ($_SESSION["loggued_on_user"] == "") {
 				include('begin.php');
@@ -15,8 +16,9 @@
 			include('side.php');
 		}
 //			print_r($_SESSION);
-			include('footer.html');
+			include('footer.php');
 		?>
+	</div>
 <script>
 
 	var help = "<?php echo $_GET['passwd']; ?>";

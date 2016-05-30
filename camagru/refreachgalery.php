@@ -1,5 +1,5 @@
 <?php session_start(); ?>
-<div  id="galery" class="galerie">
+<div  id="galery">
   <?php
 include_once('PDO.class.php');
 $db = New database();

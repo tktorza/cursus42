@@ -1,5 +1,5 @@
 <main>
-	<table class="item">
+	<table class="item responsive">
 		<tr>
 			<td colspan="3">
 				<i class="title">Please choose your item:</i>
@@ -20,38 +20,44 @@
 	</td>
 </tr>
 		<tr>
-			<td class="tall">
+			<td class="tall responsive">
 				<div onclick="Item('cadre')">
 		<div align="center">
-	<img src="images/style/tableau.png" class="tall">
+	<img src="images/style/tableau.png" class="tall responsive">
 </div>
 <div align="right">
 		<input type="radio" name="option" id="cadre" value="cadre" checked>
 </div>
 	</div>
 	</td>
-		<td class="tall">
+		<td class="tall responsive">
 			<div onclick="Item('lapin')">
-			<img src="images/style/oreille-lapin.png" class="tall">
+			<img src="images/style/oreille-lapin.png" class="tall responsive">
 			<input type="radio" name="option" value="lapin" id="lapin">
 		</div>
 		</td>
-		<td class="tall">
+		<td class="tall responsive">
 			<div onclick="Item('mickey')">
-			<img src="images/style/mickey.png" class="tall">
+			<img src="images/style/mickey.png" class="tall responsive">
 			<input type="radio" name="option" id="mickey" value="mickey">
 		</div>
 		</td>
 	</tr>
-	</table>
-		<SPAN id="cover" class="webcam responsive">
+<tr><td></td><td></td><td></td></tr>
+	<tr>
+		<td colspan="3" class="tall responsive">
+		<SPAN id="cover" class="responsive">
 			<video id="video" class="responsive"></video>
 			<button id="startbutton" class="responsive">Prendre une photo</button>
 			<input type="text" id="upload" class="responsive" placeholder="if u want to upload ur image" name="upload"/>
 			<input type="submit" id="verify" class="responsive" value="exist?" name="verify" onclick="checking()"/>
 			<canvas id="canvas" class="responsive"></canvas>
 		</span>
-		<img src="http://img0.mxstatic.com/wallpapers/b95b28b4e31057e253aac3472c0aed41_large.jpeg" class="other" id="photo" alt="photo">
+
+		</td>
+	</tr>
+	</table>
+		<img src="http://img0.mxstatic.com/wallpapers/b95b28b4e31057e253aac3472c0aed41_large.jpeg" class="other responsive" id="photo" alt="photo">
 		<script type="text/javascript">
 
 		var itm = "cadre";
@@ -61,7 +67,6 @@
 			itm = word;
 			if (word == "lapin")
 				alert("Positionnez vous au centre le l'ecran svp")
-			console.log(itm);
 		}
 
 var truc = "";
@@ -78,7 +83,7 @@ var truc = "";
 				ajax.send(upload.value);
 				ajax.onreadystatechange = function() {
 				if (ajax.readyState == 4 && ajax.status == 200) {
-					console.log(ajax.responseText);
+//					console.log(ajax.responseText);
 					if (ajax.responseText == "true")
 					{
 							verify.style.backgroundColor = "green";
@@ -163,24 +168,19 @@ var truc = "";
 	var url = "screen_create.php";
 	elem.open("POST", url, true);
 	elem.setRequestHeader("Content-type", "application/upload");
-	console.log("le truc a pour valeur:[");
-	console.log(truc);
-	console.log("]");
+	//console.log("le truc a pour valeur:[");
+	//console.log(truc);
+	//console.log("]");
 	if (truc != "")
 		var sending = [truc, itm, width, height];
 	else
 		var sending = [sender, itm, width, height];
-	console.log("voici ce que j'envoie");
-	console.log(sending);
+	//console.log("voici ce que j'envoie");
+	//console.log(sending);
 	elem.send(sending);
 
       																																								showImg('test');
 
-	elem.onreadystatechange = function() {
-  if (elem.readyState == 4 && elem.status == 200) {
-		console.log(elem.responseText);
-}
-};
 }})();
 
 function showImg(str) {
@@ -206,7 +206,7 @@ function showImg(str) {
 }
 
 function deleteImg(tab){
-			alert(tab);
+//			alert(tab);
 
 }
 		</script>
