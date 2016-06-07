@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<HTML>
+	<head>
+		<title>New</title>
+	<link rel="stylesheet" type="text/css" href="../camagru.css" media="screen">
+	</HEAD>
+	<BODY class="new">
+	<?php include('../header.php');
+	include('../footer.html');?>
+	<span class="inscription">
+		<h1 class="title">SIGN IN!<h1>
+
+			<p>
+				Change!
+			</p>
+			<form method="post" action="modif.php" onSubmit="return checkMdp()">
+			<p><label for="login">Login</label> :
+			<input type="text" size="15" placeholder="Booba94" name="login"/>
+		</p>
+		<p>
+			<label for="oldpw">Previous password</label> :
+			<input type="password" size="15" id="oldpw" name="oldpw"/>
+		</p>
+			<p>
+			<label for="newpw">New password</label> :
+			<input type="password" size="15" name="newpw" id="newpw" pattern=".{4,}">
+			</p>
+			<br />
+			<input type="submit" name="submit" value="OK"></input>
+			</form>
+
+
+	</span>
+	<script type="text/javascript">
+
+function checkMdp() {
+  var mdp = document.getElementById("oldpw").value;
+  var mdp2 = document.getElementById("newpw").value;
+  if (mdp==mdp2) {
+    alert("Same password");
+    return false;
+  }
+	else if (!mdp || !mdp2)
+		{
+			alert('False elements');
+			return false;
+		}
+  else
+  	return true;
+}
+</script>
+	<span class="alien">
+		<a class="alien" href="../index.php" title="Retour page principale" ><IMG class="alien" SRC="../images/pingouin.jpg"></a>
+	</span>
+	</BODY>
+</html>
