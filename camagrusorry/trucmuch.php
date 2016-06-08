@@ -1,11 +1,24 @@
-<main class="item">
-	<div>
+<main>
 	<table class="item responsive">
 		<tr>
 			<td colspan="3">
 				<i class="title">Please choose your item:</i>
 			</td>
 		</tr>
+		<tr>
+			<td colspan="3">
+			</td>
+		</tr>
+	</tr>
+	<tr>
+		<td colspan="3">
+		</td>
+	</tr>
+</tr>
+<tr>
+	<td colspan="3">
+	</td>
+</tr>
 		<tr>
 			<td class="tall responsive">
 				<div onclick="Item('cadre')">
@@ -30,7 +43,9 @@
 		</div>
 		</td>
 	</tr>
-</table>
+<tr><td></td><td></td><td></td></tr>
+	<tr>
+		<td colspan="3" class="tall responsive">
 		<SPAN id="cover" class="responsive">
 			<video id="video" class="responsive"></video>
 			<button id="startbutton" class="responsive">Prendre une photo</button>
@@ -39,8 +54,10 @@
 			<canvas id="canvas" class="responsive"></canvas>
 		</span>
 
+		</td>
+	</tr>
+	</table>
 		<img src="http://img0.mxstatic.com/wallpapers/b95b28b4e31057e253aac3472c0aed41_large.jpeg" class="other responsive" id="photo" alt="photo">
-</div>
 		<script type="text/javascript">
 
 		var itm = "cadre";

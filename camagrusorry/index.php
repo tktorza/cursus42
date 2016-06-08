@@ -12,7 +12,7 @@
 				include('begin.php');
 			 }
 			if ($_SESSION["loggued_on_user"] != ""){
-				echo "<div>";
+				echo "<div class=\"blue\">";
 
 			include('main.php');
 			include('side.php');

@@ -10,7 +10,6 @@
 }
 .galerie{
   background-color: #DEDCDC;
-	position: absolute;
   left: 20%;
   height:100%;
 }
@@ -26,6 +25,11 @@
 .delete{
   width: 3%;
   height: 4%;
+}
+
+.blue{
+	margin-top: 4%;
+	background-color: blue;
 }
 
 .comment{
@@ -144,18 +148,19 @@ html>body #menu li ul ul
 }
 
 .item{
+	background-color: red;
 	width: 40%;
 }
 
 
 .side{
-	align-self: right;
+	background-color: green;
+	position: relative;
 	width: 20%;
   height:80%;
 }
 
 .webcam{
-	position: absolute;
 	width: 50%;
 	height: 70%;
 	left: 0.5%;
