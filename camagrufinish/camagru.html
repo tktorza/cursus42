@@ -1,0 +1,23 @@
+<?php include('users/user_connect.php'); ?>
+<HTML>
+	<HEAD>
+		<TITLE>Camagru</TITLE>
+ <link rel="stylesheet" type="text/css" href="camagru.css" media="screen">
+	</HEAD>
+	<BODY class="fond">
+	<?php echo $_SESSION['log'] . "pdpdpdpewdpedpwe";
+	include('header.html'); ?>
+		<?php if ($_SESSION['log'] == "") {
+				include('begin.html'); }
+			if ($_SESSION['log'] != ""){
+			include('general.html');} 
+		?>
+		<span class="signup">
+		/*	<h1 width="10%" >Or fly away</h1>
+			<p><a href="users/create.html" title="Vous allez au 7eme ciel"><IMG width="30%" SRC="images/signup.png"></a></p>
+		</span>
+		<div class="footer">
+			Website created by Tkindustries&copy;.<br/>All actions have consequences.
+		</div>
+	</BODY>
+</html>

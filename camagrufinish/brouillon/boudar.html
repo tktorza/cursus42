@@ -1,0 +1,54 @@
+<?php include('users/user_connect.php'); ?>
+<HTML>
+	<HEAD>
+		<TITLE>Boudar</TITLE>
+ <link rel="stylesheet" type="text/css" href="camagru.css" media="screen">
+ <link rel="stylesheet" type="text/css" href="boudar.css" media="screen">
+	</HEAD>
+	<BODY class="fond">
+	<table class="header">
+			<tr>
+			<td align="left" class="logo">
+				<IMG class="logo" SRC="images/logo.png">	
+			</td>
+			<td align="center">
+				<h1 class="title">Boudar's life</h1>
+			</td>
+			<td>
+				<?php if($_SESSION['log'] != ""){ ?>
+
+					<p>Bonjour <?php echo $_SESSION['log'];?></p>
+					<form method="post" action="users/modif.php">
+						<input id="button" value="change password" type="submit">
+					</form>
+					<form method="post" action="users/logout.php">
+						<input id="button" value="log out" type="submit">
+					</form>
+					<form method="post" action="delete.php">
+						<input id="button" value="delete profile" type="submit">
+					</form>
+					<?php }?>
+			</td>
+		</tr>
+		</table>
+		<span class="boudar1">
+			<p class="title">"Une touche de rock'n roll", The Rolling Stones.</p>
+			<IMG  width="40%" SRC="images/boudar1.jpg">
+		</span>
+		<span class="boudar2">
+			<p class="title">"Somptueuse", Times magazine.</p>
+			<IMG width="40%" SRC="images/boudar2.jpg">
+		</span>
+		<span class="title" class="boudar3">
+			<p>"Une star", Closer.</p>
+			<IMG width="10%" SRC="images/boudar3.jpg">
+		</span>
+		<?php if ($_SESSION['log'] == "") {
+				include('begin.html'); }
+			if ($_SESSION['log'] != ""){
+			include('general.html');}
+			include('footer.html');
+		?>
+		
+	</BODY>
+</html>
