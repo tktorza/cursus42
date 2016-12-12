@@ -6,11 +6,11 @@ import { Component } from '@angular/core';
   templateUrl: 'hello-ionic.html'
 })
 export class HelloIonicPage {
-    private msg: string;
-    private from: any;
-    private messages: any;
-    private pseudo: string;
-    private myMessages: any;
+    public msg: string;
+    public from: any;
+    public messages: any;
+    public pseudo: string;
+    public myMessages: any;
 
   constructor() {
     this.pseudo = "mcheun";
@@ -27,6 +27,7 @@ export class HelloIonicPage {
     console.log(this.messages)
     if (this.msg){
       this.messages.push({from: 'me', msg: this.msg});
+      this.msg = "";
     console.log(this.msg);
     }else{
       this.messages.push({from: 'her', msg: 'hello'});
