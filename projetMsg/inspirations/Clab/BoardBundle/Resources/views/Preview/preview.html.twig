@@ -1,0 +1,52 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_preview',
+    } %}
+{% endblock %}
+
+{% block body %}
+<br><br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-9">
+            <div id="clickeat"></div>
+        </div>
+
+        <div class="col-md-3">
+            <h4>Aperçu du menu</h4>
+
+            <p><small>
+                <span class="badge">1</span> Connectez-vous avec votre compte Clickeat manager (celui utilisé lors de votre inscription myClickeat)<br>
+                <span class="badge">2</span> Vous avez l'aperçu de votre menu marchand pour votre site ou votre page Facebook.
+            </small></p>
+
+            <a href="{{ url }}" target="_blank">Accèder à la version plein écran</a> (recommandée)
+
+            <hr>
+
+            <h4>Commande test</h4>
+
+            <p><small>
+                <span class="badge">1</span> Connectez-vous avec votre compte Clickeat manager (celui utilisé lors de votre inscription myClickeat)<br>
+                <span class="badge">2</span> Cliquez sur "TEST MODE"<br>
+                <span class="badge">3</span> Composez une commande (vous pouvez tout essayer : formule, produits à options etc.)<br>
+                <span class="badge">4</span> Cliquez sur "Valider ma commande"<br>
+                <span class="badge">5</span> Complétez l'écran de configuration de la commande.<br>
+                <span class="badge">6</span> Si vous payez en ligne, vous passerez par l'interface test de notre prestataire de paiement sécurisé en ligne Stripe. Des numéros de cartes tests sont affichés en bas de leur page.<br>
+                <span class="badge">7</span> Vous recevez la commande test par mail et sur l'application Clickeat Restaurateurs sur iPhone/iPad.<br>
+                <span class="badge">8</span> Les commandes tests seront automatiquement effacées chaque soir.
+            </small></p>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript" src="http://{{ assetUrl ~ asset('front/bundle/iframe/build/js/embed.min.js') }}"></script>
+<script type="text/javascript">
+var pymParent = new pym.Parent('clickeat', '{{ url }}', {});
+</script>
+{% endblock %}

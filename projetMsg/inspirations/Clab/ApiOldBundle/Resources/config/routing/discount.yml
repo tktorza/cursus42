@@ -1,0 +1,9 @@
+api_0_rest_discount_list:
+    path:  /discount/list/{restaurantId}
+    defaults: { _controller: ClabApiOldBundle:RestDiscount:list, _format: json }
+    methods: [GET]
+
+api_0_rest_discount_best:
+    path:  /discount/get/best/{id}
+    defaults: { _controller: ClabApiOldBundle:RestDiscount:bestDiscountForCart, _format: json }
+    methods: [POST]

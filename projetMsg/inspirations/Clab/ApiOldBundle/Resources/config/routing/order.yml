@@ -1,0 +1,87 @@
+## Orders ##
+api_0_rest_order_for_restaurant:
+    path:  /restaurant/{id}/orders
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getForRestaurant, _format: json }
+    methods: [GET]
+
+api_0_rest_order_beetween_dates:
+    path:  /orders/dates
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getBeetweenDates, _format: json }
+    methods: [GET]
+
+api_0_rest_order_ticket_for_restaurant:
+    path:  /restaurant/{id}/ticket/orders
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getTicketForRestaurant, _format: json }
+    methods: [GET]
+
+
+api_0_rest_order_get:
+    path:  /orders/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:get, _format: json }
+    methods: [GET]
+
+api_0_rest_order_cart:
+    path:  /orders/cart/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getCart, _format: json }
+    methods: [GET]
+
+api_0_rest_order_edit:
+    path:  /orders/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:edit, _format: json }
+    methods: [PUT,PATCH]
+
+api_0_rest_order_remove:
+    path:  /orders/remove/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:remove, _format: json }
+    methods: [POST]
+
+api_0_rest_order_close:
+    path:  /orders/close/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:closeOrder, _format: json }
+    methods: [POST]
+
+api_0_rest_order_validate:
+    path:  /orders/validate/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:validateOrder, _format: json }
+    methods: [POST]
+
+api_0_rest_order_create_from_cart:
+    path:  /orders/new/{idCart}/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:createOrderFromCart, _format: json }
+    methods: [POST]
+
+api_0_rest_order_get_slots:
+    path:  /orders/slots/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getSlotsFromCart, _format: json }
+    methods: [GET]
+
+api_0_rest_order_get_payment_methods:
+    path:  /orders/paymentmethods/cart/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getPaymentMethodsForCart, _format: json }
+    methods: [GET]
+
+api_0_rest_order_init:
+    path:  /orders/init/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:initOrder, _format: json }
+    methods: [POST]
+
+api_0_rest_order_get_payzen_request:
+    path:  /orders/payzenrequest/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:getPayzenRequest, _format: json }
+    methods: [GET]
+
+api_0_rest_order_edit_state:
+    path: /order/state/edit/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:changeOrderState, _format: json }
+    methods: [POST]
+
+api_0_rest_order_caisse_edit_state:
+    path: /order/caisse/state/edit/{id}
+    defaults: { _controller: ClabApiOldBundle:RestOrder:changeOrderCaisseState, _format: json }
+    methods: [POST]
+
+api_0_rest_ordercaisse_save:
+    path: /order/caisse/save
+    defaults: { _controller: ClabApiOldBundle:RestOrder:saveCaisseOrder, _format: json }
+    methods: [POST]
+

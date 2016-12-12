@@ -1,0 +1,109 @@
+{% extends '@ClabWhite/base.html.twig' %}
+
+{% block bodyClass %}order breadcrumbs{% endblock %}
+{% block nav %}
+    {{ parent() }}
+    <ul class="nav navbar-nav nav-2 col-lg-8 col-md-8 col-sm-12">
+        <li><a href="#" class="actived category-group-filter"  data-target-group-category="Matsuri à la carte">Masturi à la carte</a></li>
+        <li><a href="#" class="category-group-filter"  data-target-group-category="Plateaux assortis">Plateaux assortis</a></li>
+        <li><a href="#" class="category-group-filter"  data-target-group-category="Spécialités et plats chauds">Spécialités et plats chauds</a></li>
+        <li><a href="#" class="category-group-filter"  data-target-group-category="Boissons et accompagnements">Boissons et accompagnements</a></li>
+        <li><a href="#" class="category-group-filter"  data-target-group-category="Formules déjeuner">Formules déjeuner</a></li>
+        <li><a href="#">Favoris</a></li>
+    </ul>
+{% endblock %}
+{% block body %}
+<div class="container padding-h-20 padding-v-20">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="box padding-v-20 padding-h-20">
+                <a class="btn btn-default btn-block" href="{{ path('clab_white_order_receipt', { id: order.frontId }) }}"><i class="fa fa-arrow-circle-left icon-left"></i>Retour au récapitulatif</a>
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="box padding-v-20 padding-h-20">
+                <h3 class="text-info">Suivez votre livreur</h3>
+                <div id="trackingMap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+{% block javascripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/0.9.16/socket.io.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    // generate unique user id
+    var userId = Math.random().toString(16).substring(2,15);
+    var socket = io.connect('http://delivery.clicklab.fr');
+    socket.emit('room', '{{ trackingId }}');
+
+    var map;
+    var userLat;
+    var userLng;
+
+    var doc = $(document);
+
+    var sentData = {};
+
+    var connects = {};
+    var markers = {};
+    var markersLastPosition = {};
+    var color_codes = {};
+
+    socket.on('load:coords', function(data) {
+        console.log('receiving...');
+        if (!(data.id in connects)) {
+            setMarker(data);
+        } else {
+            var latlng = new google.maps.LatLng(data.lat, data.lng);
+
+            if(google.maps.geometry.spherical.computeDistanceBetween(latlng, markersLastPosition[data.id]) > 200) {
+                map.drawRoute({
+                  origin: [markersLastPosition[data.id].lat(), markersLastPosition[data.id].lng()],
+                  destination: [data.lat, data.lng],
+                  travelMode: 'driving',
+                  strokeColor: '#ec2e61',
+                  strokeOpacity: 0.6,
+                  strokeWeight: 6
+                });
+                markersLastPosition[data.id] = latlng;
+            }
+
+            markers[data.id].setPosition(latlng);
+        }
+
+        connects[data.id] = data;
+        connects[data.id].updated = $.now(); // shothand for (new Date).getTime()
+    });
+
+    initMap();
+
+    function initMap()
+    {
+        map = new GMaps({
+            div: '#trackingMap',
+            lat: 48.851976593578065,
+            lng: 2.282697349172597,
+            zoom: 14
+        });
+    }
+
+    // showing markers for connections
+    function setMarker(data) {
+        var marker = map.addMarker({
+            lat: data.lat,
+            lng: data.lng,
+            title: 'Livreur',
+            icon: '{{ asset('front/bundle/multisite/img/embed/mapicon.png') }}',
+        });
+        markers[data.id] = marker;
+        markersLastPosition[data.id] = marker.getPosition();
+
+    }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,61 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+    category: 'apps',
+    route: 'board_apps_library_restaurant',
+    } %}
+{% endblock %}
+
+{% block body %}
+    <div class="container padding-v-10" id="coupons">
+
+        <!-- Plans -->
+        <section id="plans">
+            <div class="container">
+                <div class="row">
+                    {% if apps|length > 0 %}
+                    {% for app in apps %}
+                        <!-- item -->
+                        <div class="col-md-3 text-center">
+                            <div class="panel panel-pricing">
+                                <div class="panel-body text-center" style="height:320px;">
+
+                                    <img src="{{ vich_uploader_asset(app, 'imageFile') }}" alt="{{ app.name }}" />
+                                    <h3>{{ app.name }}</h3>
+                                    <p>{{ app.shortDescription }}</p>
+                                    <br/>
+                                    <a href="{{ path('board_app_remove',{"slug": app.slug,contextPk: contextPk}) }}">Désactiver</a>
+                                </div>
+                                <div class="panel-footer">
+                                    {% if app.callToAction is not null %}
+                                        {% if app.slug == 'livraison' %}
+                                            <a class="btn btn-lg btn-block btn-success" href="{{ url('board_dashboard')
+                                            }}/{{ context }}/{{ contextPk }}/{{ app.callToAction }}"
+                                               target="_blank">Utiliser l'application</a>
+                                        {% else %}
+                                            <a class="btn btn-lg btn-block btn-success" href="{{ url('board_dashboard')
+                                            }}/{{ contextPk }}/{{ app.callToAction }}"
+                                               target="_blank">Utiliser l'application</a>
+                                        {% endif %}
+                                    {% endif %}
+
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /item -->
+                    {% endfor %}
+                        {% else %}
+                        <h2>Vous n'avez actuellement aucune application, merci d'en ajouter depuis la librairie.</h2>
+                    {% endif %}
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+{% endblock %}

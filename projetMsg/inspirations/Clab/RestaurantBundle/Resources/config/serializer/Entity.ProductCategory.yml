@@ -1,0 +1,68 @@
+Clab\RestaurantBundle\Entity\ProductCategory:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        position:
+            expose: true
+            read_only: true
+        id:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        created:
+            expose: true
+            groups: [app,pro]
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+            groups: [app,search,public,pro]
+        name:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        description:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        slug:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        cover:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        coverSmall:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        coverFull:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        apiCover:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+            accessor:
+                getter: getApiCover
+        products:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getProducts
+            groups: [app,public,pro]
+        managerProducts:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+            accessor:
+                getter: getProducts
+        productsCount:
+            expose: true;
+            read_only: true
+            accessor:
+                getter: getProductsCount
+            groups: [app,search,public]

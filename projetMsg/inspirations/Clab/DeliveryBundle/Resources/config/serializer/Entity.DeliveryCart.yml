@@ -1,0 +1,24 @@
+Clab\DeliveryBundle\Entity\DeliveryCart:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        created:
+            expose: true
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+        min:
+            expose: true
+            read_only: true
+        max:
+            expose: true
+            read_only: true
+        extra:
+            expose: true
+            read_only: true
+        delay:
+            expose: true
+            read_only: true
+            groups: [pro]

@@ -1,0 +1,400 @@
+pro:
+    topnav:
+        services:
+            label: Services
+            tttEvents: Event validation
+            orders: Orders
+        proxy:
+            label: You manage,
+            clickeatStatus: Status Clickeat
+            tttStatus: Status TTT
+            preview: Preview
+            pushOnline: Ask to be push online
+        user:
+            label: Hello,
+            switchProxy: Select restaurant
+            addRestaurant: Create restaurant
+            addFoodtruck: Create foodtruck
+            addClient: Create chain
+            logout: log out
+    leftnav:
+        inbox:
+            label: Inbox
+        client:
+            label: My brand
+            edit: Informations
+            restaurants: My stores
+            conf: Configuration
+            users: My users
+            gallery: My pictures
+        restaurant:
+            label: My store
+            admin: Admin
+            infos: Informations
+            team: My team
+            shop: My store
+            timesheets:
+                classic: My timesheets
+                foodtruck: My itinerary
+            clickeat: My Clickeat
+            delivery: Delivery
+            users: My users
+            gallery: My pictures
+        social:
+            label: Communication
+            share: Share
+            conf: Configuration
+        tools:
+            label: My tools
+            discounts: Discounts
+        activity:
+            label: My activity
+            subscription: My subscription
+            reporting: Reporting
+            invoices: My invoices
+            stats: Statistics
+        users:
+            label: My users
+        gallery:
+            label: My pictures
+        menu:
+            label: Menu
+            categories: Products categories
+            products: My products
+            meals: My meals
+            options: Options library
+            stock: Stock management
+        website:
+            label: Website
+            theme: Theme
+            content: Content
+    restaurant:
+        title: My store
+        dashboard:
+            infosLabel: Informations
+            infosDescription: "Name, baseline, description, and restaurant contact"
+            shopLabel: My point of sale
+            shopDescription: "Where to find you ? Add more informations for your custommers : services, means of payment, ..."
+            timesheets:
+                classicLabel: My timetable
+                classicDescription: "Opening hours, of delivery and Clickeat services"
+                foodtruckLabel: My location schedule
+                foodtruckDescription: Manage your locations and events
+            clickeatLabel: My Clickeat
+            clickeatDescription: "Details about online orders, means of payment, delay, maximum quantity, ..."
+            usersLabel: My users
+            usersDescription: Manage the users of your Clickeat platform
+            galleryLabel: My pics
+            galleryDescription: Manage your photo gallery
+        infos:
+            title: My details
+            intro: Basic informations about your sign.
+            nameLabel: Name of your restaurant
+            tagsLabel: Categories
+            smallDescriptionLabel: Baseline
+            smallDescriptionHelp: Urge to eat !
+            descriptionLabel: Description
+            descriptionHelp: "Avaible on your Clickeat, TTT profile and on your website (depending of your subscription)"
+            phoneLabel: Phone number
+            phoneHelp: This phone number is communicated to the customer only after his online order.
+            tttintro: Track the Truck
+            validationMailLabel: TTT's validation email
+            hidePriceLabel: Hide prices on TTT
+            askModification: Ask for a change
+        team:
+            title: Team
+            add: Add a member
+            nameLabel: Name
+            descriptionLabel: Description
+            coverLabel: Pictures
+        store:
+            title: My point of sale
+            intro: Those informations are for the custommers who is looking at your Clickeat profile and your website (depending of your subscritpion)
+            address:
+                title: My adress
+            store:
+                paymentMethodsLabel: Means of payment in store
+                servicesLabel: Services in store
+            location:
+                title: My location
+        clickeat:
+            title: My Clickeat
+            intro: You are so close of getting access to the online ordering system
+            isOpenLabel: Restaurant opening
+            orderDelayLabel: Minimum delay for ordering (minutes)
+            orderDelayHelp: How much time do you want between the reception of the Clickeat order and the taking away from the custommer?
+            maxOrderBySlotLabel: Numbers of custommers by time slots
+            maxOrderBySlotHelp: Clickeat is working by 5 minutes time slots. How many custommers do you want to manage by time slot?
+            maxOrderPriceBySlotLabel: Maximum price by slot (€)
+            maxOrderPriceBySlotHelp: What maximum amount do you want to accept by time slot ?
+            paymentMethodsLabel: Means of payment Clickeat
+            paymentMethodsHelp: Which means of payment you want to accept for Clickeat orders ?
+    timesheets:
+        title: Time schedule
+        intro: Fill your opening hours
+        addRecurrent: Add a time slot
+        addRecurrentFoodtruck: Add a recurrent location
+        addEvent: Create an event
+        addClose: Close the restaurant
+        editRecurrent: Modify this recurrent event
+        editEvent: Modify this event
+        editForDay: Modify only for this day
+        closeForDay: Close at that date
+        typeLabel: Type
+        dayLabel: Day(s)
+        timeLabel: Time schedule
+        eventType:
+            closed: Closing
+            recurrent: Recurrent
+            event: Event
+            private: Private event
+        types:
+            opening: Openning
+            preorder: Preorder
+            delivery: Delivery
+        labels:
+            day: Day
+            startDate: Start date
+            endDate: End date
+            start: Starting hour
+            end: Ending hour
+        dayLimitHelp: "Limite the schedule between date, or leave the fields empty"
+        privateHelp: "Private event : The adress will not be shown to the custommer"
+        servicesLabel: Services
+        closeTitle: Close the restaurant
+        quickEditTitle: Modify event
+        calendarTitle: Timetable of openning hours
+    users:
+        title: My users
+        intro: You can manage here the users and their permission on the platform
+        roles:
+            manager:
+                title: Gérant
+                description: Accès au back office et aux commandes
+            manager2:
+                title: Manager
+                description: Accès au back office et aux commandes (hors facturation)
+            seller:
+                title: Seller
+                description: Only access to the dashboard for reception et orders management
+            deliveryMan:
+                title: Delivery man
+                description: Only access to his own delivery
+        newLabel: a user
+        nameLabel: Name
+        emailLabel: Email
+        roleLabel: Role(s)
+        messageLabel: Message
+        waitingRequest: Waiting request
+        requestHelp: This users doesn't exist in our database. Please confirm your email adress or validate this form to send a request. During the sign in processhe will have a direct access to your sign.
+    communication:
+        title: Communication
+        dashboard:
+            shareLabel: Post
+            shareDescription: "Emphasis of an offer, a product, ... Share the information on Clickeat and Facebook"
+            confLabel: Configuration
+            confDescription: "Social media account settings"
+        share:
+            title: Post
+            post: Message
+            postHelp: Share your profil with a custom message
+            productHelp: Share your products
+            mealHelp: Promote your meals to your custommers
+            discountHelp: Share your discounts
+        post:
+            title: Tittle
+            titlePlaceholder: Only for TTT/Clickeat
+            message: Message
+            image: Add/Change the pictures
+            link: Add a link to my profil
+            facebookHelp: Post on Facebook
+            twitterHelp: Post on Twitter
+            linkHelp: Add a link to my profil
+            productLabel: Choose a product
+            mealLabel: Choose a meal
+            discountLabel: Choose a meal
+            action: Post
+        conf:
+            title: Configuration
+            ttt:
+                title: Track the Truck - Share an event
+                facebookLabel: Automatically share on Facebook your certiied events
+                twitterLabel: Automatically share on Twitter your certified events
+                betaHelp: "Track The Truck is not open to public yet, you can't use this function for now"
+                validationMessage:
+                    title: Configure the certification message
+                    nameButton: Add the name of the location
+                    addressButton: Add the adress
+                    hourButton: Add a time schedule
+                    nameHelp: "[[name]] : name of the event location (e.g: 5th avenue New York City)"
+                    addressHelp: "[[adress]] : adress of the event"
+                    hourHelp: "[[hour]] : timeschedule of the event (e.g: from 10am to 15pm)"
+                cancelMessage:
+                    title: Configure the closing message
+            networks:
+                title: Social media informations
+                boxTitle: My social media
+                hashtagLabel: "Hashtag (without the #)"
+                network: Social media
+                intro: You can also inform visitors of all your social media.
+            widgets:
+                menu:
+                    title: Add a menu
+                    facebook: Add my menu on Facebook
+                    code: Embed code for your website
+                planning:
+                    title: Embed your planning
+                    alt: Alternative planning
+                    facebook: Add my planning on Facebook
+                    code: Embed code for your website
+                    code2: Embed code for your website (alternative)
+            connect:
+                connectedAs: Log as
+                logout: Log out
+                facebookSelect: Select on which page you want to post
+                select: Select
+                facebookHelp: Connect your Facebook account in order to post with the Clickeat tools.
+                facebookButton: Log in with Facebook
+                twitterHelp: Also connect your Twitter account
+                twitterButton: Log in with Twitter
+    catalog:
+        title: My menu
+        category:
+            title: Product category
+            add:
+                help: "Add the name of the category (Bagel, beverage, ...) and validate by clicking on \"Add\"."
+                namePlaceholder: Add a category...
+            imageHelp: "The pictures of your categories are the first images that your custommers will see on the mobile app : tease them !"
+            stateLabel: State
+        product:
+            title: My products
+            addHelp: "Add a new product (Bagel New-york). Edit options (bread, sauce) with the link \"Manage options\"."
+            importHelp: "Import products from Clickeat library to save time (beverage, ...)"
+            mealOnly: Meal only
+            emptyCategory: No product in this category. This won't be seen online.
+            manageOptions: Manage options
+            emptyOptions: No options
+            availability: Availability
+            nameLabel: Name
+            descriptionLabel: Description
+            categoryLabel: Category
+            categoryEmptyLabel: Meal only
+            priceLabel: Prices (€)
+            ref: Internal reference
+            deliveryPriceLabel: Delivery prices (€)
+            deliveryPriceHelp: If not avaible for delivery put 0
+            taxLabel: Tax
+            isHotLabel: Hot/Cold
+            hotChoice: Hot
+            coldChoice: Cold
+            onlineLabel: Online
+            onlineHelp: (Online /  Offline)
+            promotedLabel: Highlight
+            promotedHelp: The product will appear on the first customer view
+            defaultStockLabel: Default stock
+            unlimitedStockLabel: Unlimited stock
+        meal:
+            title: My meals
+            step1: "Create your steps (dish, beverage, ...) and add products to them."
+            step2: "Create your meals and add some steps. Select avaible products."
+            addSlot: Create a step
+            addProductToSlot: Add products
+            importSlot: Add a step
+            nameLabel: Name
+            descriptionLabel: Description
+            priceLabel: Prices (€)
+            deliveryPriceLabel: Delivery prices (€)
+            deliveryPriceHelp: If not avaible for delivery put 0
+            onlineLabel: Online
+            promotedLabel: Highlight
+            promotedHelp: The product will be on the first page of your menu
+            taxLabel: Tax
+            slotLibrary: My steps
+            availability: Availability
+            mealAvailability: Availability for this meal
+            positionHelp: You can change the meals or step places by moving the name in the list. (hold the clic)
+            slot:
+                title: Slot
+                nameLabel: Name
+                choice:
+                    title: Product
+                    priceLabel: Extra (€)
+        option:
+            libraryTitle: Options library
+            helpTitle: Help regarding options
+            help: >
+                <p>
+                    Create categories of options (bread, sauce, ...) before adding their respective options (cheese bread, ketchup sauce, ...).<br>
+                    If the choice is compulsory : check <strong>Required</strong><br>
+                    If there are multiple choices : check <strong>Multiple choices</strong>
+                </p>
+            addOptionLabel: Create a new category
+            namePlaceholder: Name of the category...
+            empty: No option
+            title: Option categories
+            nameLabel: Name
+            multipleLabel: Multiple choices
+            uniqueLabel: Unique choice
+            requiredLabel: Required
+            optionalLabel: Not required
+            childrenUpdateLabel: Update in products
+            childrenUpdateHelp: Spread to every products that use this option ?
+            addMinMax: Add a maximum/minimum
+            addChoiceButton: Add an option
+            emptyChoice: No option in this category
+            choice:
+                title: Option
+                childrenOnlineLabel: State on your products
+                childrenOnlineHelp: "This option is going to be imported to each product link to the category. Would you like to set it online by default ?"
+                childrenUpdateLabel: Update on the product
+                childrenUpdateHelp: Spread to every products that use this option ?
+                nameLabel: Name
+                priceLabel: Price
+    rowActions:
+        optionsPopover: Options
+        galleryPopover: Pictures
+        sharePopover: Share
+        editPopover: Modify
+        passwordPopover: Password
+        savePopover: Save
+        deletePopover: Delete
+    confirmAction:
+        title: Confirm this action ?
+    address:
+        title: Adress
+        nameLabel: Name
+        streetLabel: Street
+        zipLabel: ZIP code
+        cityLabel: City
+    paymentMethods:
+        creditcard: Credit card
+        cash: Cash
+        ticket: Voucher
+    days:
+        monday: Monday
+        tuesday: Tuesday
+        wednesday: Wednesday
+        thursday: Thursday
+        friday: Friday
+        saturday: Saturday
+        sunday: Sunday
+    global:
+        product: product
+        meal: meal
+        discount: discount
+        importedFrom: Imported from
+    online: Online
+    add: Add
+    edit: Edit
+    save: Save
+    delete: Delete
+    import: Import
+    back: Back
+    cancel: Cancel
+    confirm: Confirm
+    cover: Picture
+    name: Name
+    description: Description
+    actions: Actions
+    yes: Yes
+    no: No

@@ -1,0 +1,44 @@
+Clab\DeliveryBundle\Entity\DeliveryDay:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+        created:
+            expose: true
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+        day:
+            expose: true
+            read_only: true
+            groups: [pro]
+        weekDay:
+            expose: true
+            read_only: true
+            groups: [pro,follow]
+        start:
+            expose: true
+            read_only: true
+            groups: [pro,follow]
+        end:
+            expose: true
+            read_only: true
+            groups: [pro,follow]
+        apiFullSlots:
+            expose: true
+            read_only: true
+            groups: [pro,follow]
+            accessor:
+                getter: getFullSlots
+        deliverySchedule:
+            expose: true
+            read_only: true
+            groups: [pro,follow]
+        deliveryMen:
+            expose: true
+            read_only: true
+            groups: [pro,follow]

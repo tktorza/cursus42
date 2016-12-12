@@ -1,0 +1,16 @@
+Clab\SocialBundle\Entity\SocialProfile:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        staticFacebookId:
+            expose: true
+        staticTwitterId:
+            expose: true
+        staticFoursquareId:
+            expose: true
+        staticTumblrId:
+            expose: true
+        staticInstagramId:
+            expose: true
+        hashtag:
+            expose: true

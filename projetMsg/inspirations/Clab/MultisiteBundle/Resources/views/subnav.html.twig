@@ -1,0 +1,31 @@
+<nav class="navbar navbar-default navbar-fixed-top" id="subnav">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse-2">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            {% if site.orderButton %}
+            <a class="btn btn-primary navbar-btn visible-xs-inline-block" id="orderButtonSmall" href="{{ orderUrl }}" target="_blank">Commander en ligne</a>
+            {% endif %}
+        </div>
+
+        <div class="collapse navbar-collapse" id="navbar-collapse-2">
+            <ul class="nav navbar-nav">
+                <li {% if currentPage is defined and currentPage == 'home' %}class="active"{% endif %}><a href="{{ path('multisite_get') }}">Accueil & Infos</a></li>
+                {% if site.sectionMenu %}<li {% if currentPage is defined and currentPage == 'menu' %}class="active"{% endif %}><a href="{{ path('multisite_menu') }}">La Carte</a></li>{% endif %}
+                {% if restaurant.isMobile %}<li {% if currentPage is defined and currentPage == 'planning' %}class="active"{% endif %}><a href="{{ path('multisite_planning') }}">Itinéraire</a></li>{% endif %}
+                {% if site.sectionGallery %}<li {% if currentPage is defined and currentPage == 'gallery' %}class="active"{% endif %}><a href="{{ path('multisite_gallery') }}">Photos</a></li>{% endif %}
+                {% if site.sectionReview %}<li {% if currentPage is defined and currentPage == 'reviews' %}class="active"{% endif %}><a href="{{ path('multisite_reviews') }}">Avis</a></li>{% endif %}
+                {% if site.sectionSocial %}<li {% if currentPage is defined and currentPage == 'social' %}class="active"{% endif %}><a href="{{ path('multisite_social') }}">Actus</a></li>{% endif %}
+                {% if site.sectionContact %}<li {% if currentPage is defined and currentPage == 'contact' %}class="active"{% endif %}><a href="{{ path('multisite_contact') }}">Contact</a></li>{% endif %}
+            </ul>
+
+            {% if site.orderButton %}
+            <a class="btn btn-primary navbar-btn navbar-right hidden-xs" id="orderButton" href="{{ orderUrl }}" target="_blank">Commander en ligne</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

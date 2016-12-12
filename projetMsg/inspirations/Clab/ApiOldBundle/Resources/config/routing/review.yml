@@ -1,0 +1,10 @@
+## Social ##
+api_0_rest_review_list:
+    path:  /reviews/{id}
+    defaults: { _controller: ClabApiOldBundle:RestReview:list, _format: json }
+    methods: [GET]
+
+api_0_rest_review_new:
+    path:  /reviews/add
+    defaults: { _controller: ClabApiOldBundle:RestReview:new, _format: json }
+    methods: [POST]

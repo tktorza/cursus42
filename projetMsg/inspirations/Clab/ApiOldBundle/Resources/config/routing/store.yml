@@ -1,0 +1,116 @@
+# Store
+api_0_rest_preorder_seach:
+    path:  /search/takeaway
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:searchTakeaway, _format: json }
+    methods: [GET]
+
+api_0_rest_delivery_seach:
+    path:  /search/delivery
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:searchDelivery, _format: json }
+    methods: [GET]
+
+api_0_rest_updated_from_bo:
+    path:  /restaurant/updated
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:updatedFromBo, _format: json }
+    methods: [GET]
+
+api_0_rest_get_one_store:
+    path:  /restaurant/get
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:getOneRestaurant, _format: json }
+    methods: [POST]
+
+api_0_rest_created_from_bo:
+    path:  /restaurant/created
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:createdFromBo, _format: json }
+    methods: [GET]
+
+api_0_rest_clickeat_seach:
+    path:  /search/clickeat
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:clickeatSearch, _format: json }
+    methods: [GET]
+
+api_0_rest_store_quick_list:
+    path:  /restaurants/quick-list
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:quickList, _format: json }
+    methods: [GET]
+
+# Foodtrucks
+api_0_rest_foodtruck_list:
+    path:  /foodtrucks
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:list, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_quick_list:
+    path:  /foodtrucks/quick-list
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:quickList, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_seach:
+    path:  /foodtrucks/search
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:search, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_seach_location:
+    path:  /foodtrucks/search-location
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:searchByLocation, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_get:
+    path:  /foodtrucks/{id}
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:get, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_today_events:
+    path:  /restaurant/{restaurantId}/foodtruck/events
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:getTodayEvents, _format: json }
+    methods: [GET]
+
+api_0_rest_foodtruck_validate:
+    path:  /restaurant/{restaurantId}/foodtruck/validate
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:validate, _format: json }
+    methods: [POST]
+
+api_0_rest_foodtruck_publish:
+    path:  /restaurant/{restaurantId}/foodtruck/publish
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:publish, _format: json }
+    methods: [POST]
+
+api_0_rest_foodtruck_cancel:
+    path:  /restaurant/{restaurantId}/foodtruck/cancel
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:cancel, _format: json }
+    methods: [POST]
+
+api_0_rest_foodtruck_close:
+    path:  /restaurant/{restaurantId}/foodtruck/close
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:close, _format: json }
+    methods: [POST]
+
+api_0_rest_foodtruck_edit:
+    path:  /restaurant/{restaurantId}/foodtruck/edit
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:edit, _format: json }
+    methods: [POST]
+
+api_0_rest_foodtruck_delete:
+    path:  /restaurant/{restaurantId}/foodtruck/delete/{id}
+    defaults: { _controller: ClabApiOldBundle:RestFoodtruck:delete, _format: json }
+    methods: [DELETE]
+
+api_0_rest_discount_list:
+    path:  /restaurant/{restaurantId}/discounts
+    defaults: { _controller: ClabApiOldBundle:RestDiscount:list, _format: json }
+    methods: [GET]
+
+api_0_rest_texes_list:
+    path:  /restaurant/taxes
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:listTaxes, _format: json }
+    methods: [GET]
+
+api_0_rest_restaurant_search:
+    path:  /search/restaurant
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:searchRestaurants, _format: json }
+    methods: [POST]
+
+api_0_rest_restaurant_best_review:
+    path:  /restaurant/best/review
+    defaults: { _controller: ClabApiOldBundle:RestRestaurant:getBestReviewOfRestaurant, _format: json }
+    methods: [POST]

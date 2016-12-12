@@ -1,0 +1,30 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_iframe',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-iframe.png') }}">
+                    <br><br>
+                    <h2>Interface marchande sur votre site et Facebook</h2>
+                    <br>
+                    <p>
+                        Intégrez une interface de commande en ligne directement sur votre site web ou votre page Facebook. Vos clients pourront directement commander via ces canaux.
+                    </p>
+                    <br><br>
+                    <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'iframe' }) }}">Accèder</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

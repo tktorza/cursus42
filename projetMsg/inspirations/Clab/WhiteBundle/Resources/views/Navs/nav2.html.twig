@@ -1,0 +1,20 @@
+{% set route = app.request.attributes.get('_route') %}
+{% if is_mobile() %}
+    <div class="nav-menu">
+        <ul class="nav navbar-nav nav-2 col-sm-12">
+            <li class="col-sm-12 full logoutLine"><a href="{{ path('fos_user_security_logout') }}">{{ user.isMale ? 'Mr.' : 'Mme.' }} {{ user.lastName }} / Déconnexion</a></li>
+            <li class="col-sm-6"><a href="{{ path('clab_white_user_reductions') }}"  {% if route == 'clab_white_user_reductions' %}class="actived"{% endif %}>Vos primes</a></li>
+            <li class="col-sm-6"><a href="{{ path('clab_white_user_profile') }}" {% if route == 'clab_white_user_profile' %}class="actived"{% endif %} >Vos informations</a></li>
+            <li class="col-sm-6"><a href="{{ path('clab_white_user_address') }}" {% if route == 'clab_white_user_address' %}class="actived"{% endif %}>Vos adresses</a></li>
+            <li class="col-sm-12 full commands"><a href="{{ path('clab_white_user_orders') }}" {% if route == 'clab_white_user_orders' %}class="actived"{% endif %}>Vos commandes</a></li>
+        </ul>
+    </div>
+{% else %}
+    <ul class="nav navbar-nav nav-2 col-lg-12 col-md-12 col-sm-12">
+        <li class="col-md-3"><a href="{{ path('clab_white_user_orders') }}" {% if route == 'clab_white_user_orders' %}class="actived"{% endif %} >Commande<br />et suivi</a></li>
+        <li class="col-md-2"><a href="{{ path('clab_white_user_reductions') }}" {% if route == 'clab_white_user_reductions' %}class="actived"{% endif %}>Primes</a></li>
+        <li class="col-md-2"><a href="{{ path('clab_white_user_profile') }}" {% if route == 'clab_white_user_profile' %}class="actived"{% endif %}>Informations personnelles</a></li>
+        <li class="col-md-2"><a href="{{ path('clab_white_user_address') }}" {% if route == 'clab_white_user_address' %}class="actived"{% endif %} >Adresses<br />de livraison</a></li>
+        <li class="col-md-3"><a class="red" href="{{ path('fos_user_security_logout') }}">{{ user.isMale ? 'Mr.' : 'Mme.' }} {{ user.lastName }}<br />Déconnexion</a></li>
+    </ul>
+{% endif %}

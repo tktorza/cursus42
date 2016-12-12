@@ -1,0 +1,6 @@
+<p>Un nouveau {% if restaurant.isMobile %}foodtruck{% else %}resto{% endif %} !</p>
+
+<p><strong>{{ restaurant.name }}</strong></p>
+
+<p><a href="{{ url('board_dashboard', { context: 'restaurant', contextPk: restaurant.slug }) }}">Accèder à son tableau de bord</a></p>
+

@@ -1,0 +1,34 @@
+{% extends 'ClabBoardBundle:Mail:base.html.twig' %}
+{% import 'ClabBoardBundle:Mail:macro/mail.html.twig' as mail %}
+
+{% if restaurant.isMobile %}
+{% set service = 'Clickeat et Track the Truck' %}
+{% set store = 'food truck' %}
+{% else %}
+{% set service = 'Clickeat' %}
+{% set store = 'restaurant' %}
+{% endif %}
+
+{% block body %}
+    {% include 'ClabBoardBundle:Mail:partials/blockWhite.html.twig' with {
+        block1: true,
+        title1: "Bonjour " ~ user.firstName,
+        content1: "
+            Je suis Antoine, l’un des co-fondateurs de " ~ service ~ ". Bienvenue !<br>
+            Nous avons créé " ~ service ~ " pour vous aider à développer votre activité en ligne facilement. N’hésitez donc pas à nous solliciter à tout moment.<br>
+            <br>
+            Vous pouvez dès à présent renseigner les pré-requis pour finaliser la création de votre compte sur MyClickeat, l’interface pour gérer toutes les informations en ligne sur votre " ~ store ~ ".
+        ",
+        button1: true,
+        button1Label: "Accèder à myClickeat",
+        button1Link: url('board_onboard_custom_infos', { slug: restaurant.slug }),
+        block2: true,
+        content2: "
+            Un membre de notre équipe vous contactera très prochainement pour finaliser votre inscription et vous pourrez passer en ligne lorsque vous le souhaiterez. 
+        ",
+    } %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockAppstore.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockHelp.html.twig' %}
+{% endblock %}

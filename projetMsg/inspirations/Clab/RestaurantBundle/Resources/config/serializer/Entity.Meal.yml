@@ -1,0 +1,93 @@
+Clab\RestaurantBundle\Entity\Meal:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        created:
+            expose: true
+            groups: [app,pro]
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+            groups: [app,pro]
+        name:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        slug:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        description:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        price:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        currentPrice:
+            expose: true
+            read_only: true
+            accessor:
+                getter: _getCurrentPrice
+            groups: [app,search,public,pro]
+        deliveryPrice:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        priceOnSite:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        managerPrice:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+            accessor:
+                getter: getPrice
+        currentSale:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getCurrentSale
+            groups: [app,search,public,pro]
+        cover:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        coverSmall:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        coverFull:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        apiCover:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getApiCover
+            groups: [app,search,public,pro]
+        slots:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro,extended]
+        tax:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        taxDelivery:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        taxOnSite:
+            expose: true
+            read_only: true
+            groups: [app,pro]

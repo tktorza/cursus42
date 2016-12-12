@@ -1,0 +1,83 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: context == 'restaurant' ? 'store' : 'client',
+        route: 'board_user_library',
+        rightLink: path('board_user_add', { context: context, contextPk: contextPk }),
+        rightLinkLabel: 'Ajouter un utilisateur myclickeat',
+        rightLinkAjaxModal: true,
+        rightLink2: path('board_user_pincode_add', { context: context, contextPk: contextPk }),
+        rightLink2Label: 'Ajouter un utilisateur caisse',
+        rightLink2ajaxModal: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="users">
+    <h3>Utilisateurs</h3>
+    <section class="panel">
+        <div class="panel-body" id="userTable">
+            <table class="table table-hover">
+                <thead>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle(s)</th>
+                    <th>Mot de passe</th>
+                </thead>
+                <tbody id="userList" data-url="{{ path('board_user_library_list', { contextPk: contextPk, context: context }) }}" class="list">
+                    {% include 'ClabBoardBundle:User:libraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% if context == 'restaurant' %}
+    <h3>Accès pin caisse</h3>
+    <section class="panel">
+        <div class="panel-body" id="staffTable">
+            <table class="table table-hover">
+                <thead>
+                    <th>Nom</th>
+                    <th>Code</th>
+                    <th>Accès myclickeat</th>
+                    <th>Accès logs</th>
+                </thead>
+                <tbody id="staffList" data-url="{{ path('board_pincode_library_list', { contextPk: contextPk }) }}"
+                       class="list">
+                    {% include 'ClabBoardBundle:User:pin_list.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+function mix()
+{
+    $('#userList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+
+    $('#staffList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#userList').mixItUp('destroy');
+    $('#staffList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+</script>
+{% endblock %}

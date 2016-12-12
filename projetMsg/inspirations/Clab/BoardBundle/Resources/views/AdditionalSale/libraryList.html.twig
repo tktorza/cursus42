@@ -1,0 +1,33 @@
+{% for additionalSale in additionalSales %}
+   <tr
+    id="additionalSale-{{ additionalSale.slug }}"
+    class="mix clickable"
+    data-target="drawer" href="{{ path('board_additional_sale_edit', { contextPk: contextPk, slug: additionalSale.slug }) }}">
+    <td class="name">{{ additionalSale.name }}</td>
+    <td>
+        {% if additionalSale.product is not null %}
+
+            {{ additionalSale.product.name }}
+        {% elseif additionalSale.meal is not null %}
+            {{ additionalSale.meal.name }}
+        {% endif %}
+    </td>
+    <td>
+        {% if additionalSale.additionalSaleProducts is not empty %}
+            {% for additionalProduct in additionalSale.additionalSaleProducts %}
+                    {{ additionalProduct.product.name }}
+                {% if additionalProduct.price is not null %}
+                    (+{{ additionalProduct.price|number_format(2,'.',',') }})
+                {% endif %},
+            {% endfor %}
+        {% endif %}
+    </td>
+    <td>
+        {% if additionalSale.isOnline %}
+            <span class="label label-success">En ligne</span>
+          {% else %}
+          <span class="label label-danger">Indisponible</span>
+          {% endif %}
+    </td>
+</tr>
+{% endfor %}

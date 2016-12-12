@@ -1,0 +1,144 @@
+{% extends 'ClabManagerBundle:Dashboard2:layout.html.twig' %}
+
+{% set subwayCat = ['Pain', 'Recette', 'Fromage', 'Suppl. viandes', 'Suppl. fromage', 'Toasté', 'Légumes', 'Sauce'] %}
+
+{% block page %}
+<div data-role="page" data-dialog="true">
+
+    <div data-role="header" data-theme="b" class="{% if order.state != 4 and order.state != 5 %}{% if order.onlinePayment %}header-online-payment{% else %}header-direct-payment{% endif %}{% else %}{% if order.state == 5 %}header-canceled{% else %}header-order{% endif %}{% endif %}">
+        <h1>{{ order.time|date('G:i') }} . {{ order.profile.verboseName }}</h1>
+        <a href="#popupMenu" data-rel="popup" data-transition="slideup" data-icon="gear" class="ui-btn-right" data-theme="a"></a>
+        <div data-role="popup" id="popupMenu" data-theme="b">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                {% if order.profile.phone and order.state < 4 %}
+                <li><a href="tel:{{ order.profile.phone }}">Appeler</a></li>
+                {% endif %}
+                <li><a href="#" onClick="window.print();">Imprimer</a></li>
+            </ul>
+        </div>
+    </div><!-- /header -->
+
+    <div role="main" class="ui-content">
+        {% if order.state == 5 %}
+            <h3>Commande annulée</h3>
+        {% endif %}
+        <table class="table table-striped">
+            <thead>
+                <th>#</th>
+                <th>Nom</th>
+                <th>Quantité</th>
+                <th>Prix unit.</th>
+                <th>Prix tot.</th>
+            </thead>
+
+            {% set count = 0 %}
+            {% set mealCount = 0 %}
+
+            <tbody>
+                {% for element in order.cart.elements %}
+                    {% if element.meal != null %}
+                        {% set count = count + 1 %}
+                        {% set mealCount = mealCount + 1 %}
+                        {% for children in element.childrens %}
+                        <tr>
+
+                            <td>#{{ count }}</td>
+                            <td>
+                            {% if children.product.subwaySandwich %}Sandwich{% else %}{{ children.product.subwayName }}{% endif %} (Formule {{ mealCount }})
+                            {% if children.choices|length > 0 %}
+                                {% if children.product.subwaySandwich %}
+                                    {% for cat in subwayCat %}
+                                        <br>
+                                        <small><strong>{{ cat }}: </strong>{% if loop.first %}Taille {{ children.product.subwaySandwichSize }} - {% endif %} {% for choice in children.choices if choice.subwayType == cat %}{{ choice.subwayName }}&nbsp;&nbsp;{% endfor %}</small>
+                                    {% endfor %}
+                                    <br>
+                                    <small>{% for choice in children.choices if choice.subwayType is null %}{{ choice.subwayName }}&nbsp;&nbsp;{% endfor %}</small>
+                                {% else %}
+                                <br>
+                                <small>{% for choice in children.choices %}{% if not loop.first %}, {% endif %}{{ choice.subwayName }}{% endfor %}</small>
+                                {% endif %}
+                            {% endif %}
+                            </td>
+                            <td>{{ children.quantity * element.quantity }}</td>
+                            <td>{{ children.price }}€</td>
+                            <td>{{ children.price * children.quantity * element.quantity }}€</td>
+                        </tr>
+                        {% endfor %}
+                    {% endif %}
+                {% endfor %}
+
+                {% for element in order.cart.elements %}
+                <tr>
+                {% if element.product != null %}
+                    <td>#{{ loop.index }}</td>
+                    <td>
+                    {% if element.product.subwaySandwich %}Sandwich{% else %}{{ element.product.subwayName }}{% endif %}
+                    {% if element.choices|length > 0 %}
+                        {% if element.product.subwaySandwich %}
+                            {% for cat in subwayCat %}
+                                <br>
+                                <small><strong>{{ cat }}: </strong>{% if loop.first %}Taille {{ element.product.subwaySandwichSize }} - {% endif %} {% for choice in element.choices if choice.subwayType == cat %}{{ choice.subwayName }}&nbsp;&nbsp;{% endfor %}</small>
+                            {% endfor %}
+                            <br>
+                            <small>{% for choice in element.choices if choice.subwayType is null %}{{ choice.subwayName }}&nbsp;&nbsp;{% endfor %}</small>
+                        {% else %}
+                        <br>
+                        <small>{% for choice in element.choices %}{% if not loop.first %}, {% endif %}{{ choice.subwayName }}{% endfor %}</small>
+                        {% endif %}
+                    {% endif %}
+                    </td>
+                    <td>{{ element.quantity }}</td>
+                    <td>{{ element.price }}€</td>
+                    <td>{{ element.price * element.quantity }}€</td>
+                </tr>
+                {% endif %}
+                {% endfor %}
+
+                {% if order.cart.deliveryCart is not null and order.cart.deliveryCart.extra and order.cart.deliveryCart.extra > 0 %}
+                <tr>
+                    <td colspan="4">Supplément livraison</td>
+                    <td><span class="pull-rigth">{{ order.cart.deliveryCart.extra }}€</span></td>
+                </tr>
+                {% endif %}
+
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td><strong>Total</strong></td>
+                    <td><strong><span id="order-price">{{ order.price }}</span>€</strong></td>
+                </tr>
+            </tbody>
+        </table>
+
+        {% if order.cart.discount %}
+            <p><i class="icon-tag"></i>&nbsp;&nbsp;Offre: {{ order.cart.discount.name }} : {{ order.cart.discount.description }}</p>
+        {% endif %}
+
+        {% if order.cart.coupon %}
+            <p><i class="icon-tag"></i>&nbsp;&nbsp;Coupon: {{ order.cart.coupon.name }} - {{ order.cart.coupon.verbose }}</p>
+        {% endif %}
+
+        {% if order.comment != null %}
+            <p><strong>Commentaire client: </strong>{{ order.comment }}</p>
+        {% endif %}
+
+        {% if order.delivery and order.delivery.code and order.state < 4 %}
+        <hr>
+            <div style="font-size: 140%">
+                <p><strong>Commande en livraison</strong></p>
+            </div>
+            <p><strong>Code livreur : </strong>{{ order.delivery.code }}</p>
+            <p><strong>Adresse : </strong>{{ order.delivery.address.verbose }}</p>
+            <p><strong>Commentaire : </strong>{{ order.delivery.comment }}</p>
+            <p><strong>Téléphone : </strong>{{ order.profile.phone }}</p>
+          <hr>
+        {% endif %}
+
+        {% if order.state != 4 and order.state != 5 %}
+        <form action="{{ path('manager_order_update') }}" method="post" data-ajax="false">
+            <input type="hidden" name="order" value="{{ order.id }}"/>
+            <button type="submit" data-role="button" data-theme="b" data-transition="pop">Cloturer</button>
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

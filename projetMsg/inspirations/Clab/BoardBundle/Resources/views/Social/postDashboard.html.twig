@@ -1,0 +1,88 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'social',
+        route: 'board_social_dashboard',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="social">
+    <div class="row">
+        <div class="col-md-8">
+            <section class="panel">
+                <div class="panel-body">
+                    <h2><i class="fa fa-bullhorn icon-left"></i>Diffusez autour de vous</h2>
+                    <br>
+                    <div class="list-group" id="dashboard">
+                        <a href="{{ path('board_social_post', { contextPk: contextPk, type: 'message' }) }}" class="list-group-item">
+                            <div class="media">
+                                <div class="pull-left" href="#">
+                                    <img class="media-object" src="{{ asset('front/bundle/board/img/social/icon-message.png') }}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="media-heading">Un message</h3>
+                                    <p>Partagez votre profil avec un message personnalisé</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{{ path('board_social_post', { contextPk: contextPk, type: 'product' }) }}" class="list-group-item">
+                            <div class="media">
+                                <div class="pull-left">
+                                    <img class="media-object" src="{{ asset('front/bundle/board/img/social/icon-product.png') }}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="media-heading">Un produit</h3>
+                                    <p>Diffusez vos produits</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{{ path('board_social_post', { contextPk: contextPk, type: 'meal' }) }}" class="list-group-item">
+                            <div class="media">
+                                <div class="pull-left" href="{{ path('board_social_post', { contextPk: contextPk, type: 'meal' }) }}">
+                                    <img class="media-object" src="{{ asset('front/bundle/board/img/social/icon-meal.png') }}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="media-heading">Une formule</h3>
+                                    <p>Informez vos clients sur vos formules</p>
+                                </div>
+                            </div>
+                        </a>
+                        <a href="{{ path('board_social_post', { contextPk: contextPk, type: 'discount' }) }}" class="list-group-item">
+                            <div class="media">
+                                <div class="pull-left" href="{{ path('board_social_post', { contextPk: contextPk, type: 'discount' }) }}">
+                                    <img class="media-object" src="{{ asset('front/bundle/board/img/social/icon-discount.png') }}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="media-heading">Une offre</h3>
+                                    <p>Diffusez vos offres.</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% if false and proxy.isMobile %}
+                        <a href="{{ path('board_social_post', { contextPk: contextPk, type: 'event' }) }}" class="list-group-item">
+                            <div class="media">
+                                <div class="pull-left" href="{{ path('board_social_post', { contextPk: contextPk, type: 'location' }) }}">
+                                    <img class="media-object" src="{{ asset('front/bundle/board/img/social/icon-ttt.png') }}">
+                                </div>
+                                <div class="media-body">
+                                    <h3 class="media-heading">Un emplacement</h3>
+                                    <p>Communiquez sur vos emplacements</p>
+                                </div>
+                            </div>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-4">
+            {% if not proxy.facebookPage %}
+            <p>Connectez Facebook et Twitter pour optimiser votre communication en ligne : <a href="{{ path('board_settings', { contextPk: contextPk, type: 'social' }) }}">Paramètres du compte > Intégration</a>.
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

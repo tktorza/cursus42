@@ -1,0 +1,16 @@
+Clab\RestaurantBundle\Entity\Tax:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        name:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        value:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]

@@ -1,0 +1,33 @@
+<section *ngIf="cart && cart.elements">
+    <section *ngFor="let element of cart.elements">
+      <div *ngIf="element.quantity">
+        <div class="col-xs-12">
+          <div *ngIf="!element.meal">
+            <h6>{{ element.product.name }} x {{element.quantity}}</h6>
+            <div *ngIf="element.choices.length">
+              <p class="children" *ngFor="let choice of element.choices">
+                {{ choice.value }}
+              </p>
+            </div>
+          </div>
+          <div *ngIf="element.meal">
+            <h6>{{ element.meal.name }} x {{element.quantity}}</h6>
+            <div *ngIf="element.childrens.length">
+              <p class="children" *ngFor="let children of element.childrens">
+                {{ children.product.name }}
+                  <span class="product-options" *ngIf="children.choices.length">
+                    (<span *ngFor="let choice of children.choices, let last = last">{{ choice.value }}<span *ngIf="!last">, </span></span>)
+                  </span>
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="discount" *ngIf="cart.discount" text-center>
+        <ion-icon name="bulb"></ion-icon> {{ cart.discount.description }} (-{{ cart.discountAmount }}€)
+    </section>
+    <section class="price" *ngIf="cart.price" text-center>
+        <ion-icon name="bulb"></ion-icon> {{ cart.price }}€)
+    </section>
+  </section>

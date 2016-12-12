@@ -1,0 +1,10 @@
+## Social ##
+api_rest_taxonomy_vocabulary_terms:
+    path:  /vocabularies/{slug}/terms
+    defaults: { _controller: ClabApiBundle:RestTaxonomy:vocabularyTerms, _format: json}
+    methods: [GET]
+
+api_rest_taxonomy_get_tags:
+    path:  /tags
+    defaults: { _controller: ClabApiBundle:RestTaxonomy:getTags, _format: json}
+    methods: [GET]

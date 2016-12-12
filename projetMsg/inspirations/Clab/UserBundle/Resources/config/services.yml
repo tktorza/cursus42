@@ -1,0 +1,42 @@
+services:
+    app_user.authentication.success_handler:
+        class:  Clab\UserBundle\Security\Http\Authentication\AuthenticationSuccessHandler
+        arguments:  [ @security.http_utils, @service_container, {}]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+            - { name: kernel.event_listener, event: app_user.authentication.success, method: handleAuthenticationSuccess }
+
+    login_success_handler:
+        class:  Clab\UserBundle\Service\LoginSuccessHandler
+        arguments:  [@router, @doctrine.orm.entity_manager, %domain%, @translator.default]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+
+    logout_success_handler:
+        class:  Clab\UserBundle\Service\LogoutSuccessHandler
+        arguments:  [@router]
+        tags:
+            - { name: 'monolog.logger', channel: 'security' }
+
+    my_user_provider:
+        class: Clab\UserBundle\Security\User\Provider\FOSUBUserProvider
+        arguments: [@fos_user.user_manager, {facebook: facebookId, facebook_ttt: facebookId}, @service_container, @doctrine.orm.entity_manager]
+
+    app_user.registration_listener:
+        class: Clab\UserBundle\EventListener\RegistrationListener
+        arguments: [@doctrine.orm.entity_manager, @service_container]
+        tags:
+            - { name: kernel.event_subscriber }
+
+    app_user.password_resetting:
+        class: Clab\UserBundle\EventListener\PasswordResettingListener
+        arguments: [@router]
+        tags:
+            - { name: kernel.event_subscriber }
+    app_user.registration_request_manager:
+        class: Clab\UserBundle\Service\RegistrationRequestManager
+        arguments: [ @doctrine.orm.entity_manager, @service_container, @mailer, @templating ]
+
+    app_user.user_manager:
+        class: Clab\UserBundle\Service\UserManager
+        arguments: [ @service_container, @doctrine.orm.entity_manager, @router ]

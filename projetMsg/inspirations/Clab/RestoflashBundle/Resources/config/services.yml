@@ -1,0 +1,14 @@
+parameters:
+    clab_restoflash.restoflash_token.class: 'Clab\RestoflashBundle\Service\RestoflashToken'
+    clab_restoflash.restoflash_web_payment.class: 'Clab\RestoflashBundle\Service\RestoflashWebPayment'
+
+services:
+    clab_restoflash.restoflash_token:
+        class: %clab_restoflash.restoflash_token.class%
+        arguments: [ %clab_restoflash.parameters%, @doctrine.orm.entity_manager, @service_container, @form.factory ]
+        scope: prototype
+
+    clab_restoflash.restoflash_web_payment:
+        class: %clab_restoflash.restoflash_web_payment.class%
+        arguments: [ %clab_restoflash.parameters%, @doctrine.orm.entity_manager, @service_container, @form.factory ]
+        scope: prototype

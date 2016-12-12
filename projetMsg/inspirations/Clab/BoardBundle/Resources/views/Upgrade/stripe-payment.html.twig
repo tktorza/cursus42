@@ -1,0 +1,116 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+
+{% block body %}
+
+<div class="container padding-v-10" id="onboard">
+    <div class="row">
+            <div class="col-md-6"  id="saved-card"  >
+            {% if client is not null and cards is not null %}
+                <header class="panel-heading"><i class="fa fa-credit-card icon-left"></i>Mes moyens de paiement<br/>
+                    <small>Pour payer avec une carte enregistrée, cliquez sur la carte avec laquelle vous
+                           souhaitez payer</small>
+                </header>
+                <div class="panel panel-default credit-card-box">
+                    <div class="panel-body">
+                        <table class="table ">
+                            <thead>
+                            <th>Type</th>
+                            <th>Date d'exp</th>
+                            <th>Numéro</th>
+                            <th>Nom</th>
+                            </thead>
+                            <tbody>
+                            {% for card in cards %}
+
+                                <tr id="{{ card.id }}">
+                                    <td><a href="" style="color:#767676;">{{ card.brand }}</a></td>
+                                    <td>{{ card.exp_month }}/{{ card.exp_year }}</td>
+                                    <td>XXXX-XXXX-XXXX-{{ card.last4 }}</td>
+                                    <td>
+                                        {% if card.name is null %}
+                                            Non renseigné
+                                        {% else %}
+                                            {{ card.name }}
+                                        {% endif %}
+                                    </td>
+                                </tr>
+
+                            {% endfor %}
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+            <div class="col-md-6">
+                <header class="panel-heading"><i class="fa fa-credit-card icon-left"></i>Récapitulatif</header>
+                <div class="well well2 text-center">
+                    {% if plan.interval == 'month' %}
+                        <h4>{{ plan.name }}</h4>
+                        <br>
+                        {% set planAmountMonth = ((plan.amount / 100)) %}
+                        <p class="lead"><strong>{{ planAmountMonth|number_format(2, '.', ',') }}€
+                                                                                                / mois</strong></p>
+                        <p>Soit {{ (planAmountMonth * 12)|number_format(2, '.', ',') }}€ HT / an</p>
+                        {% if plan.id starts with 'clickeat-' %}
+                            <p>Commissions depuis :</p>
+                            <p><small>
+                                    Clickeat <strong>9%</strong><br>
+                                    Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                    Site internet <strong>{{ plan.id|last }}%</strong>
+                                </small></p>
+                            {% endif %}
+                    {% else %}
+                        <h4>{{ plan.name }}</h4>
+                        <br>
+                        {% set planAmountYear = ((plan.amount / 100)) %}
+                        <p class="lead"><strong>Soit un prélèvement unique de : {{ planAmountYear|number_format(2, '.', ',') }}€ HT / an</strong></p>
+                        <p>Soit {{ (planAmountYear /12)|number_format(2, '.', ',') }}€ HT / mois</p>
+                    {% if plan.id starts with 'clickeat-' %}
+                        <p>Commissions depuis :</p>
+                        <p><small>
+                                Clickeat <strong>9%</strong><br>
+                                Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                Site internet <strong>{{ plan.id|last }}%</strong>
+                            </small></p>
+                    {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+        {{ parent() }}
+        <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('tr').click( function() {
+                    var getUrl = window.location;
+                    var baseUrl = getUrl .protocol + "//" + getUrl.host + "/" + getUrl.pathname.split('/')[1];
+                    var url = baseUrl + "/board/{{ restaurant.slug }}/upgrade/{{ plan.id }}/"+ this.id;
+                    window.location.href = url;
+
+                }).hover( function() {
+                    $(this).toggleClass('hover');
+                });
+
+                Stripe.setPublishableKey('{{ publishableKey }}');
+                jQuery(function($) {
+                    $('#payment-form').submit(function(e) {
+                        var $form = $(this);
+                        // Disable the submit button to prevent repeated clicks
+                        $form.find('button').prop('disabled', true);
+                        Stripe.card.createToken($form, stripeResponseHandler);
+                        // Prevent the form from submitting with the default action
+                        return false;
+                    });
+
+                });
+            });
+        </script>
+{% endblock %}

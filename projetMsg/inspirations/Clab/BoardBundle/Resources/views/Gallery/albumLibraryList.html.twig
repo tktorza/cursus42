@@ -1,0 +1,78 @@
+<tr id="profile-picture" class="mix">
+    <td class="name">
+        <img src="{{ proxy.gallery.cover.webpath | imagine_filter('square_20') }}" class="img-circle margin-right">
+        Mes photos de profil
+    </td>
+    <td><i class="fa fa-lock fa-lg"></i></td>
+    <td>
+        <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'restaurant', entityId: proxy.id }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set imageCount = proxy.gallery.images|length %}
+        {% if imageCount > 0 %}
+            <span class="badge badge-success">{{ imageCount }}</span>
+        {% else %}
+            <span class="badge">{{ imageCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+<tr id="profile-picture" class="mix">
+    <td class="name">
+        <img src="{{ proxy.galleryBig.cover.webpath | imagine_filter('square_20') }}" class="img-circle margin-right">
+        Mes photos de couverture
+    </td>
+    <td><i class="fa fa-lock fa-lg"></i></td>
+    <td>
+        <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'restaurant', entityId: proxy.id, type: 'big' }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set imageCount = proxy.galleryBig.images|length %}
+        {% if imageCount > 0 %}
+            <span class="badge badge-success">{{ imageCount }}</span>
+        {% else %}
+            <span class="badge">{{ imageCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+<tr id="profile-picture" class="mix">
+    <td class="name">
+        Mon menu (format png,jpg ou jpeg)
+    </td>
+    <td><i class="fa fa-lock fa-lg"></i></td>
+    <td>
+        <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'restaurant', entityId: proxy.id, type: 'menu' }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set imageCount = proxy.galleryMenu.images|length %}
+        {% if imageCount > 0 %}
+            <span class="badge badge-success">{{ imageCount }}</span>
+        {% else %}
+            <span class="badge">{{ imageCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+{% for album in albums %}
+<tr
+    id="album-{{ album.slug }}"
+    class="mix clickable"
+    data-target="drawer" href="{{ path('board_album_edit', { context: context, contextPk: contextPk, slug: album.slug }) }}"
+>
+    <td class="name">
+        {{ album.name }}
+    </td>
+    <td>
+        {% if album.isOnline %}
+            <i class="fa fa-circle icon-success icon-left"></i>En ligne
+        {% else %}
+            <i class="fa fa-circle icon-danger icon-left"></i>Hors ligne
+        {% endif %}
+    </td>
+    <td>
+        <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'album', entityId: album.id }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set imageCount = album.gallery.images|length %}
+        {% if imageCount > 0 %}
+            <span class="badge badge-success">{{ imageCount }}</span>
+        {% else %}
+            <span class="badge">{{ imageCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

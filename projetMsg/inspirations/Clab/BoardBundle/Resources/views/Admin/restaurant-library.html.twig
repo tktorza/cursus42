@@ -1,0 +1,102 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+    category: 'admin',
+    route: 'board_admin_library_restaurant'
+    } %}
+{% endblock %}
+
+{% block body %}
+    <div class="container padding-v-10" id="coupons">
+        <section class="panel">
+            <div class="panel-body" id="couponTable">
+                <table class="table table-hover">
+                    <thead>
+                    <th>Nom</th>
+                    <th>Adresse</th>
+                    <th>Ville</th>
+                    <th>Statut</th>
+                    <th>Actions</th>
+                    </thead>
+                    <tbody id="subscriptionList" class="list">
+                    {% for restaurant in restaurants %}
+                        <tr>
+                            <td class="name">{{ restaurant.name }}</td>
+                            <td class="address">{{ restaurant.address.street }}</td>
+                            <td class="address">{{ restaurant.address.city }}</td>
+                            {% if restaurant.status >= 3000 %}
+                            <td><span class="label label-success">En ligne</span></td>
+                            {% else %}
+                                <td><span class="label label-danger">Hors ligne</span></td>
+                            {% endif %}
+                            <td>
+                                {% if restaurant.status >= 3000 %}
+                                <a href="{{ path('board_admin_close_restaurant',{'contextPk':contextPk,'slug':restaurant.slug})
+                                }}">Fermer le restaurant</a>
+                                {% else %}
+                                <a href="{{ path('board_admin_open_restaurant',{'contextPk':contextPk,'slug':restaurant.slug}) }}">
+                                    Ouvrir le restaurant</a>
+                                {% endif %}
+                            </td>
+                                <td>
+                                {% if restaurant.isOpen == true %}
+                                    <a href="{{ path('board_admin_disallow_restaurant',{'contextPk':contextPk,'slug':restaurant.slug})
+                                    }}">Fermer la commande en ligne</a>
+                                {% else %}
+                                    <a href="{{ path('board_admin_allow_restaurant',{'contextPk':contextPk,'slug':restaurant.slug}) }}">Ouvrir la commande en ligne</a>
+                                {% endif %}
+                       </td>
+                            <td>
+                                <a href="{{ path('board_admin_synchro_restaurant',{'contextPk':contextPk,'slug':restaurant.slug}) }}" data-toggle="tooltip"
+
+                                    {% if restaurant.lastSyncCatalog is not null %}
+                                        {% if catalogNeedSync is defined and catalogNeedSync is not empty and catalogNeedSync[restaurant.id] is defined and catalogNeedSync[restaurant.id] %}
+                                            title="La carte n'est plus synchronisée"><i class="fa fa-refresh fa-lg" style="color: #aa0000;"></i>
+                                        {% else %}
+                                            title="La carte a bien été synchronisée le {{ restaurant.lastSyncCatalog|date('d-m-Y') }} à {{ restaurant.lastSyncCatalog|date('H:i') }}"><i class="fa fa-refresh fa-lg" style="color: #00aa00;"></i>
+                                        {% endif %}
+                                    {% else %}
+                                        title="Synchroniser la carte"><i class="fa fa-refresh fa-lg" style="color: #aa0000;"></i>
+                                    {% endif %}
+                                </a>
+                            </td>
+                            <td>
+                                <a href="{{ path('board_dashboard',{context: 'restaurant',contextPk: restaurant.slug}) }}" target="_blank" data-toggle="tooltip" title="lien vers ce restaurant"><i class="fa fa-external-link fa-lg"></i></a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+
+    <script type="text/javascript">
+
+        function mix()
+        {
+            $('#couponList').mixItUp({
+                layout: {
+                    display: 'table-row',
+                }
+            });
+        }
+
+        function ajaxFormCallback()
+        {
+            $('#couponList').mixItUp('destroy');
+            mix();
+        }
+
+        mix();
+
+        {% if coupon is defined and coupon %}
+        $('#coupon-{{ coupon }}').trigger('click');
+        {% endif %}
+    </script>
+{% endblock %}

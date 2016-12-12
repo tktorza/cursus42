@@ -1,0 +1,231 @@
+<div class="cart-complete" id="cart">
+    <div id="cart-header">
+        {% if noInteraction is not defined or noInteraction is null %}
+            {% if cart.orderType == 3 and area is defined and area is not null %}
+                <a class="btn btn-cart"
+                   id="buttonCartValidation"
+                   {% if cart.totalPrice < (area.minPanier ? area.minPanier : 5) %}disabled data-toggle="tooltip" title="Minimum de {{ area.minPanier ? area.minPanier : 5 }}€ de commande" {% endif %}
+                {% if not app.user %}
+                    href="#login-modal"
+                    data-toggle="modal"
+                    data-target="#login-modal"
+                {% else %}
+                   href="{{ path('clab_white_order_recap', { slug: cart.restaurant.slug }) }}"
+                {% endif %}>
+                    <span class="text-center">Commander </span><span class="price text-center">{{ cart.totalPrice|number_format(2) }}&nbsp;&euro;</span>
+                </a>
+            {% else %}
+                <a class="btn btn-cart"
+                   id="buttonCartValidation"
+                   {% if cart.totalPrice < 5 %}disabled data-toggle="tooltip" title="Minimum de 5€ de commande" {% endif %}
+                    {% if not app.user %}
+                        href="#login-modal"
+                        data-toggle="modal"
+                        data-target="#login-modal"
+                    {% else %}
+                   href="{{ path('clab_white_order_recap', { slug: cart.restaurant.slug }) }}"
+                    {% endif %}>
+                    <div>
+                        <span class="text-center">Commander </span><span class="price text-center">{{ cart.totalPrice|number_format(2) }}&nbsp;&euro;</span>
+                    </div>
+
+                </a>
+
+            {% endif %}
+        {% else %}
+            <p class="btn btn-cart background-grey-1 no-interaction" id="buttonCartValidation">
+                    <span class="text-center">TOTAL </span>
+                    <span class="total-price text-center">{{ cart.totalPrice|number_format(2) }}&nbsp;&euro;</span>
+
+            </p>
+        {% endif %}
+
+    </div>
+
+    {% if cart is defined %}
+        {% if cart.elements|length == 0 %}
+            <div class="empty-cart text-center">Votre commande est vide.</div>
+        {% else %}
+            <div class="content{% if noInteraction is defined and noInteraction is not null %}background-transparent{% endif %} padding-top-v-10">
+                {% if cart.orderType != 3 %}
+                    <div class="col-x-12 text-center">
+                        <span class="nota-bene text-center">Les prix emporté sont réduits de 10% par rapport au prix livré</span>
+                    </div>
+                {% endif %}
+                <div class="products-wrapper">
+                    {% for element in cart.elements %}
+                        {% if element.additionalSaleProduct is null %}
+                            <div price="{{ element.price }}" class="cart-product cart-element">
+
+                      <span class="pull-right">
+                          <span class="price">
+                              {% set supplement=0 %}
+
+                              {% if element.childrens|length > 0 %}
+                                  {% for children in element.childrens %}
+                                      {% set supplement = (supplement + (children.price * children.quantity * element.quantity)) %}
+                                  {% endfor %}
+                              {% endif %}
+
+                              {% if element.addSaleProductCartElements|length >0 %}
+                                  {% for addSale in element.addSaleProductCartElements %}
+                                      {% set supplement=supplement+addSale.price %}
+                                  {% endfor %}
+                                  {{ ((element.price*element.quantity)+supplement)|number_format(2,'.',',') }}&nbsp;&euro;
+                              {% else %}
+                                  {{ (element.price*element.quantity +supplement)|number_format(2,'.',',') }}&nbsp;&euro;
+                              {% endif %}
+                          </span>
+                      </span>
+                      <span>
+                          {% if (noInteraction is not defined or noInteraction is null) and ((element.product is not null and element.product.category is not null) or element.meal is not null) %}
+                           <span class="cart-tooltip">
+                               {% if is_mobile() %}
+                               <i class="fa fa-angle-down" aria-hidden="true"></i>
+                                {% endif %}
+                                 <select class="cart-update-quantity select2" data-element-id="{{ element.hash }}">
+                                     {% for i in 0..20 %}
+                                     {% if i == element.quantity %}
+                                         <option selected value="{{ element.quantity }}">{{ element.quantity }}</option>
+
+                                     {%  else  %}
+                                         <option value="{{ i }}">{{ i }}</option>
+                                     {% endif  %}
+                                     {% endfor %}
+                                </select>
+                               {% if is_mobile() %}
+                               <i class="fa fa-angle-up" aria-hidden="true"></i>
+                                {% endif %}
+                          </span>
+                          {% elseif noInteraction is defined and noInteraction %}
+                            <span class="cart-tooltip">
+                                <span class="red">{{ element.quantity }}</span>
+                            </span>
+                          {% endif %}
+                          <span class="cart-element-name {% if is_mobile() %}mobile-child-sauce padding-bottom-20{% endif %}" {% if noInteraction is defined and noInteraction %}style="margin-left:28px;"{% endif %}>
+                              {{ element.proxy.name }}
+                          </span>
+                          <ul class="product-children">
+                              {% for choice in element.choices %}
+                                  <li style="list-style-type:none; font-size: 10px;">{{ choice.value }}{% if (choice.value == "Sauce Soja Salée 17ml" or choice.value == "Sauce Soja Sucrée 17ml")%} incluse{% endif %}</li>
+                              {% endfor %}
+                          </ul>
+                      </span>
+
+                                {% if element.childrens|length > 0 %}
+                                    <ul class="product-children">
+                                        {% for children in element.childrens %}
+                                            <li style="list-style-type: none; text-align: left !important;  ">
+                              <span>
+                                  <small>
+                                      {{ (children.proxy.name == 'Non merci') ? '' : '- ' ~ children.proxy.name }}
+                                  </small>
+                                  <ul class="children-subproducts">
+                                      {% for choice in children.choices %}
+                                          <li style="list-style-type: none; text-align: left !important;">
+                                              <small>{{ choice.value }}</small>
+                                          </li>
+                                      {% endfor %}
+                                  </ul>
+                              </span>
+                                            </li>
+
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                {% if element.addSaleProductCartElements|length >0 %}
+                                    {% for addSale in element.addSaleProductCartElements %}
+
+                                        <span>
+                                          <small>
+                                              - {{ addSale.product.name }}
+                                          </small>
+                                          <ul class="children-subproducts">
+                                              {% for choice in addSale.choices %}
+                                                  <li>
+                                                      <small>{{ choice.value }}</small>
+                                                  </li>
+                                              {% endfor %}
+                                          </ul>
+                                      </span>
+
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            {% if not loop.last %}
+                                <div class="cart-product-bottom"></div>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    {% if cart.coupon is not null %}
+                        <p>Coupons</p>
+                        <p style="text-align:right;">
+                            {{ cart.coupon.name }} ({{ cart.coupon.verbose}})
+                        </p>
+                    {% endif %}
+                    {% if cart.discount is not null %}
+                        <p>Remises</p>
+                        <p style="text-align:right;">
+                            <b>{{ cart.discount.getDescription() }}</b>
+                        </p>
+                    {% endif %}
+                    {% if cart.loyalties|length >0 %}
+                        <hr>
+                        <p>Primes fidélité</p>
+                        <ul style="text-align:right;">
+                        {% for loyalty in cart.loyalties %}
+                            <b>- {{ loyalty.value }} &euro;</b></br>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div><!-- cart-inner -->
+        {% endif %}
+    {% endif %}
+    <script>
+
+        var userLoggedin = {% if not app.user %}null; {% else %}"{{ app.user }}";{% endif %}
+        if(!userLoggedin)
+        {
+            $('#buttonCartValidation').click(function(e)
+            {
+                {% if is_mobile() %}
+                    $('#cartModal').modal('hide');
+                {% endif %}
+                $( document ).ajaxSuccess(function( event, xhr, settings ) {
+                    window.location.replace("{{ path('clab_white_order_recap', { slug: cart.restaurant.slug }) }}");
+                });
+            });
+        }
+
+        $('.cart-update-quantity').on('change', function(){
+            var
+                    quantity = $(this).find(':selected').val(),
+                    elementHash = $(this).attr('data-element-id'),
+                    url = "{{ path('clab_white_cart_update_quantity', {slug: restaurant.slug, hash: 'HASH', quantity: 'QUANTITY'}) }}"
+                    ;
+            $.post(url.replace("HASH", elementHash).replace("QUANTITY", quantity), function(data){
+                $('.cart-wrapper').html(data);
+            }).fail(function(){
+                sweetAlert('Oops...', 'Erreur serveur, Veuillez recommencer', 'error');
+            });
+        });
+
+        {% if isMenu is defined and isMenu %}
+            $('.meal-filter').click();
+
+            {% for flashMessage in app.session.flashbag.get('meal-alert') %}
+                sweetAlert({
+                             title: 'Attention :',
+                             text: '{{ flashMessage|trans|escape('js') }}',
+                             imageUrl: "{{ asset('images/logo.jpg') }}"
+                            });
+            {% endfor %}
+        {% endif %}
+        $(document).ready(function(){
+            $('.select2').select2({
+                minimumResultsForSearch: Infinity
+            });
+        });
+    </script>
+</div>

@@ -1,0 +1,67 @@
+{{ form_start(form, {'action':path('clab_call_center_card_add',{userId: app.session.get('customer')}),'attr': {'id': 'payment-form'}}) }}
+
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1">
+            <div class="form-group">
+                <label for="cardNumber">Numéro de la carte</label>
+                <div class="input-group">
+                    {{ form_widget(form.card, { 'attr': {'class': 'form-control','data-stripe':'number'} }) }}
+                    <span class="input-group-addon log"><i class="fa fa-credit-card"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-5 col-xs-offset-1">
+            <div class="form-inline">
+                <div class="form-group">
+                    <label for="cardExpiry">Date d'expiration</label>
+                    <div id="cardExpiry" class="row" style="margin: 0px;">
+                            {{ form_widget(form.month, { 'attr': {'class': 'form-control col-xs-5','data-stripe':'exp-month'} }) }}
+                            {{ form_widget(form.year, { 'attr': {'class': 'form-control col-xs-7','data-stripe':'exp-year'} }) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-5">
+            <div class="form-group">
+                <label for="cardCVC">Code de sécurité</label>
+                {{ form_widget(form.cvc, { 'attr': {'class': 'form-control','data-stripe':'cvc'},'id':'cardCVC'}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-xs-10 col-xs-offset-1" hidden>
+            <div class="form-group">
+                <label for="cardName">Nom (facultatif)</label>
+                {{ form_widget(form.name, { 'attr': {'class': 'form-control',
+                    'data-stripe':'name', 'value': 'CALL_CENTER_CARD'}, 'id':'cardName' }) }}
+            </div>
+        </div>
+    </div>
+<hr>
+    <div class="row">
+
+        <div class="col-xs-2 col-xs-offset-1">
+            <i style="margin-top:0.3em;" class="fa fa-lock fa-3x"></i>
+        </div>
+        <div class="col-xs-9">
+            <label>Vos détails de paiement sont stockés en sécurité auprès de notre partenaire <a href="https://stripe.com/fr">Stripe</a>.<br>En utilisant un cryptage de qualité bancaire.</label>
+        </div>
+    </div>
+<hr>
+    <div class="row">
+        <div class="col-xs-3 col-xs-offset-1">
+            <a class="cardFormToggle" type="submit" >Annuler</a>
+        </div>
+        <div class="col-xs-7">
+            <button class="btn btn-default pull-right" type="submit" >Ajouter ma
+                carte&nbsp;&nbsp;<span style="display:none;" class="fa fa-spinner fa-spin fa-1x"></span>
+            </button>
+        </div>
+        <div class="col-xs-2"></div>
+    </div>
+
+{{ form_rest(form) }}
+{{ form_end(form) }}
+

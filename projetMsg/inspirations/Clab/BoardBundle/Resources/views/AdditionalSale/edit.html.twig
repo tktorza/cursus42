@@ -1,0 +1,122 @@
+<form method="post" action="{{ path('board_additional_sale_edit', { contextPk: contextPk, slug: additionalSale.slug }) }}" novalidation novalidate class="ajax-form watch" data-callback="#additionalSaleList" data-changed="0">
+    <div class="drawer-scroll">
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="big-label">
+                {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+
+        <div class="col-md-5 form-group">
+                <div class="big-label">
+                    {{ form_row(form.isOnline, { attr: { class: 'icheck' } }) }}
+                </div>
+            </div>
+            <div class="col-md-7 form-group">
+                <div class="big-label">
+                    {{ form_row(form.multiple, { attr: { class: 'icheck multipleCheck' } }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 minmax" {% if not additionalSale.multiple %}style="display:none;"{% endif %}>
+                {{ form_row(form.minimum, { attr: { class: 'form-control' } }) }}
+            </div>
+            <div class="col-md-6 minmax" {% if not additionalSale.multiple %}style="display:none;"{% endif %}>
+                {{ form_row(form.maximum, { attr: { class: 'form-control' } }) }}
+            </div>
+        </div>
+        <hr>
+        <div class="big-label">
+        <b>Choisissez un produit sur lequel la vente additionnelle s'appliquera:</b>
+        <br>
+        {{ form_widget(form.choices, { attr: { class: 'chosen-select col-md-8'} }) }}
+        <br>
+        <br>
+        </div>
+        <hr>
+        {% if form.additionalSaleProducts|length > 0 %}
+            <div id="choice-fields-list" class="input-list sortable" {% if form.additionalSaleProducts.vars.prototype is defined %}data-prototype="{{ _self.additionalSaleProducts_prototype(form.additionalSaleProducts.vars.prototype)|e }}"{% endif %}>
+                {% for additionalSaleProduct in form.additionalSaleProducts %}
+                    {% if loop.index==1 %}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-8">
+                                <b>Nom du produit</b>
+                            </div>
+                            <div class="col-md-4">
+                                <b>Supplément</b>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="row input-row choice-field">
+                        <div class="col-md-8">
+                            {{ additionalSaleProduct.vars.data.product.name }}
+                        </div>
+                        <div class="col-md-2">
+                            {{ form_widget(additionalSaleProduct.price, { attr: { class: 'form-control input-right' } }) }}
+                        </div>
+                        <div class="col-md-1">
+                            €
+                        </div>
+                        <div class="col-md-1">
+                            {{ form_rest(additionalSaleProduct) }}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>Il n'y a pas encore de produits proposés dans cette vente additionnelle au niveau de votre enseigne.</p>
+        {% endif %}
+
+        <br><br>
+            <a class="btn btn-sm btn-primary btn-block ladda-button btn-form-watch" data-style="expand-right" href="{{ path('board_additional_sale_assign_product', { contextPk: contextPk ,slug: additionalSale.slug }) }}" data-target="ajaxModal" >Ajouter/supprimer des produits</a>
+
+
+
+        {{ form_rest(form) }}
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: additionalSale.id ? path
+    ('board_additional_sale_delete', { contextPk: contextPk, slug: additionalSale.slug }) : null ,
+    duplicateLink: additionalSale.id ? path
+    ('board_additional_sale_duplicate', { contextPk: contextPk, slug: additionalSale.slug }) : null} %}
+</form>
+<script type="text/javascript">
+    $( document ).ready(function() {
+
+        $(".chosen-select").select2({
+            placeholder: "Lors de l'ajout de ...",
+            allowClear: true
+        });
+
+
+        $('.multipleCheck').on('ifChecked', function(event) {
+            $('.minmax').show();
+        });
+
+        $('.multipleCheck').on('ifUnchecked', function(event) {
+            $('.minmax').hide();
+        });
+
+        $('.sortable').sortable({
+            handle: '.handle',
+            cursor: 'move',
+            helper: function(event, ui) {
+                ui.children().each(function() {
+                    $(this).width($(this).width());
+                });
+                return ui;
+            },
+            update: function(event, ui) {
+                $('.choice-field').each(function() {
+                    $(this).find('.choice-position').val($(this).index() + 1);
+                });
+            }
+        });
+
+    });
+
+
+</script>

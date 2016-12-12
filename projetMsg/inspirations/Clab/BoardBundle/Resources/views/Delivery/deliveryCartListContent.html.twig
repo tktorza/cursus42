@@ -1,0 +1,12 @@
+{% for deliveryCart in deliveryCarts %}
+<tr
+    id="deliveryCart-{{ deliveryCart.id }}"
+    class="clickable"
+    data-target="drawer" href="{{ path('board_delivery_deliverycart_edit', { context:context, contextPk: contextPk, id: deliveryCart.id }) }}"
+>
+  <td>{% if deliveryCart.min %}{{ deliveryCart.min }}€{% else %}0{% endif %}</td>
+  <td>{% if deliveryCart.max %}{{ deliveryCart.max }}€{% else %}&infin;{% endif %}</td>
+  <td>{{ deliveryCart.delay }}min</td>
+  <td>{% if deliveryCart.extra %}{{ deliveryCart.extra }}€{% else %}Gratuit{% endif %}</td>
+</tr>
+{% endfor %}

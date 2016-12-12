@@ -1,0 +1,49 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+{% block navContent %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% include 'ClabBoardBundle:Onboard:Custom/breadcrumbs.html.twig' with { step: 'menu' } %}
+
+    <br><br>
+    <section class="panel">
+        <div class="panel-body">
+            <form action="{{ path('board_onboard_custom_catalog', { slug: proxy.slug }) }}" method="post" {{ form_enctype(form) }} id="myForm" class="watch" data-changed="0">
+                <h2>2. Menu</h2>
+                <hr>
+
+                <br>
+
+                <h4>Envoyez-le nous directement par mail à support@click-eat.fr</h4>
+
+                <a class="btn btn-success" href="mailto:commercial@click-eat.fr?subject=Carte du restaurant {{ proxy.name }}" target="_blank"><i class="fa fa-envelope icon-left"></i>Envoyer par mail</a>
+
+                <br><br>
+                
+                {{ form_row(form.deal.menuSent, { attr: { class: 'icheck' } }) }}
+
+                <br><br>
+
+                {{ form_rest(form) }}
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a class="btn btn-default btn-lg btn-block" href="{{ path('board_onboard_custom_infos', { slug: proxy.slug }) }}"><i class="fa fa-arrow-circle-left icon-left"></i>Précédent</a>
+                    </div>
+
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Suivant<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+{% include 'ClabBoardBundle:Onboard:Custom/formScript.html.twig' %}
+{% endblock %}

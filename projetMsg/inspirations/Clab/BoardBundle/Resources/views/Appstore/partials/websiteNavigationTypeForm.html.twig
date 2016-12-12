@@ -1,0 +1,19 @@
+{% extends 'MopaBootstrapBundle:Form:fields.html.twig' %}
+
+{% block choice_widget_expanded %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default('') ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ')}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (inline is defined and inline ? 'inline' : ''))|trim}) %}
+    {% set label_attr = label_attr|merge({'class': 'grouped-checkbox'}) %}
+    <div {{ block('widget_container_attributes') }}>
+    {% for name, choice in form.vars.choices %}
+         <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <small>{{ form[name].vars.label|trans({}, translation_domain) }}</small><br>
+            <img src="{{ asset('front/bundle/board/img/website/navigation-' ~ choice.data ~ '.png') }}"><br><br>
+            {{ form_widget(form[name], {'attr': {'class': attr.widget_class|default('') ~ ' icheck'}}) }}
+        </label>&nbsp;&nbsp;
+    {% endfor %}
+    </div>
+{% endspaceless %}
+{% endblock choice_widget_expanded %}

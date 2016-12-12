@@ -1,0 +1,47 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Ajouter un employé{% endblock %}
+
+{% block body %}
+<form method="post" action="{{ path('board_user_add', { context: context, contextPk: contextPk }) }}">
+    <div class="form-group">
+        {{ form_row(form.firstName, { attr: { class: 'form-control' } }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.lastName, { attr: { class: 'form-control' } }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.email, { attr: { class: 'form-control' } }) }}
+    </div>
+    <div class="form-group">
+        {{ form_row(form.plainPassword, { attr: { class: 'form-control' } }) }}
+    </div>
+    <div class="form-group">
+        {{ form_widget(form.roles, { attr: { class: 'icheck' } }) }}
+    </div>
+
+    {% if form.restaurant is defined %}
+        <div class="form-group">
+            {{ form_row(form.chaine, { attr: { class: 'icheck' } }) }}
+            <small>Si vous cochez cette case l'utilisateur sera créé au niveau chaine</small>
+        </div>
+        <div class="form-group">
+            {{ form_row(form.restaurant, { attr: { class: 'form-control' } }) }}
+        </div>
+    {% endif %}
+
+
+    {{ form_rest(form) }}
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+    <hr>
+    <p><span class="label label-danger">Gérant</span> : Accès au back office et aux commandes </p>
+    <p><span class="label label-success">Manageur</span> : Accès au back office et aux commandes (hors facturation) </p>
+    <p><span class="label label-info">Vendeur</span> : Accès uniquement au dashboard pour réception et traitement des
+                                                     commandes </p>
+    <p><span class="label label-warning">Livreur</span> : Accès uniquement aux livraisons qui lui sont associées </p>
+{% endblock %}

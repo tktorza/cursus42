@@ -1,0 +1,6 @@
+Clab\SocialBundle\Entity\SocialPost:
+    properties:
+        title:
+            - NotBlank: ~
+        message:
+            - NotBlank: ~

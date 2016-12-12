@@ -1,0 +1,36 @@
+<div class="orderTypeWrapper">
+    {% if not hasPreorder and not hasDelivery %}
+        <div class="twocolumn-wrap">
+            <strong class="text-danger">{{ 'clickeat.store.order_type.no_order'|trans }}</strong>
+        </div>
+    {% else %}
+    {% if orderType == 1 or orderType == null %}
+
+    <div class="order-type">
+      <h1>Commande <br/>à emporter</h1>
+    </div>
+        {% if  hasDelivery %}
+    <div class="actions delivery">
+        <a href="#deliveryAddressModal" data-toggle="modal" data-target="#deliveryAddressModal">Commander en
+                                                                                                livraison</a>
+
+    </div>
+        {% endif %}
+
+    {% elseif orderType == 3 %}
+
+    <div class="order-type">
+      <h1>Commande en <br/>livraison</h1>
+      <strong><a href="#deliveryAddressModal" data-toggle="modal" data-target="#deliveryAddressModal"><span class="text">{% if deliveryAddress %}{{ deliveryAddress.verbose }}{% endif %}</span> <span class="fa fa-pencil"></span></a></strong> 
+    </div>
+
+    <div class="actions takeaway clearfix">
+        {% if hasPreorder %}
+        <a class="pull-right btn-order-type-takeaway" url="{{ path('iframe_switch_order_type', { slug: restaurant
+            .slug, type: 1 }) }}">Commander à emporter</a>
+        {% endif %}
+    </div>
+
+    {% endif %}
+    {% endif %}
+</div>

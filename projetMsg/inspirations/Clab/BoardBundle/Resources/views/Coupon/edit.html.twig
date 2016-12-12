@@ -1,0 +1,103 @@
+<form method="post" action="{{ path('board_coupon_edit', { contextPk: contextPk, slug: coupon.slug }) }}" novalidation novalidate class="ajax-form watch" data-callback="#couponList" data-changed="0">
+    <div class="drawer-scroll">
+        <div class="row">
+            <div class="col-md-12 form-group">
+                <div class="big-label">
+                {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+            </div>
+            </div>
+        </div>
+        <div class="row">
+            {% if context == 'restaurant' and forcedIsOnline is defined and not forcedIsOnline %}
+        <div class="col-md-5 form-group">
+                <div class="big-label">
+                    {{ form_row(form.isOnline, { attr: { class: 'icheck' } }) }}
+                </div>
+            </div>
+
+{% endif %}
+            <div class="col-md-7 form-group">
+                <div class="big-label">
+                    {{ form_row(form.platform, { attr: { class: 'form-control' } }) }}
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.amount, { attr: { class: 'form-control' } }) }}
+                </div>
+                <br>
+            </div>
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.type, { attr: { class: 'form-control' } }) }}
+                </div>
+                <br>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.quantity, { attr: { class: 'form-control' } }) }}
+                </div>
+                <br>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.unlimited, { attr: { class: 'icheck' } }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.isUniqueUsage, { attr: { class: 'icheck' } }) }}
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <p style="color:red;margin-left:3%;">Si vous souhaitez que le coupon ne soit pas limité dans le temps, merci
+                                              de
+                                       laisser
+                                  les champs de
+               dates vide</p>
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.startDay, { attr: { class: 'form-control input-inline datepicker' } }) }}
+                </div>
+                <br>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.endDay, { attr: { class: 'form-control input-inline datepicker' } }) }}
+                </div>
+            </div>
+
+        </div>
+
+        {{ form_rest(form) }}
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: coupon.id ? path
+    ('board_coupon_delete', { contextPk: contextPk, slug: coupon.slug }) : null } %}
+</form>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+
+
+        $('.everytime').on('ifChecked', function (event) {
+            $('.availabilities').hide();
+            $('.availabilities-hint').show();
+        });
+
+        $('.everytime').on('ifUnchecked', function (event) {
+            $('.availabilities').show();
+            $('.availabilities-hint').hide();
+        });
+    });
+</script>

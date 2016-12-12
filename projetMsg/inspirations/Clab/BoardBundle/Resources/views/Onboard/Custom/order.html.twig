@@ -1,0 +1,130 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+{% block navContent %}{% endblock %}
+
+{% block body %}
+<div class="container">
+    {% include 'ClabBoardBundle:Onboard:Custom/breadcrumbs.html.twig' with { step: 'order' } %}
+
+    <br><br>
+    <section class="panel">
+        <div class="panel-body">
+            <h2>4. Commande en ligne</h2>
+            <hr>
+
+
+
+            <form action="{{ path('board_onboard_custom_order', { slug: proxy.slug }) }}" method="post" id="myForm" class="watch" data-changed="0">
+
+                <div class="form-group big-label" {% if not proxy.isMobile %}style="display: none;"{% endif %}>
+                    {{ form_row(form.deal.interestedInOrder, { attr: { class: 'icheck order-check' } }) }}
+                </div>
+
+                <div class="order-box" {% if not proxy.deal.interestedInOrder %}style="display: none;"{% endif %}>
+                    <div class="form-group big-label">
+                        {% if disableTakeaway is defined and disableTakeaway %}
+                            {{ form_row(form.deal.interestedInTakeaway, { attr: { class: 'icheck ordertype takeaway', disabled: true } }) }}
+                        {% else %}
+                            {{ form_row(form.deal.interestedInTakeaway, { attr: { class: 'icheck ordertype takeaway' } }) }}
+                        {% endif %}
+                    </div>
+
+                    <div class="form-group big-label">
+                        {{ form_row(form.deal.interestedInDelivery, { attr: { class: 'icheck ordertype delivery' } }) }}
+                    </div>
+
+                    <div class="form-group notification-mails" {% if not proxy.deal.interestedInTakeaway and not proxy.deal.interestedInDelivery %}style="display: none;"{% endif %}>
+                        {{ form_row(form.notification_mails, { attr: { class: 'form-control' } }) }}
+                        <small>Plusieurs mails peuvent être saisis, veuillez-les séparer par une virgule.</small>
+                    </div>
+
+                    {% if form.deal.interestedInEmbedOrder is defined %}
+                        <h3>J'aimerais</h3>
+                        <div class="form-group big-label">
+                            {{ form_row(form.deal.interestedInEmbedOrder, { attr: { class: 'icheck' } }) }}
+                        </div>
+                    {% endif %}
+
+                    {% if form.deal.interestedInFacebookOrder is defined %}
+                        <div class="form-group big-label">
+                            {{ form_row(form.deal.interestedInFacebookOrder, { attr: { class: 'icheck' } }) }}
+                        </div>
+                    {% endif %}
+                </div>
+
+                {{ form_rest(form) }}
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a class="btn btn-default btn-lg btn-block" href="{{ path('board_onboard_custom_timesheets', { slug: proxy.slug }) }}"><i class="fa fa-arrow-circle-left icon-left"></i>Précédent</a>
+                    </div>
+
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Suivant<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    var order = {{ proxy.deal.interestedInOrder ? 1 : 0 }};
+    var takeaway = {{ proxy.deal.interestedInTakeaway ? 1 : 0 }};
+    var delivery = {{ proxy.deal.interestedInDelivery ? 1 : 0 }};
+
+    $('.order-check').on('ifUnchecked', function(event) {
+        order = 0;
+        $('.ordertype .icheck').each(function() {
+            $(this).iCheck('uncheck');
+        });
+        display();
+    });
+
+    $('.order-check').on('ifChecked', function(event) {
+        order = 1;
+        display();
+    });
+
+    $('.takeaway').on('ifUnchecked', function(event) {
+        takeaway = 0;
+        display();
+    });
+
+    $('.takeaway').on('ifChecked', function(event) {
+        takeaway = 1;
+        display();
+    });
+
+    $('.delivery').on('ifUnchecked', function(event) {
+        delivery = 0;
+        display();
+    });
+
+    $('.delivery').on('ifChecked', function(event) {
+        delivery = 1;
+        display();
+    });
+
+    function display()
+    {
+        console.log(takeaway, delivery);
+        if(order) {
+            $('.order-box').show();
+        } else {
+            $('.order-box').hide();
+        }
+
+        if(takeaway || delivery) {
+            $('.notification-mails').show();
+        } else {
+            $('.notification-mails').hide();
+        }
+    }
+</script>
+{% include 'ClabBoardBundle:Onboard:Custom/formScript.html.twig' %}
+{% endblock %}

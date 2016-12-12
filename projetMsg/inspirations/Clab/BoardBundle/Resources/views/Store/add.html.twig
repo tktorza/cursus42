@@ -1,0 +1,46 @@
+<div id="addRestaurant" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <form method="post" action="{{ path('board_store_create') }}">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Ajout d'un restaurant</h4>
+            </div>
+            <div class="modal-body">
+
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                            {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+                    </div>
+                </div>
+                    <div class="row">
+                        <div class="col-md-12 form-group">
+                                {{ form_row(form.address.street, { attr: { class: 'form-control' } }) }}
+                        </div>
+                    </div>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        {{ form_row(form.address.zip, { attr: { class: 'form-control' } }) }}
+                    </div>
+                    <div class="col-md-6 form-group">
+                        {{ form_row(form.address.city, { attr: { class: 'form-control' } }) }}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12 form-group">
+                            {{ form_row(form.emailPayment, { attr: { class: 'form-control input-lg' } }) }}
+                    </div>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+            {{ form_rest(form) }}
+        </form>
+        </div>
+
+    </div>
+</div>

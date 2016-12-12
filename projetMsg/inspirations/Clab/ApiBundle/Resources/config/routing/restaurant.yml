@@ -1,0 +1,113 @@
+#
+api_rest_get_one_store:
+    path:  /{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestRestaurant:getOneRestaurant, _format: json }
+    requirements:
+        restaurantId: \d+
+    methods: [GET]
+
+api_rest_edit_one_store:
+    path:  /{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestRestaurant:updateRestaurant, _format: json }
+    requirements:
+        restaurantId: \d+
+    methods: [PUT]
+#
+api_rest_restaurant_search:
+    path:  /search
+    defaults: { _controller: ClabApiBundle:RestRestaurant:searchRestaurants, _format: json }
+    methods: [GET]
+#
+api_rest_restaurant_quicklist:
+    path:  /quicklist
+    defaults: { _controller: ClabApiBundle:RestRestaurant:quickList, _format: json }
+    methods: [GET]
+#
+api_rest_taxes_list:
+    path:  /taxes
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listTaxes, _format: json }
+    methods: [GET]
+#
+api_rest_restaurant_best_review:
+    path:  /{restaurantId}/best-review
+    defaults: { _controller: ClabApiBundle:RestRestaurant:getBestReviewOfRestaurant, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_restaurant_list_carte:
+    path:  /{restaurantId}/list/menus
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listMenu, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_restaurant_list_categories:
+    path:  /{restaurantId}/list/categories
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listCategories, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_restaurant_list_products:
+    path:  /{restaurantId}/list/products
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listProducts, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_restaurant_list_meals:
+    path:  /{restaurantId}/list/meals
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listMeals, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_option_list:
+    path:  /{restaurantId}/list/options
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listOptions, _format: json }
+    requirements:
+          restaurantId: \d+
+    methods: [GET]
+#
+api_rest_discount_list:
+    path:  /{restaurantId}/list/discounts
+    defaults: { _controller: ClabApiBundle:RestRestaurant:listDiscounts, _format: json }
+    requirements:
+            restaurantId: \d+
+    methods: [GET]
+#
+api_rest_updated_from_bo:
+    path:  /updated
+    defaults: { _controller: ClabApiBundle:RestRestaurant:updatedFromBo, _format: json }
+    methods: [GET]
+#
+api_rest_created_from_bo:
+    path:  /created
+    defaults: { _controller: ClabApiBundle:RestRestaurant:createdFromBo, _format: json }
+    methods: [GET]
+
+api_rest_get_clients:
+    path: /{restaurantId}/clients
+    defaults: { _controller: ClabApiBundle:RestRestaurant:getClients, _format: json }
+    requirements:
+            restaurantId: \d+
+    methods: [GET]
+
+api_rest_get_checker_board_config:
+    path: /{restaurantId}/checkerBoard
+    defaults: { _controller: ClabApiBundle:RestRestaurant:getCheckerBoard, _format: json }
+    requirements:
+            restaurantId: \d+
+    methods: [GET]
+
+api_rest_update_checker_board_config:
+    path: /{restaurantId}/checkerBoard
+    defaults: { _controller: ClabApiBundle:RestRestaurant:updateCheckerBoard, _format: json }
+    requirements:
+            restaurantId: \d+
+    methods: [PUT, PATCH]
+
+
+
+

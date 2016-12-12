@@ -1,0 +1,63 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_restaurant_planning',
+        rightLink: path('board_restaurant_planning_edit', { contextPk: contextPk }),
+        rightLinkLabel: 'Créer un évènement',
+        rightLinkDrawer: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="planning">
+    <a class="btn btn-default" href="{{ path('board_foodtruck_planning', { contextPk: contextPk }) }}"><i class="fa fa-arrow-circle-left icon-left"></i>Retour liste</a>
+    <br><br>
+    <section class="panel">
+        <div class="panel-body">
+            <div id="calendar"></div>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+moment.locale('fr');
+$(document).ready(function() {
+    var calendar = $('#calendar').fullCalendar({
+        lang: 'fr',
+        events: [
+            {% for timestamp, day in planning %}
+                {% set looplast = loop.last %}
+                {% for event in day %}
+                {
+                        id: '{{ timestamp }}',
+                        title: '{{ event.address.verbose }}',
+                        start: '{{ event.start|date('Y-m-d\\TH:i:sP') }}',
+                        end: '{{ event.end|date('Y-m-d\\TH:i:sP') }}',
+                        timestamp: '{{ event.timestamp }}',
+                        timesheetId: '{{ event.timesheet.id }}',
+                }{% if not looplast or not loop.last %},{% endif %}
+                {% endfor %}
+            {% endfor %}
+        ],
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay'
+        },
+        editable: false,
+        defaultView: 'month',
+        allDayDefault: false,
+        eventClick: function(calEvent, jsEvent, view) {
+            var target = '{{ proxy.slug }}/foodtruck/calendar-edit/' + calEvent.timestamp + '/' + calEvent.timesheetId;
+            $("#ajaxModal .modal-content").load(target, function() {
+                $("#ajaxModal").modal("show");
+            });
+        }
+    });
+});
+</script>
+{% endblock %}

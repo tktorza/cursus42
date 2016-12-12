@@ -1,0 +1,53 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% form_theme form _self %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_delivery',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="delivery">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <section class="panel">
+                <div class="panel-body">
+                    <form method="post" action="{{ path('board_delivery_day_create', { context:context, contextPk: contextPk, value: value, cancel: cancel ? cancel.id : null }) }}">
+
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.start, { attr: { class: 'form-control timepicker', placeholder: 'Sélectionnez un horaire' } }) }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form_row(form.end, { attr: { class: 'form-control timepicker', placeholder: 'Sélectionnez un horaire' } }) }}
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="form-group">
+                                    {{ form_label(form.deliveryMen) }}
+                                    {{ form_widget(form.deliveryMen, { label_attr: { class: 'checkbox-inline checkbox-box' }, attr: { class: 'icheck' } }) }}
+                                    {{ form_errors(form.deliveryMen) }}
+                                </div>
+                            </div>
+                        </div>
+
+                        {{ form_rest(form) }}
+
+                        <hr>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Enregistrer</button>
+
+                    </form>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

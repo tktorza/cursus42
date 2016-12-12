@@ -1,0 +1,58 @@
+{% extends 'ClabMultisiteBundle::base.html.twig' %}
+
+{% block title %}Nos photos - {% endblock %}
+{% block ogtitle %}Nos photos - {% endblock %}
+{% block metaDescription %}Consultez nos photos.{% endblock %}
+{% block ogdescription %}Consultez nos photos.{% endblock %}
+{% block metaKeywords %}photos, plats, menu, carte{% endblock %}
+
+{% block subnav %}
+    {% include 'ClabMultisiteBundle::subnav.html.twig' with { currentPage: 'gallery' } %}
+{% endblock %}
+
+{% block body %}
+<section class="container padding-v-60" id="gallery">
+    {% for album in restaurant.albums if album.isOnline %}
+    <div class="row">   
+        <div class="col-md-4">
+            <h2 class="thin">{{ album.name }}</h2>
+            {% if album.description %}
+                <p>{{ album.description|raw }}</p>
+            {% endif %}
+        </div>
+
+        <div class="col-md-8">
+            <div id="carousel-{{ album.slug }}" class="carousel slide" data-ride="carousel">
+                <ol class="carousel-indicators">
+                    {% for image in album.gallery.images %}
+                        <li data-target="#carousel-{{ album.slug }}" data-slide-to="{{ loop.index - 1 }}" {% if loop.first %}class="active"{% endif %}></li>
+                    {% endfor %}
+                </ol>
+
+                <div class="carousel-inner" role="listbox">
+                    {% for image in album.gallery.images %}
+                    <div class="item {% if loop.first %}active{% endif %}">
+                        <img src="{{ image.webPath }}" alt="{{ restaurant.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <a class="left carousel-control" href="#carousel-{{ album.slug }}" role="button" data-slide="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="right carousel-control" href="#carousel-{{ album.slug }}" role="button" data-slide="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+    <hr>
+    {% endfor %}
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'ClabClickeatBundle:Mixpanel:mixpanel.html.twig' with { mixpanelTrack: 'View gallery', mixpanelTrackProperties: { 'Restaurant': restaurant.name } } %}
+{% endblock %}

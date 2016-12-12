@@ -1,0 +1,15 @@
+parameters:
+    clab_delivery.delivery_manager.class: Clab\DeliveryBundle\Service\DeliveryManager
+    clab_delivery.delivery_day_listener.class: Clab\DeliveryBundle\Listener\DeliveryDayListener
+
+services:
+    clab_delivery.delivery_manager:
+        class: %clab_delivery.delivery_manager.class%
+        arguments: [ @doctrine.orm.entity_manager, @service_container ]
+
+    #clab_delivery.delivery_day_listener:
+    #    class: %clab_delivery.delivery_day_listener.class%
+    #    arguments: [ @service_container ]
+    #    tags:
+    #        - { name: doctrine.event_listener, event: prePersist }
+    #        - { name: doctrine.event_listener, event: preUpdate }

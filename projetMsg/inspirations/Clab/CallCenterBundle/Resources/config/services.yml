@@ -1,0 +1,4 @@
+services:
+#    clab_call_center.example:
+#        class: Clab\CallCenterBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

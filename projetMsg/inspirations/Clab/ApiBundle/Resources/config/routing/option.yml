@@ -1,0 +1,44 @@
+api_rest_option_product_list:
+    path:  /product/{productId}
+    defaults: { _controller: ClabApiBundle:RestOption:listForProduct, _format: json }
+    methods: [GET]
+
+api_rest_option_create_for_restaurant:
+    path:  /restaurant/{restaurantId}/create
+    defaults: { _controller: ClabApiBundle:RestOption:create, _format: json }
+    methods: [POST]
+
+api_rest_option_get:
+    path:  /{optionId}
+    defaults: { _controller: ClabApiBundle:RestOption:get, _format: json }
+    methods: [GET]
+
+api_rest_option_remove:
+    path:  /{optionId}
+    defaults: { _controller: ClabApiBundle:RestOption:remove, _format: json }
+    methods: [DELETE]
+
+api_rest_option_create_choice:
+    path:  /restaurant/{restaurantId}/choice/create
+    defaults: { _controller: ClabApiBundle:RestOption:createChoice, _format: json }
+    methods: [POST]
+
+api_rest_option_get_choice:
+    path:  /choice/{choiceId}
+    defaults: { _controller: ClabApiBundle:RestOption:getChoice, _format: json }
+    methods: [GET]
+
+api_rest_option_remove_choice:
+    path:  /choice/{choiceId}
+    defaults: { _controller: ClabApiBundle:RestOption:removeChoice, _format: json }
+    methods: [DELETE]
+
+api_rest_option_edit_choice:
+    path:  /choice/{choiceId}
+    defaults: { _controller: ClabApiBundle:RestOption:patchChoice, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_option_edit_choices:
+    path:  /edit/choices
+    defaults: { _controller: ClabApiBundle:RestOption:editOptionChoice, _format: json }
+    methods: [PUT,PATCH]

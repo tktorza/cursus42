@@ -1,0 +1,54 @@
+<div class="meal-compose col-xs-12">
+    <div class="hold-wrapper">
+        <div id="meal-nav">
+            {% set currentOk = false %}
+            <div class="pearls pearls-xs row padding-v-25">
+                {% for key, mealChoice in meal.slots %}
+
+                    <div class="{% if mealChoice.slot.id == slot.id %}current{% set currentOk = true %}{% elseif not
+                    currentOk %}done{% endif %}
+                    {% if meal.slots|length==1 %} col-xs-12
+                    {% elseif meal.slots|length==2 %} col-xs-6
+                    {% elseif meal.slots|length==3 %} col-xs-4
+                    {% elseif meal.slots|length==4 %} col-xs-3
+                    {% elseif meal.slots|length>=5 %} col-xs-2
+                    {% endif %}">
+                        <span class="text-center col-xs-12 step-text"><a url="{{ path('clab_white_meal_compose', { token: token,slot:mealChoice.slot.id }) }}"> {{ mealChoice.slot.name }} </a></span>
+                        <span class="text-center col-xs-12 step-check" style="margin-top: 2%;"><i class="fa fa-check"></i></span>
+                    </div>
+                {% endfor %}
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="products">
+    <ul class="col-xs-12">
+        {% for choice in productChoices %}
+            {% set product = choice.product %}
+            {% set category = choice.product.category %}
+            {% include 'ClabWhiteBundle:Order:productModal.html.twig' with {product: product, options: options, orderType: cart.orderType, parentMeal: currentMeal, token:token, slot:slot} %}
+            {% include 'ClabWhiteBundle:Order:modalProduct.html.twig' with {orderType: cart.orderType, parentMeal: currentMeal, token:token, slot:slot } %}
+        {% endfor %}
+    </ul>
+    <script>
+
+        $('.catalog-categories').fadeOut(500);
+        $('button.quit.pull-right.cancel').click(function () {
+            $('.catalog-categories').fadeIn(500);
+        });
+
+        $(document).ready(function () {
+            jcf.replaceAll();
+
+            $('.product-header').each(function () {
+                var element = $(this);
+                var background = element.data('background');
+
+                element.css({'background-image': 'url('+background+')'});
+
+            });
+        });
+    </script>
+</div>
+

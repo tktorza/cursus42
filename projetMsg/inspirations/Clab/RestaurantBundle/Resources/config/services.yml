@@ -1,0 +1,89 @@
+services:
+    clab.restaurant_menu_manager:
+        class: Clab\RestaurantBundle\Manager\RestaurantMenuManager
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    app_restaurant.product_category_manager:
+        class: Clab\RestaurantBundle\Manager\ProductCategoryManager
+        arguments: [ @doctrine.orm.entity_manager ]
+        tags:
+            - { name: kernel.event_listener, event: app_restaurant.product_category_created, method: createdFromChainStore }
+
+
+    app_restaurant.product_manager:
+        class: Clab\RestaurantBundle\Manager\ProductManager
+        arguments: [ @doctrine.orm.entity_manager, @clab.restaurant_menu_manager ]
+        tags:
+
+
+    app_restaurant.restaurant_manager:
+        class: Clab\RestaurantBundle\Manager\RestaurantManager
+        arguments: [ @doctrine.orm.entity_manager ]
+
+    app_restaurant.product_option_manager:
+        class: Clab\RestaurantBundle\Manager\ProductOptionManager
+        arguments: [ @doctrine.orm.entity_manager, @form.factory, @translator ]
+        tags:
+            - { name: kernel.event_listener, event: app_restaurant.product_option_created, method: createdFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.product_option_updated, method: updatedFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.option_choice_created, method: choiceCreatedFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.option_choice_updated, method: choiceUpdatedFromChainStore }
+
+    app_restaurant.meal_manager:
+        class: Clab\RestaurantBundle\Manager\MealManager
+        arguments: [ @doctrine.orm.entity_manager, @app_restaurant.product_manager, @clab.restaurant_menu_manager ]
+        tags:
+            - { name: kernel.event_listener, event: app_restaurant.meal_created, method: createdFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.meal_updated, method: updatedFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.meal_slot_created, method: slotCreatedFromChainStore }
+            - { name: kernel.event_listener, event: app_restaurant.meal_slot_updated, method: slotUpdatedFromChainStore }
+
+    app_restaurant.timesheet_manager:
+        class: Clab\RestaurantBundle\Manager\TimeSheetManager
+        arguments: [ @doctrine.orm.entity_manager , ["Ouvert","Fermé","Bientôt fermé","Bientôt ouvert"]]
+
+    app.restaurant.restaurant_listener:
+        class: Clab\RestaurantBundle\Listener\RestaurantListener
+        arguments: [ @service_container ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+            - { name: doctrine.event_listener, event: preUpdate, priority: 100 }
+
+
+    app_restaurant.listener.product_category:
+        class: Clab\RestaurantBundle\Listener\ProductCategoryListener
+        arguments: [ @event_dispatcher ]
+
+    app_restaurant.listener.product:
+        class: Clab\RestaurantBundle\Listener\ProductListener
+        arguments: [ @event_dispatcher ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+
+
+    app_restaurant.listener.product_option:
+        class: Clab\RestaurantBundle\Listener\ProductOptionListener
+        arguments: [ @event_dispatcher ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+
+    app_restaurant.listener.option_choice:
+        class: Clab\RestaurantBundle\Listener\OptionChoiceListener
+        arguments: [ @event_dispatcher ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+
+
+    app_restaurant.listener.meal:
+        class: Clab\RestaurantBundle\Listener\MealListener
+        arguments: [ @event_dispatcher ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+
+
+    app_restaurant.listener.meal_slot:
+        class: Clab\RestaurantBundle\Listener\MealSlotListener
+        arguments: [ @event_dispatcher ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 100 }
+

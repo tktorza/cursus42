@@ -1,0 +1,59 @@
+{% if is_mobile() %}
+    <div class="nav-menu menu-opened">
+        <ul class="nav navbar-nav nav-2 col-md-8 col-xs-12">
+                <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter actived" id="Plateaux_assortis" data-target-group-category="Plateaux assortis" style="color :#E60039!important">Plats assortis</a></li>
+                <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter" data-target-group-category="Boissons et accompagnements">À-côtés</a></li>
+                <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Matsuri à la carte" >À la carte</a></li>
+                <li class="col-xs-6 col-sm-2 no-padding meal-filter"><a href="#" class="category-group-filter"  data-target-group-category="Formules déjeuner">Formules midi</a></li>
+                <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Spécialités et plats chauds">Plats chauds</a></li>
+                <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Favoris">Vos favoris</a></li>
+        </ul>
+        <nav class="navbar navbar-default center" >
+            <span style="
+                position: absolute;
+                left: 5px;
+                top: 0px;
+                height: 100%;
+                font-size: 31px;
+                line-height: 55px;
+                color: #9b9b9b;
+                z-index: 99;"><i class="fa fa-angle-left"></i></span>
+            <div class="swiper-container">
+            {% if categories is defined  %}
+                <ul class="nav navbar-nav nav-3 col-md-8 col-sm-12 swiper-wrapper">
+                    {% for category in categories %}
+                        <li class="category-filter swiper-slide {% if loop.index == 1 %}actived{% endif %}" data-category-group="{{ category.categoryGroup }}" data-target-category="{{category.id}}" >{{ category.name }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            </div>
+            <span style="
+                position: absolute;
+                right: 5px;
+                top: 0px;
+                height: 100%;
+                font-size: 31px;
+                line-height: 55px;
+                color: #9b9b9b;
+                z-index: 99;"><i class="fa fa-angle-right"></i></span>
+        </nav>
+    </div>
+{% else %}
+    <ul class="nav navbar-nav nav-2 col-md-8 col-xs-12">
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="actived category-group-filter"  data-target-group-category="Plateaux assortis">Plateaux<br />assortis</a></li>
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Matsuri à la carte">Masturi<br />à la carte</a></li>
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Spécialités et plats chauds">Spécialités et<br />plats chauds</a></li>
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Boissons et accompagnements">Boissons et<br />accompagnements</a></li>
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter meal-filter"  data-target-group-category="Formules déjeuner">Formules<br />déjeuner</a></li>
+        <li class="col-xs-6 col-sm-2 no-padding"><a href="#" class="category-group-filter"  data-target-group-category="Favoris">Mes<br />favoris</a></li>
+    </ul>
+    <nav class="navbar navbar-default navbar-fixed-top center second-block background-grey-5" >
+        {% if categories is defined  %}
+            <ul class="nav navbar-nav nav-3 col-md-8 col-sm-12">
+                {% for category in categories %}
+                    <li style="display:none" class="category-filter {% if loop.index == 1 %}actived{% endif %}" data-category-group="{{ category.categoryGroup }}" data-target-category="{{category.id}}">{{ category.name }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </nav>
+{% endif %}

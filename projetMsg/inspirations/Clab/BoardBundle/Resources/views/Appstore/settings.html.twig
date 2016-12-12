@@ -1,0 +1,74 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_settings',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="social">
+    <div class="row">
+        <div class="col-md-8">
+            <section class="panel">
+                <header class="panel-heading">Réglages</header>
+                <div class="panel-body">
+                    {{ form_start(form) }}
+
+                        <h2>Couleurs</h2>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-6">
+                                {{ form_row(form.primaryColor, { attr: { class: 'input-lg form-control minicolors' } }) }}
+                            </div>
+
+                            <div class="col-md-6">
+                                {{ form_row(form.cartColor, { attr: { class: 'input-lg form-control minicolors' } }) }}
+                            </div>
+                        </div>
+               <br/>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.buttonColor, { attr: { class: 'input-lg form-control minicolors' } }) }}
+                        </div>
+                    </div>
+                        <hr>
+                    <h2>Logo</h2>
+                    <br />
+                    <div class="row">
+                    <div class="col-md-6">
+                        {{ form_row(form.logoMcFile, { attr: { class: 'form-control ' } }) }}
+                    </div>
+                    <div class="col-md-6">
+                    <p><b>Aperçu de votre logo mis à l'échelle</b></p>
+                    <center>
+                    <img src="{{ vich_uploader_asset(restaurant, 'logoMcFile') }}" alt="{{ restaurant.name }}"
+                    style="width: 60px;"/>
+                    </center>
+                        </div>
+                    </div>
+                    </div>
+                    <hr/>
+
+                        <h2>Moyens de paiement</h2>
+                    <small>Merci d'indiquer au moins un moyen de paiement</small>
+                    <br/>
+                        <br>
+                        <div class="form-group>">
+                            {{ form_row(form.paymentMethods, { attr: { class: 'icheck inline' } }) }}
+                        </div>
+                    <br/>
+                        <hr>
+
+                        <button type="submit" class="btn btn-primary btn-block">Enregister</button>
+                    {{ form_rest(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_end(form) }}
+
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

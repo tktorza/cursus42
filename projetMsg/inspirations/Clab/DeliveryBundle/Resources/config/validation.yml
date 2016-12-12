@@ -1,0 +1,13 @@
+Clab\DeliveryBundle\Entity\DeliveryPeriod:
+    properties:
+        #start:
+        #    - NotBlank: ~
+        #end:
+        #    - NotBlank: ~
+
+Clab\DeliveryBundle\Entity\DeliveryDay:
+    properties:
+        start:
+            - NotBlank: ~
+        end:
+            - NotBlank: ~

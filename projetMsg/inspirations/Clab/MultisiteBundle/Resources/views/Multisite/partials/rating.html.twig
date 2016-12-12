@@ -1,0 +1,15 @@
+{% spaceless %}
+    {% if score is defined and score %}
+        <span class="review-score">
+    {% if score > 0 %}
+        {% for i in 1..(score / 2)|round  %}<i class="fa fa-star"></i>{% endfor %}
+        {% set empty = 5 - ( score / 2)|round  %}
+    {% else %}
+        {% set empty = 5 %}
+    {% endif %}
+            {% if empty > 0 %}
+                {% for i in 1..empty %}<i class="fa fa-star-o"></i>{% endfor %}
+            {% endif %}
+    </span>
+    {% endif %}
+{% endspaceless %}

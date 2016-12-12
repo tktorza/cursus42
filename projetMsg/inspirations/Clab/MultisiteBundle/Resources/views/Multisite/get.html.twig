@@ -1,0 +1,220 @@
+{% extends 'ClabMultisiteBundle::base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabMultisiteBundle::subnav.html.twig' with { currentPage: 'home' } %}
+{% endblock %}
+
+{% block body %}
+{% if restaurant.description %}
+<section class="container-fluid" id="description">
+    <div class="row">
+        {% if restaurant.isMobile %}
+        <div class="col-md-4">
+            <div id="quickPlanning">
+                {% if foodtruck.currentEvent %}
+                    {% set event = foodtruck.currentEvent %}
+                    <h3 class="thin">Actuellement</h3>
+                    <dl class="dl-horizontal">
+                        <dt>
+                            <span class="text-info">{{ event.start|localizeddate('medium', 'none') }}</span><br>
+                            {{ event.start|date('H:i') }} - {{ event.end|date('H:i') }}
+                        </dt>
+                        <dd>
+                            {% if event.private %}
+                                Évènement privé
+                            {% else %}
+                                <small><a href="https://maps.google.com/?q={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}" target="_blank"><i class="fa fa-map-marker icon-left"></i>{{ event.address.verbose }}</a></small>
+                            {% endif %}
+                        </dd>
+                    </dl>
+                {% endif %}
+                {% for event in foodtruck.nextEvents %}
+                    {% if loop.first %}
+                        <h3 class="thin">Prochainement</h3>
+                        <dl class="dl-horizontal">
+                    {% endif %}
+                            <dt>
+                                <span class="text-info">{{ event.start|localizeddate('medium', 'none') }}</span><br>
+                                {{ event.start|date('H:i') }} - {{ event.end|date('H:i') }}
+                            </dt>
+                            <dd>
+                                {% if event.private %}
+                                    Évènement privé
+                                {% else %}
+                                    <small><a href="https://maps.google.com/?q={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}" target="_blank"><i class="fa fa-map-marker icon-left"></i>{{ event.address.verbose }}</a></small>
+                                {% endif %}
+                            </dd>
+                    {% if loop.last %}
+                        </dl>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        {% endif %}
+        <div class="col-md-8 {% if not restaurant.isMobile %}col-md-offset-2{% endif %} text-center padding-v-60 padding-h-40">
+            <h4 class="thin">{% if site.aboutTitle and site.aboutTitle != '' %}{{ site.aboutTitle }}{% else %}À propos{% endif %}</h4><br>
+            {{ restaurant.description|raw }}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{% set days = { 1: 'voc.datetime.days.monday', 2: 'voc.datetime.days.tuesday', 3: 'voc.datetime.days.wednesday', 4: 'voc.datetime.days.thursday', 5: 'voc.datetime.days.friday', 6: 'voc.datetime.days.saturday', 7: 'voc.datetime.days.sunday' } %}
+<section class="container padding-v-60" id="home-infos">
+    <div class="row">
+        {% if site.sectionReview and restaurant.reviewData.reviews[0] is defined %}
+        <div class="col-md-6">
+            <div id="lastReview">
+                {% set lastReview = restaurant.reviewData.reviews[0] %}
+                <h4>Dernier avis</h4>
+                <br>
+
+                <div class="media">
+                    <div class="pull-left text-center margin-right">
+                        <img class="media-object img-circle cover" src="{{ lastReview.author.cover | imagine_filter('square_80') }}" alt="{{ lastReview.author.name }}">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ lastReview.title }}</h4>
+                        {% include 'ClabClickeatBundle:Store:partials/rating.html.twig' with { score: lastReview.score } %}
+                        <p><small>Par {{ lastReview.author.name }} le {{ lastReview.created|date('d/m/Y') }}</small></p>
+                        <p>{{ lastReview.body }}</p>
+                    </div>
+                </div>
+
+                <br><br>
+                <p><a href="{{ path('multisite_reviews') }}"><i class="fa fa-arrow-circle-right icon-left"></i>Voir tous les avis</a></p>
+            </div>
+        </div>
+        {% endif %}
+
+        {% if site.sectionSocial and restaurant.newsData.news[0] is defined %}
+        <div class="col-md-6">
+            <div id="lastNews">
+                {% set lastNews = restaurant.newsData.news[0] %}
+                <h4>Dernière actualité</h4>
+                <br>
+
+                <div class="media">
+                    <div class="pull-left text-center">
+                        <img class="media-object img-circle cover" src="{{ lastNews.cover }}" alt="{{ lastNews.title }}">
+                    </div>
+                    <div class="media-body">
+                        <h4 class="media-heading">{{ lastNews.title }}</h4>
+                        <p><small>le {{ lastNews.created|date('d/m/Y') }}</small></p>
+                        <p>{{ lastNews.message }}</p>
+                    </div>
+                    <div class="clear"></div>
+                </div>
+
+                <br><br>
+                <p><a href="{{ path('multisite_social') }}"><i class="fa fa-arrow-circle-right icon-left"></i>Voir toutes les actualités</a></p>
+                <div class="clear"></div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <hr>
+
+    <div class="row">
+        {% if not restaurant.isMobile %}
+        <div class="col-md-4">
+            <h4>Horaires d'ouverture</h4>
+            <br>
+
+            {% for days,hours in planning %}
+            {% if "now"|date('l')|upper == days %}
+            <div class="text1">De</div>
+            <span>
+                {% for hour in hours %}
+                    {{ hour['start']|date('H\\hi') }} à {{ hour['end']|date
+                ('H\\hi') }}<br/>
+                {% endfor %}
+            </span>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <div class="col-md-4">
+            <h4>{{ 'clickeat.store.about.services.title'|trans }}</h4>
+            {% if restaurant.services|length == 0 %}
+                <p>{{ 'clickeat.store.about.services.empty'|trans }}</p>
+            {% else %}
+                <p>
+                    {% for service in restaurant.services %}
+                        {{ service.name|trans }}{{ not loop.last ? ', ' }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+
+        </div>
+
+        <div class="col-md-4">
+            <h4>{{ 'clickeat.store.about.payment_methods.title'|trans }}</h4>
+            {% if restaurant.storePaymentMethods|length == 0 %}
+                <p>{{ 'clickeat.store.about.payment_methods.empty'|trans }}</p>
+            {% else %}
+                <p>
+                    {% for method in restaurant.storePaymentMethods %}
+                        {{ method.name|trans }}{{ not loop.last ? ', ' }}
+                    {% endfor %}
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<section class="container padding-v-60 text-center" id="social">
+{% if restaurant.socialProfile %}
+{% set sp = restaurant.socialProfile %}
+{% if sp.staticFacebookId or sp.staticTwitterId or sp.staticInstagramId or sp.staticTumblrId or sp.staticFoursquareId %}<h4 class="thin">Retrouvez nous...</h4>{% endif %}
+<p class="text-center">
+    {% if sp.staticFacebookId %}
+    <a href="http://facebook.com/{{ sp.staticFacebookId }}" target="_blank" class="facebook">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+    {% endif %}
+    {% if sp.staticTwitterId %}
+    <a href="http://twitter.com/{{ sp.staticTwitterId }}" target="_blank" class="twitter">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+    {% endif %}
+    {% if sp.staticInstagramId %}
+    <a href="https://instagram.com/{{ sp.staticInstagramId }}" target="_blank" class="instagram">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-instagram fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+    {% endif %}
+    {% if sp.staticTumblrId %}
+    <a href="http://{{ sp.staticTumblrId }}.tumblr.com" target="_blank" class="tumblr">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-tumblr fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+    {% endif %}
+    {% if sp.staticFoursquareId %}
+    <a href="https://fr.foursquare.com/explore?&q={{ sp.staticFoursquareId|url_encode }}" target="_blank" class="foursquare">
+        <span class="fa-stack fa-lg">
+            <i class="fa fa-circle fa-stack-2x"></i>
+            <i class="fa fa-foursquare fa-stack-1x fa-inverse"></i>
+        </span>
+    </a>
+    {% endif %}
+</p>
+{% endif %}
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'ClabClickeatBundle:Mixpanel:mixpanel.html.twig' with { mixpanelTrack: 'View homepage', mixpanelTrackProperties: { 'Restaurant': restaurant.name } } %}
+{% endblock %}

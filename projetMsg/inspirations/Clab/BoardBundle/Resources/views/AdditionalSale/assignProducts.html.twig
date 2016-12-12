@@ -1,0 +1,65 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+{% block title %}Gérer les produits proposés{% endblock %}
+{% form_theme form _self %}
+
+{% block _form_choices_widget %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    <ul class="list list-group list-group-checkbox">
+    {% for id, child in form %}
+        {% set entity = form.vars.choices[id].data %}
+        <li class="list-group-item clearfix">
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+            <span class="name">{{ child.vars.label|trans({}, translation_domain) }}</span>
+            <div class="checkbox pull-right">
+                {{ form_widget(child, {'attr': {'class': 'icheck ' ~ attr.widget_class|default('')}}) }}
+            </div>
+        </label>
+        </li>
+    {% endfor %}
+    </ul>
+{% endspaceless %}
+{% endblock _form_choices_widget %}
+
+{% block body %}
+{% if form.choices|length > 0 %}
+    <form id="form_assign_products" method="post" action="{{ path('board_additional_sale_assign_product', { contextPk: contextPk ,slug: additionalSale.slug}) }}" class="ajax-form watch" data-callback="#additionalSaleList" data-changed="0">
+        <div id="choices">
+            <input type="text" class="search form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+            {{ form_widget(form.choices) }}
+        </div>
+        {{ form_errors(form.choices) }}
+        {{ form_rest(form) }}
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+            <button type="submit" class="btn btn-primary" >Enregistrer</button>
+        </div>
+    </form>
+{% endif %}
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var choiceList = new List('choices', {
+    valueNames: [ 'name' ]
+});
+
+$('#form_assign_products').on('submit',function(){
+    $('#ajaxModal').modal('hide');
+})
+var fulllist = [];
+$('.list-group-item.clearfix').each(function(){
+    fulllist.push($(this));
+});
+$('button[type="submit"]').on('click',function(e){
+    $('.list.list-group.list-group-checkbox').find('.list-group-item.clearfix').each(function(){
+        if(fulllist.indexOf($(this))>=0){
+            fulllist.splice(fulllist.indexOf($(this)),1);
+        }
+    })
+    $('.list.list-group.list-group-checkbox').append(fulllist);
+});
+</script>
+{% endblock %}

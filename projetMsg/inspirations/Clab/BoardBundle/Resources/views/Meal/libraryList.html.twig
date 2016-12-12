@@ -1,0 +1,22 @@
+{% for meal in meals %}
+<tr
+    id="sort_{{ meal.id }}"
+    class="clickable"
+    data-target="drawer" href="{{ path('board_meal_edit', { context: context, contextPk: contextPk, slug: meal.slug }) }}"
+>
+    <td>
+        {{ meal.name }}
+    </td>
+    <td>{{ meal.price }}€</td>
+    <td>
+        {% set slotCount = meal.slots|length %}
+        {% if slotCount > 0 %}
+            <span class="badge badge-success">{{ slotCount }}</span>
+        {% else %}
+            <span class="badge">{{ slotCount }}</span>
+        {% endif %}
+    </td>
+    <td>{% if meal.position == 999 %}Aucun ordre{% else %}Position {{ meal.position + 1 }}{% endif %}
+        <span class="text-muted pull-right handle"><i class="fa fa-reorder fa-lg"></i></span></td>
+</tr>
+{% endfor %}

@@ -1,0 +1,79 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+   {{ parent() }}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="reviews">
+    <div class="filters">
+        <h4>Trier par:</h4>
+        <a href="#" class="btn btn-default btn-round btn-l sort" data-sort="read:desc">Vue</a>
+    </div>
+    <br/>
+    <section class="panel">
+        <div class="panel-heading">
+       <h4>Les commentaires</h4>
+        </div>
+        <div class="panel-body" id="reviewTable">
+            <table class="table table-hover table-stripped table-bordered" id="datatable" width="100%">
+                <thead>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                </thead>
+                <thead>
+                    <th>Titre</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Note globale</th>
+                    <th>Qualité des plats</th>
+                    <th>Propreté</th>
+                    <th>Service</th>
+                    <th>Prix</th>
+                    <th>Réponse</th>
+                    <th>Vue</th>
+                </thead>
+                <tbody id="reviewList" data-url="{{ path('board_review_library_list', { contextPk: contextPk }) }}"
+                       class="list">
+                    {% include 'ClabBoardBundle:Review:libraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+
+function mix()
+{
+    $('#reviewList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#reviewList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+
+{% if review is defined and review %}
+    $('#review-{{ review }}').trigger('click');
+{% endif %}
+</script>
+{% endblock %}

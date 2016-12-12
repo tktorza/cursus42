@@ -1,0 +1,65 @@
+{% extends 'ClabWhiteBundle::baseModal.html.twig' %}
+
+{% block modalClass %}modalOption {% if is_mobile() %}no-padding{% endif %}{% endblock %}
+{% block modalId %}{% if token is not null %}modalOptionMeal-{{ product.id }}{% else %}modalOption-{{ product.id }}{% endif %}{% endblock %}
+{% block buttonClass %}{% if is_mobile() %}margin-right-27{% endif %}{% endblock %}
+{% block modalUnderClass %}{% if is_mobile() %}margin-right-47{% endif %}{% endblock %}
+{% block modalTitle %}Votre assaisonnement{% endblock %}
+{% block modalBody %}
+    <div class="holder">
+        <div class="options-form-container" data-id="{{ token is defined and token is not null ? token ~ product.id : product.id }}" style="text-align: left;">
+            {{ form_start(form, { action: path('clab_white_product_option_form', { slug: product.slug, token: token,slot: slot}), name: (token is defined and token is not null) ? token ~ product.id : product.id }) }}
+            {% for child in form.children %}
+                    <div class="hold height option_group">
+                        <div class="row">
+                            {% for value in child.children %}
+                                <div class="col-md-4">
+                                    <div class="img"></div>
+                                    <label>
+                                        {% if value.vars.value is not empty and value.parent.vars.choices[value.vars.value].data.price > 0 %}
+                                            {{ form_widget(value,{ 'attr': {'price':product.price,'min':child.vars.attr.min,'max':child.vars.attr.max ,'sup':value.parent.vars.choices[value.vars.value].data.price} }) }}
+                                        {% else %}
+                                            {{ form_widget(value,{ 'attr': {'price':product.price,'min':child.vars.attr.min,'max':child.vars.attr.max} }) }}
+                                        {% endif %}
+                                        <small class="option_order_label">
+                                            <span class="margin-v-sauce">{{ value.vars['label'] }}
+                                            {% if value.vars.value is not empty %}
+                                                {% if value.parent.vars.choices[value.vars.value].data.price > 0 %}
+                                                    (+{{ value.parent.vars.choices[value.vars.value].data.price|number_format(2, '.', ',') }} €)
+                                                {% endif %}
+                                            {% endif %}
+
+                                            </span>
+                                            <p class="gluten-style">
+                                                contient du gluten
+                                            </p>
+                                            <button type="submit" class="btn btn-red submit_option_{{ product.id }} ">
+                                                Choisir
+                                            </button>
+                                        </small>
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+            {% endfor %}
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        $('.submit_option_{{ product.id }}').on('click', function (e) {
+            e.preventDefault();
+
+            $(this).parents('label').find('input').click();
+            $self = $(this);
+
+            setTimeout(function(){
+                $self.parents('form').submit();
+                $('.modal').modal('hide');
+            }, 100);
+        });
+    </script>
+{% endblock %}
+

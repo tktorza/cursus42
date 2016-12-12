@@ -1,0 +1,61 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Temps de préparation{% endblock %}
+
+{% block body %}
+<form method="post" action="{{ path('board_restaurant_extra_making_time', { contextPk: contextPk }) }}">
+    <div id="products">
+        <input type="text" id="custom-search" class="form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+        <ul class="list list-group list-group-checkbox">
+            {% for productForm in form.products %}
+                {% set entity = productForm.vars.data %}
+                <li class="list-group-item clearfix">
+                <label>
+                    <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+                    <span class="name">{{ entity.name }}</span>
+                    <div class="checkbox pull-right">
+                        {{ form_widget(productForm.extraMakingTime, { attr: { class: 'form-control' }}) }}
+                        {{ form_errors(productForm.extraMakingTime) }}
+                    </div>
+                </label>
+                </li>
+            {% endfor %}
+        </ul>
+        {{ form_widget(form.products) }}
+    </div>
+    {{ form_errors(form.products) }}
+    {{ form_rest(form) }}
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var productList = new List('products', {
+    valueNames: [ 'name' ]
+});
+$('#custom-search').keyup(function(e) {
+    var val = $(this).val(),
+        item;
+    for (var i = 0; i < productList.items.length; i++) {
+        item = productList.items[i];
+        element = $(item.elm);
+        for (var v in item.values()) {
+            var itemValue = item.values()[v].toString().toLowerCase();
+            if (itemValue.search(val) > -1 && val != "") {
+                element.show();
+                continue;
+            } else if(!val || val == '') {
+                element.show();
+                continue;
+            } else {
+                element.hide();
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

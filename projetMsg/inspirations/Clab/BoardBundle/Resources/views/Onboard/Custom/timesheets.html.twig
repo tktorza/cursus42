@@ -1,0 +1,193 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+{% block navContent %}{% endblock %}
+
+{% block body %}
+<div class="container" id="planning">
+    {% include 'ClabBoardBundle:Onboard:Custom/breadcrumbs.html.twig' with { step: 'timesheets' } %}
+
+    <br><br>
+    <section class="panel">
+        <div class="panel-body">
+            <h2>3. Horaires</h2>
+            <hr>
+            <form action="{{ path('board_onboard_custom_timesheets', { slug: proxy.slug }) }}" method="post" id="myForm" class="watch" data-changed="0">
+                <div class="input-list padding-v-10">
+                    <div class="row timesheet-day">
+                        <div class="col-md-3">
+                            <strong>Ajouter pour <br>tous les jours</strong>
+                        </div>
+                        <div class="col-md-7">
+                            <div class="timesheet-list">
+                                <div class="row timesheet-field">
+                                    <div class="col-md-4">
+                                        <input type="time" class="form-control timepicker" id="allStart" name="" value="">
+                                    </div>
+                                    <div class="col-md-4">
+                                        <input type="time" class="form-control timepicker" id="allEnd" name="" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <a class="btn btn-success" id="addToAll">Ajouter</a>
+                        </div>
+                    </div>
+                    <hr>
+
+                    {% for i in days %}
+                        {% set checkbox = attribute(form, 'is_weekday_' ~ i) %}
+                        {% set timesheetsForm = attribute(form, 'timesheets_' ~ i) %}
+                        <div class="row timesheet-day">
+                            <div class="col-md-3">
+                                {{ form_row(checkbox, { attr: { class: 'icheck reveal', "data-target": 'timesheets-' ~ i } }) }}
+                            </div>
+                            <div class="col-md-7">
+                                <div class="timesheet-list timesheets-{{ i }}" {% if timesheetsForm.vars.prototype is defined %}data-prototype="{{ _self.timesheet_prototype(timesheetsForm.vars.prototype)|e }}"{% endif %} {% if timesheetsForm|length == 0 %}style="display:none;"{% endif %}>
+                                    {% for timesheet in timesheetsForm %}
+                                        <div class="row timesheet-field">
+                                            <div class="col-md-5">
+                                                {{ form_widget(timesheet.start, { attr: { class: 'form-control timepicker' }, label_render: false }) }}
+                                            </div>
+                                            <div class="col-md-5">
+                                                {{ form_widget(timesheet.end, { attr: { class: 'form-control timepicker' }, label_render: false }) }}
+                                            </div>
+                                            <div class="col-md-2">
+                                                <span class="remove"></span>
+                                                {{ form_rest(timesheet) }}
+                                            </div>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="timesheets-{{ i }}" {% if timesheetsForm|length == 0 %}style="display:none;"{% endif %}>
+                                    <div class="timesheet-add"></div>
+                                </div>
+                            </div>
+                        </div>
+                        {% if not loop.last %}
+                        <hr>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+
+                <div class="hide">
+                {{ form_rest(form) }}
+                </div>
+
+                <hr>
+                <div class="row">
+                    <div class="col-md-4">
+                        <a class="btn btn-default btn-lg btn-block" href="{{ path('board_onboard_custom_catalog', { slug: proxy.slug }) }}"><i class="fa fa-arrow-circle-left icon-left"></i>Précédent</a>
+                    </div>
+
+                    <div class="col-md-8">
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Suivant<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+jQuery(document).ready(function() {
+
+    $('.timesheet-add').each(function() {
+        $(this).html('<a href="#" class="add_timesheet_link"><i class="fa fa-plus-circle fa-2x"></i></a>');
+    });
+
+    $('.timesheet-field').each(function() {
+        addTimesheetFormDeleteLink($(this));
+    });
+
+    $('.add_timesheet_link').on('click', function(e) {
+        e.preventDefault();
+        addTimesheetForm($(this).parents('.timesheet-day').find('.timesheet-list'));
+    });
+});
+
+function addTimesheetForm(collectionHolder) {
+    var prototype = collectionHolder.attr('data-prototype');
+    var newForm = prototype.replace(/__name__/g, $('.timesheet-field').length);
+
+    var $newFormDiv = $('<div class="timesheet-field"></div>').append(newForm);
+    collectionHolder.append($newFormDiv);
+
+    addTimesheetFormDeleteLink($newFormDiv);
+
+    initFields();
+}
+
+function addTimesheetFormDeleteLink($timesheetFormDiv) {
+    var $removeFormA = $('<a href="#"><i class="fa fa-trash-o"></i></a>');
+    $timesheetFormDiv.find('.remove').append($removeFormA);
+
+    $removeFormA.on('click', function(e) {
+        e.preventDefault();
+        $timesheetFormDiv.remove();
+    });
+}
+
+$(document).on('ifChecked', '.reveal', function(event) {
+    element = $(document).find('.' + $(this).data('target'));
+    element.show();
+    if($(document).find('.' + $(this).data('target') + ' .timesheet-field').length == 0) {
+        element.parents('.timesheet-day').find('.add_timesheet_link').click();
+    }
+});
+
+$(document).on('ifUnchecked', '.reveal', function(event) {
+    $(document).find('.' + $(this).data('target')).hide();
+    $(document).find('.' + $(this).data('target') + ' .timesheet-field').each(function() {
+        $(this).remove();
+    })
+});
+
+$('#addToAll').on('click', function() {
+    var start = $('#allStart').val();
+    var end = $('#allEnd').val();
+
+    if(start && end) {
+        $('.reveal').each(function() {
+            if($(this).prop('checked')) {
+                element = $(document).find('.' + $(this).data('target'));
+                element.parents('.timesheet-day').find('.add_timesheet_link').click();
+            } else {
+                $(this).iCheck('check');
+            }
+        });
+
+        $('.timesheet-list').each(function() {
+            var form = $(this).find('.timesheet-field').last();
+
+            form.find('.startPicker').val(start);
+            form.find('.endPicker').val(end);
+        });
+    }
+
+    $('#allStart').val('');
+    $('#allEnd').val('');
+});
+</script>
+{% include 'ClabBoardBundle:Onboard:Custom/formScript.html.twig' %}
+{% endblock %}
+
+{% macro timesheet_prototype(timesheet) %}
+    <div class="row">
+        <div class="col-md-5">
+            {{ form_widget(timesheet.start, { attr: { class: 'form-control timepicker startPicker' }, label_render: false }) }}
+        </div>
+        <div class="col-md-5">
+            {{ form_widget(timesheet.end, { attr: { class: 'form-control timepicker endPicker' }, label_render: false }) }}
+        </div>
+        <div class="col-md-2">
+            <span class="remove"></span>
+            {{ form_rest(timesheet) }}
+        </div>
+    </div>
+{% endmacro %}

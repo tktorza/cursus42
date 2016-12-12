@@ -1,0 +1,29 @@
+api_rest_gallery_get:
+    path:  /gallery/{entityType}/{entityId}
+    defaults: { _controller: ClabApiBundle:RestMedia:get, _format: json }
+    methods: [GET]
+
+api_rest_gallery_upload:
+    path:  /gallery/{entityType}/{entityId}/{galleryType}/upload
+    defaults: { _controller: ClabApiBundle:RestMedia:upload, _format: json }
+    methods: [POST]
+
+api_rest_gallery_edit:
+    path:  /gallery/{entityType}/{entityId}
+    defaults: { _controller: ClabApiBundle:RestMedia:edit, _format: json }
+    methods: [PATCH]
+
+api_rest_gallery_delete:
+    path:  /gallery/{entityType}/{entityId}/images/{imageId}
+    defaults: { _controller: ClabApiBundle:RestMedia:delete, _format: json }
+    methods: [DELETE]
+
+api_rest_gallery_public_get:
+    path:  /gallery-public/{entityType}/{entityId}
+    defaults: { _controller: ClabApiBundle:RestMedia:getPublic, _format: json }
+    methods: [GET]
+
+api_rest_gallery_public_upload:
+    path:  /gallery-public/{entityType}/{entityId}
+    defaults: { _controller: ClabApiBundle:RestMedia:uploadPublic, _format: json }
+    methods: [POST]

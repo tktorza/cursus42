@@ -1,0 +1,40 @@
+Clab\ShopBundle\Entity\Loyalty:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        orderType:
+            expose: true
+            read_only: true
+            groups: [app, public, pro]
+        user:
+            expose: true
+            read_only: true
+            groups: [app]
+        validUntil:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        isUsed:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        value:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        isCombinable:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        isRefreshed:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        cart:
+            expose: true
+            read_only: true
+            groups: [app]

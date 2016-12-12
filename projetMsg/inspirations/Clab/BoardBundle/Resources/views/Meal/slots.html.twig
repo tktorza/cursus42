@@ -1,0 +1,41 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Ajouter d'autres étapes{% endblock %}
+
+{% block body %}
+{% if form.slots|length > 0 %}
+<form method="post" action="{{ path('board_meal_slots', { context: context, contextPk: contextPk, slug: meal.slug }) }}">
+    <div class="input-list">
+        {% for id, slotForm in form.slots %}
+            {% set entity = form.slots.vars.choices[id].data %}
+            <div class="row input-row">
+                <div class="col-md-1">
+                    {{ form_widget(slotForm, { attr: { class: 'icheck' } }) }}
+                </div>
+                <div class="col-md-11">
+                    {{ entity.name }} - 
+                    <small class="text-muted">
+                    {% for productCategory in entity.productCategories %}
+                        {{ productCategory.name }}{% if not loop.last %}, {% endif %}
+                    {% endfor %}
+                    </small>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    <br><br>
+    <div style="display:none;">
+        {{ form_rest(form) }}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+{% else %}
+    <p>Aucune étape dans votre bibliothèque.</p>
+    <a href="{{ path('board_meal_slot_library', { context: context, contextPk: contextPk }) }}" class="btn btn-primary">Créer ma première étape</a>
+{% endif %}
+{% endblock %}

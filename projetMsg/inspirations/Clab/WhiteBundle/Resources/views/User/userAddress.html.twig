@@ -1,0 +1,70 @@
+{% extends 'ClabWhiteBundle::base.html.twig' %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}
+{% block nav %}
+    {{ parent() }}
+    {% include 'ClabWhiteBundle:Navs:nav2.html.twig' with {user:app.user} %}
+{% endblock %}
+{% block body %}
+<section class="container profile padding-top-container-profile " id="mobile_container_profile" >
+    <div class="field col-md-8  col-md-offset-2 text-center" {% if is_mobile() %} style="margin-bottom: -15px !important; " {% endif %}>
+        <h3>Adresse par défaut</h3>
+        {% if homeAddress %}
+        <div class="group">
+            <div  tabindex="0" class="dropdown col-md-10 col-md-offset-1 padding-all-2-5 text-left padding-bottom-10">
+                <h4>{{ homeAddress.name ? homeAddress.name : 'Adresse par défaut' }}<i class="fa fa-chevron-right" aria-hidden="true"></i></h4>
+                <div class="dropdown-content">
+                    <div class="item padding-v-25">
+                        <div class="col-md-12 color-grey-4"><p>{{ homeAddress.street }}</br>{{ homeAddress.zip }}</br>{{ homeAddress.city }}</p></div>
+                    </div>
+                    <div class="dropdown-footer">
+                        <div class="row">
+                            <a href="{{ path('clab_white_user_delete_address', {'id': homeAddress.id}) }}" class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small; border-left: thin solid #eaeaea;"{% endif %}>Supprimer</a>
+                            <a href="{{ path('clab_white_user_edit_address', {'id': homeAddress.id}) }}"class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small;"{% endif %}>Modifier</a>
+                            <a href="{{ path('clab_white_user_remove_home_address') }}"class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small;"{% endif %}>Retirer par défaut</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <h4>Aucune adresse</h4>
+        {% endif %}
+    </div>
+    <div class="field col-md-8  col-md-offset-2 text-center" {% if is_mobile() %}style="border-top-width: 0px!important" {% endif %}>
+        <h3>Vos adresses de livraison</h3>
+        {% if addresses | length > 0 %}
+        <div class="group">
+            {% for address in addresses %}
+                {% if (homeAddress and address.id != homeAddress.id) or not homeAddress %}
+                    <div  tabindex="0" class="dropdown col-md-10 col-md-offset-1 padding-all-2-5 text-left{% if is_mobile() %} padding-bottom-15{% else %} padding-bottom-10{% endif %} ">
+                        <h4>{{ address.name ? address.name : loop.index }}<i class="fa fa-chevron-right" aria-hidden="true"></i></h4>
+                        <div class="dropdown-content">
+                            <div class="item padding-v-25">
+                                <div class="col-md-12 color-grey-4"><p>{{ address.street }}</br> {{ address.zip }}</br> {{ address.city}}</p></div>
+                            </div>
+                            <div class="dropdown-footer">
+                                <div class="row">
+                                    <a href="{{ path('clab_white_user_delete_address', {'id': address.id}) }}" class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small; border-left: thin solid #eaeaea"{% endif %}>Supprimer</a>
+                                    <a href="{{ path('clab_white_user_edit_address', {'id': address.id}) }}"class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small;"{% endif %}>Modifier</a>
+                                    <a href="{{ path('clab_white_user_set_home_address', {'id': address.id}) }}"class="col-xs-4 btn-flat" {% if is_mobile() %}style="font-size: x-small;"{% endif %}>Mettre par défaut</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endfor %}
+            {% else %}
+                <h4>Aucune Adresse</h4>
+            {% endif %}
+        <a href="{{ path('clab_white_user_add_address') }}" class="btn btn-red btn-lg">Ajouter une nouvelle adresse</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+{% block footerClass %}relative background-black-matsuri{% endblock %}
+{% block upperFooterClass %}background-black-matsuri{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+{% endblock %}

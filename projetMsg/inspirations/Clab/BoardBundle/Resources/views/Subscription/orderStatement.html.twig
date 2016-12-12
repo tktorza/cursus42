@@ -1,0 +1,99 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block navContent %}{% endblock %}
+{% block bodyClass %}singlenav{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('front/bundle/board/build/css/base.css') }}">
+{% endblock %}
+
+{% set infos = orderStatement.infos %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1 bg-white">
+            <h1>Relevé de commission - {{ orderStatement.restaurant.name }} {% if orderStatement.restaurant.legalName %}({{ orderStatement.restaurant.legalName }}){% endif %}</h1>
+            <h3>Du {{ orderStatement.startDate|date('d/m/Y') }} au {{ orderStatement.endDate|date('d/m/Y') }}</h3>
+
+            <div class="row">
+                <div class="col-md-6">
+                </div>
+
+                <div class="col-md-6">
+                    <table class="table table-bordered table-stripped">
+                        <tr>
+                            <td>Total Commission TTC</td>
+                            <td>{{ (infos.totalClick + infos.totalClick * orderStatement.tax)|number_format(2) }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Total Commission HT</td>
+                            <td>{{ infos.totalClick }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Total paiement en ligne</td>
+                            <td>{{ infos.totalOnline }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Solde initiale</td>
+                            <td>{{ orderStatement.parentBalance }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Solde semaine</td>
+                            <td>{{ orderStatement.balance }}€</td>
+                        </tr>
+                        <tr>
+                            <td>Solde finale</td>
+                            <td>{{ orderStatement.cumulatedBalance }}€</td>
+                        </tr>
+                    </table>
+                    </table>
+                </div>
+            </div>
+
+            <table class="table table-bordered table-striped" id="orderTable">
+                <thead>
+                    <th>Date</th>
+                    <th>Prix</th>
+                    <th>Coupon CE.</th>
+                    <th>Coupon Res.</th>
+                    <th>Offre Res.</th>
+                    <th>Comm.</th>
+                    <th>Total reduc</th>
+                    <th>TVA</th>
+                    <th>Paiement</th>
+                    <th>Trans.</th>
+                    <th>Click Eat</th>
+                    <th>Gain</th>
+                </thead>
+                <tbody>
+                    {% for order in orderStatement.orders %}
+                        <tr>
+                            <td>{{ order.time|date('d/m/Y') }}</td>
+                            <td>{{ order.price }}€</td>
+                            <td>{{ order.clickEatCouponPrice }}€</td>
+                            <td>{{ order.restaurantCouponPrice }}€</td>
+                            <td>{{ order.restaurantDiscountPrice }}€</td>
+                            <td>{{ order.commission }}%</td>
+                            <td>{{ order.reduction }}</td>
+                            <td>{{ order.totalTax }}€</td>
+                            <td>
+                                {% if order.restoflashTransaction %}
+                                    Restoflash
+                                {% elseif order.onlinePayment %}
+                                    En ligne
+                                {% else %}
+                                    Sur place
+                                {% endif %}
+                            </td>
+                            <td>{% if order.onlinePayment and not order.restoflashTransaction %}{{ order.subscription.transactionCommission }}%{% else %}-{% endif %}</td>
+                            <td>{{ order.clickEatCommission }}€</td>
+                            <td>{{ order.restaurantGain }}€</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

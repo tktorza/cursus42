@@ -1,0 +1,121 @@
+<div class="modal fade popup-holder" id="modalAddSale-{{ product.additionalSale.id }}" tabindex="-1" role="dialog"
+     aria-labelledby="myModalLabel">
+
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content" style="width:80%;margin-left: 6em;text-align: left;">
+            <div class="popup-wrap">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h3 class="modal-title" style="color:white;width:100%">{{ product.additionalSale.name }}</h3>
+                </div>
+                <div class="holder" style="width: 90%;margin-left: 3em;">
+                    <div class="options-form-container" data-id="{{ product.additionalSale.slug }}">
+
+                        {{ form_start(formAddSale, { action: path('clab_cart_add_sale',{'slug': product.additionalSale.slug}), name: product.additionalSale.slug ,attr : { class: 'formAddSale' , 'novalidate': 'true'}}) }}
+                            {% for child in formAddSale.children %}
+                                {% if child.vars['label'] is not null %}
+                                    <div class="child-option-container">
+                                        <div class="row">
+                                            <h4 class="col-md-8 center-block"
+                                                style="text-transform: uppercase;font-size: 16px;width:100%;">Pour l'achat de {{ product.name }}, {{ restaurant.name }} vous propose:</h4>
+                                            <h4 class="col-md-4 errors_option"
+                                                style="text-transform: uppercase;font-size: 14px;"></h4>
+                                        </div>
+                                        {% if child.vars.attr is not empty %}
+                                            {% if child.vars.attr.min is null and child.vars.attr.max is not null %}
+                                                <p style="font-size: 12px;"> Vous pouvez choisir
+                                                    jusqu'à {{ child.vars.attr.max }}
+                                                    produits</p>
+                                            {% elseif child.vars.attr.max is null and child.vars.attr.min is not null %}
+                                                <p style="font-size: 12px;"> Vous devez choisir au
+                                                    moins {{ child.vars.attr.min }}
+                                                    produits</p>
+                                            {% elseif child.vars.attr.max is not null and child.vars.attr.min is not null %}
+                                                <p style="font-size: 12px;"> Vous pouvez choisir entre {{ child.vars.attr.min }}
+                                                    et {{ child.vars.attr.max }}
+                                                    produits</p>
+                                            {% else %}
+                                                <p></p>
+                                            {% endif %}
+                                        {% endif %}
+                                        <hr/>
+                                        <br/>
+                                        <div class="hold height addSaleChoices">
+                                            <div class="row">
+                                                {% for value in child.children %}
+                                                    <div class="col-md-4" style="margin-top:2%;">
+                                                        <label>
+                                                            {% if value.parent.vars.choices[value.vars.value].data.product.options|length >0 %}
+                                                                {% set hasOption="true" %}
+                                                            {% else %}
+                                                                {% set hasOption="false" %}
+                                                            {% endif %}
+
+                                                                {{ form_widget(value,{ 'attr': {'price':value.parent.vars.choices[value.vars.value].data.price,'min':child.vars.attr.min,'max':child.vars.attr.max, 'hasOption':hasOption ,'addSaleSlug': product.additionalSale.slug, 'slug': value.parent.vars.choices[value.vars.value].data.product.slug } ,'required':false}) }}
+
+                                                            <small class="option_order_label"
+                                                                   style="font-weight: 400;">{{ value.vars['label'] }}
+
+                                                                {% if value.vars.value is not empty %}
+                                                                    {% if value.parent.vars.choices[value.vars.value].data.price > 0 %}<br>(+{{ value.parent.vars.choices[value.vars.value].data.price|number_format(2, '.', ',') }} €)
+                                                                    {% endif %}
+                                                                {% endif %}
+                                                            </small>
+                                                        </label>
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="add_sale_option" style="padding-top: 2em;">
+                                            {% for value in child.children %}
+                                                {% if value.parent.vars.choices[value.vars.value].data.product.options|length >0 %}
+                                                    {{ render(controller('ClabCallCenterBundle:AdditionalSale:getAdditionalSaleOptionForm', { 'slug': value.parent.vars.choices[value.vars.value].data.product.slug })) }}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                        <br/>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        {{ form_rest(formAddSale) }}
+                        <div class="child-option-container">
+                            <div class="row">
+                                <h4 class="col-md-12" style="text-transform: uppercase;font-size: 16px;">  </h4>
+                            </div>
+                            <div class="row">
+                                <h4 class="col-md-4 errors_option" style="text-transform: uppercase;font-size: 14px;"></h4>
+                            </div>
+
+                            <hr style="margin-top:0px;margin-bottom:0px;">
+                            <div class="hold height option_group">
+                                <div class="row">
+
+                                </div>
+                            </div>
+                            <br>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-4"></div>
+                            <div class="col-xs-4" style="display: inline-flex;padding-left:0px;margin-bottom: 2em;">
+                                <a href="#"
+                                   class="btn btn-inverse"
+                                   data-dismiss="modal"
+                                   aria-label="Close"
+                                   style="width: 7em;">Non merci</a>
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <button type="submit" class="btn btn-primary submit_option"
+                                        id="submit">Ajouter
+                                </button>
+                            </div>
+                            <div class="col-xs-4"></div>
+                        </div>
+                        {{ form_end(formAddSale) }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

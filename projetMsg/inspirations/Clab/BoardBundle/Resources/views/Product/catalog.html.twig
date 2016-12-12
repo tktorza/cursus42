@@ -1,0 +1,155 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'restaurant',
+        route: 'board_catalog',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10">
+    <section class="panel">
+        <div class="panel-body">
+            <form method="post" action="{{ path('board_catalog', { context: context, contextPk: contextPk }) }}">
+                {% for categoryForm in form.categories %}
+                <div class="panel-group" id="accordion">
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            {% for productForm in categoryForm.products %}
+                                {% if loop.first %}
+                                <div class="row">
+                                    <div class="col-md-3 text-center"><h4>{{ categoryForm.vars.data.name }}</h4></div>
+                                    <div class="col-md-1 text-center"><small>En ligne</small></div>
+                                    <div class="col-md-2 text-center"><small>Prix</small></div>
+                                    {% if productForm.stock is defined %}
+                                    <div class="col-md-1 text-center"><small>Stock</small></div>
+                                    <div class="col-md-1 text-center"><small>Stock par défaut</small></div>
+                                    <div class="col-md-1 text-center"><small>Stock illimité</small></div>
+                                    {% endif %}
+                                </div>
+                                <hr>
+                                {% endif %}
+
+                                {% set product = productForm.vars.data %}
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        {{ form_widget(productForm.name, { attr: { class: 'form-control' } }) }}
+                                    </div>
+                                    <div class="col-md-1 text-center">
+                                        {{ form_widget(productForm.isOnline, { attr: { class: 'icheck inline-checkboxes' } }) }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form_widget(productForm.price, { attr: { class: 'form-control' } }) }}
+                                    </div>
+                                    {% if productForm.stock is defined %}
+                                    <div class="col-md-1">
+                                        {{ form_widget(productForm.stock, { attr: { class: 'form-control' } }) }}
+                                    </div>
+                                    <div class="col-md-1">
+                                        {{ form_widget(productForm.defaultStock, { attr: { class: 'form-control' } }) }}
+                                    </div>
+                                    <div class="col-md-1 text-center">
+                                        {{ form_widget(productForm.unlimitedStock, { attr: { class: 'icheck inline' } }) }}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                {% if productForm.childrens is defined %}
+                                <div class="panel-group panel-childrens" id="{{ product.slug }}-accordion" style="border: 1px solid rgb(218, 218, 218);">
+                                    <div class="panel panel-inverse">
+                                        <div class="panel-heading" role="tab" id="headingOne">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#{{ product.slug }}-accordion" href="#{{ product.slug }}-collapseOne" aria-expanded="true" aria-controls="collapseOne"><i class="fa fa-caret-right icon-left"></i>Restaurants <span class="synch-info label"></span></a>
+                                            </h4>
+                                        </div>
+                                        <div id="{{ product.slug }}-collapseOne" class="panel-collapse collapse">
+                                            <div class="panel-body">
+                                                {% for childrenProductForm in productForm.childrens %}
+                                                    {% set childrenProduct = childrenProductForm.vars.data %}
+                                                    <div class="row">
+                                                        <div class="col-md-3">
+                                                            {{ childrenProduct.name }}
+                                                        </div>
+                                                        <div class="col-md-1 text-center">
+                                                            {{ form_widget(childrenProductForm.isOnline, { attr: { class: 'icheck inline-checkboxes' } }) }}
+                                                        </div>
+                                                        <div class="col-md-2 form-group {% if childrenProduct.price != product.price %}has-error{% else %}has-success{% endif %}">
+                                                            {{ form_widget(childrenProductForm.price, { attr: { class: 'form-control' } }) }}
+                                                        </div>
+                                                        {% if childrenProductForm.stock is defined %}
+                                                        <div class="col-md-1">
+                                                            {{ form_widget(childrenProductForm.stock, { attr: { class: 'form-control' } }) }}
+                                                        </div>
+                                                        <div class="col-md-1">
+                                                            {{ form_widget(childrenProductForm.defaultStock, { attr: { class: 'form-control' } }) }}
+                                                        </div>
+                                                        <div class="col-md-1 text-center">
+                                                            {{ form_widget(childrenProductForm.unlimitedStock, { attr: { class: 'icheck inline' } }) }}
+                                                        </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <hr>
+                {% endfor %}
+                    {% for mealForm in form.meals %}
+                                {% if loop.first %}
+                                <div class="row">
+                                    <div class="col-md-3 text-center"><h4>Formules</h4></div>
+                                </div>
+                                <br>
+                                <div class="row">
+
+                                    <div class="col-md-3 text-center"><small>Nom</small></div>
+                                    <div class="col-md-1 text-center"><small>En ligne</small></div>
+                                    <div class="col-md-2 text-center"><small>Prix</small></div>
+                                </div>
+                                <hr>
+                                {% endif %}
+
+                                {% set meal = mealForm.vars.data %}
+                                <div class="row">
+                                    {% if mealForm.name is defined %}
+                                        <div class="col-md-3">
+                                            {{ form_widget(mealForm.name, { attr: { class: 'form-control' } }) }}
+                                        </div>
+                                    {% else %}
+                                        <div class="col-md-3 text-center">
+                                            {{ meal.name }}
+                                        </div>
+                                    {% endif %}
+                                    <div class="col-md-1 text-center">
+                                        {{ form_widget(mealForm.isOnline, { attr: { class: 'icheck inline-checkboxes' } }) }}
+                                    </div>
+                                    <div class="col-md-2">
+                                        {{ form_widget(mealForm.price, { attr: { class: 'form-control' } }) }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                    <hr>
+                {{ form_rest(form) }}
+                <button type="submit" class="btn btn-block btn-lg btn-primary">Enregistrer</button>
+            </form>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('.panel-childrens').each(function() {
+    if($(this).find('.has-error').length != 0) {
+        $(this).find('.synch-info').addClass('label-warning').html('Non synchronisé');
+    } else {
+        $(this).find('.synch-info').addClass('label-success').html('Synchronisé');
+    }
+});
+</script>
+{% endblock %}

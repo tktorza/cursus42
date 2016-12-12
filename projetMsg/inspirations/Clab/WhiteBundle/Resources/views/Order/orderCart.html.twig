@@ -1,0 +1,56 @@
+<section id="order-cart">
+    <table class="table table-striped">
+        {% for element in cart.elements %}
+        <tr>
+            <td>
+                <strong class="text-primary">{{ element.quantity }}</strong> {{ element.proxy.name }}
+                <small>
+                {% for choice in element.choices %}
+                    {% if loop.first %}({% endif %}
+                    {{ choice.value }} {% if choice.price > 0 %}(+{{ (choice.price)|number_format(2,'.',',') }}€){% endif %}
+                    {% if not loop.last %}, {% else %}){% endif %}
+                {% endfor %}
+                </small>
+            </td>
+            <td class="text-right">{{ (element.price*element.quantity)|number_format(2) }}€</td>
+        </tr>
+            {% for children in element.childrens %}
+            <tr>
+                <td>
+                    <i class="fa fa-angle-right margin-left icon-left"></i>{{ children.proxy.name }}
+                    <small>
+                    {% for choice in children.choices %}
+                        {% if loop.first %}({% endif %}
+                        {{ choice.value }} {% if choice.price > 0 %}(+{{ (choice.price)|number_format(2,'.',',') }}€){% endif %}
+                        {% if not loop.last %}, {% else %}){% endif %}
+                    {% endfor %}
+                    </small>
+                </td>
+                <td class="text-right">{% if children.price > 0 %}(+{{ (children.price * children.quantity * element.quantity)|number_format(2) }}€){% else %}0€{% endif %}</td>
+            </tr>
+            {% endfor %}
+        {% endfor %}
+        {% if cart.deliveryCart is not null and cart.deliveryCart.extra and cart.deliveryCart.extra > 0 %}
+            <tr>
+                <td>{{ 'clickeat.cart.delivery_extra'|trans }}</td>
+                <td class="text-right">{{ cart.deliveryCart.extra }}€</td>
+            </tr>
+        {% endif %}
+        {% if cart.coupon is not null %}
+            <tr>
+              <td>{{ 'clickeat.voc.coupon'|trans }} {{ cart.coupon.name }}</td>
+              <td class="text-right">{{ cart.coupon.verbose }}</td>
+            </tr>
+        {% endif %}
+        {% if cart.discount is not null %}
+            <tr>
+              <td><i class="fa fa-tag icon-discount icon-left"></i>{{ cart.discount.description }}</td>
+              <td class="text-right">-{{ cart.discountAmount|number_format(2,'.',',') }}€</td>
+            </tr>
+        {% endif %}
+        <tr class="border-top">
+            <td><strong>{{ 'clickeat.cart.total'|trans }}</strong></td>
+            <td class="text-right text-primary"><strong>{{ cart.totalPrice|number_format(2,'.',',') }}€</strong></td>
+        </tr>
+    </table>
+</section>

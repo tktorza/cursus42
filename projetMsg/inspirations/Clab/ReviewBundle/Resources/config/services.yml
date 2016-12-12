@@ -1,0 +1,5 @@
+services:
+    clab_review.review_manager:
+        class: Clab\ReviewBundle\Service\ReviewManager
+        arguments: [ @doctrine.orm.entity_manager, @request ]
+        scope: request

@@ -1,0 +1,97 @@
+{% extends 'ClabWhiteBundle::base.html.twig' %}
+{% block head %}
+    {{ parent() }}
+{% endblock %}{%- block footerClass -%}
+{%- endblock -%}
+{% block nav %}
+    {{ parent() }}
+    {% include 'ClabWhiteBundle:Navs:nav2.html.twig' with { user:app.user} %}
+{% endblock %}
+{% block body %}
+    <section class="container profile padding-top-container-profile " id="mobile_container_profile">
+        <div class="field col-md-8  col-md-offset-2 text-center">
+            <h3>Vos commandes en cours</h3>
+            {% if orders |length>0 %}
+                {% for order in orders %}
+                    {% if order.preparationState != 3 %}
+                        {% set cart = order.cart %}
+                        <div class="group">
+                            <div  tabindex="0" class="dropdown col-md-10 col-md-offset-1 padding-all-2-5 text-left">
+                                <h4>Commande du {{ order.created|date('d/m/Y') }}<i class="fa fa-chevron-right" aria-hidden="true"></i></h4>
+                                <div class="dropdown-content">
+                                    {% if cart is defined %}
+                                        {% for element in cart.elements %}
+                                            {% if  element.proxy is not null %}
+                                                <div class="item padding-v-25">
+                                                    <div class="col-md-2 color-red-matsuri">{{ element.quantity }}</div>
+                                                    <div class="col-md-10 color-grey-4">{{ element.proxy.name }}</div>
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="dropdown-footer">
+                                        <div class="row {% if is_mobile() %}margin-bottom-40{% endif %}">
+                                            <div class="col-md-4 col-md-offset-4 text-center">{{ order.price|number_format(2, '.', ',') }} €</div>
+                                        </div>
+                                        <div class="row margin-v-15 text-center{% if is_mobile() %} padding-bottom-6 {% endif %}">
+                                            <a class="btn btn-lg btn-primary line-height-30" href="{{ path('clab_white_order_receipt', { hash: order.hash}) }}" >Suivre la commande</a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if loop.index == orders| length %}Aucune commande.{% endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                Aucune commande.
+            {% endif %}
+        </div>
+        <div class="field col-md-8  col-md-offset-2 text-center">
+            <h3>Vos commandes précédentes</h3>
+            {% if orders |length>0 %}
+                {% for order in orders %}
+                    {% if order.preparationState == 3 %}
+                        {% set cart = order.cart %}
+                        <div class="group">
+                            <div  tabindex="0" class="dropdown col-md-10 col-md-offset-1 padding-all-2-5 text-left">
+                                <h4>Commande du {{ order.created|date('d/m/Y') }}<i class="fa fa-chevron-right" aria-hidden="true"></i></h4>
+                                <div class="dropdown-content">
+                                    {% if cart is defined %}
+                                        {% for element in cart.elements %}
+                                            {% if  element.proxy is not null %}
+                                            <div class="item padding-v-25">
+                                                <div class="col-md-2 color-red-matsuri">{{ element.quantity }}</div>
+                                                <div class="col-md-10 color-grey-4">{{ element.proxy.name }}</div>
+                                            </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                    {% endif %}
+                                    <div class="dropdown-footer">
+                                        <div class="row">
+                                            <div class="col-md-4 col-md-offset-4 text-center">{{ order.price|number_format(2, '.', ',') }} €</div>
+                                        </div>
+                                        {#<div class="row">
+                                            <button class="col-md-12 btn-flat">Suivre la commande</button>
+                                        </div>#}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% else %}
+                        {% if loop.index == orders| length %}Aucune commande.{%  endif %}
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+            Aucune commande.
+            {% endif %}
+        </div>
+    </section>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $('.fa-chevron-right:eq(0)').click();
+    </script>
+{% endblock %}

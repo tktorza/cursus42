@@ -1,0 +1,30 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'restaurant',
+        route: 'board_category_library',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/features/icon-category.png') }}">
+                    <br><br>
+                    <h2>Vos catégories</h2>
+                    <br>
+                    <p>
+                        Organisez ici les grandes parties de votre carte : entrées, plats, desserts, boissons... On vous conseille de ne pas mettre trop de catégories pour ne pas perdre vos clients
+                    </p>
+                    <br><br>
+                    <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'category' }) }}">Créez votre première catégorie</a>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

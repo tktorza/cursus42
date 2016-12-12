@@ -1,0 +1,14 @@
+api_rest_get_log:
+    path:  /log/{id}
+    defaults: { _controller: ClabApiBundle:RestLog:getLog, _format: json }
+    methods: [GET]
+
+api_rest_new_log:
+    path:  /log
+    defaults: { _controller: ClabApiBundle:RestLog:new, _format: json }
+    methods: [POST]
+
+api_rest_new_session:
+    path: /logs/session
+    defaults: { _controller: ClabApiBundle:RestLog:createSession, _format: json }
+    methods: [POST]

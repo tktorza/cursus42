@@ -1,0 +1,59 @@
+api_0_rest_meal_list_for_menu:
+    path:  /meal/menu/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getForRestaurantMenu, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_list_for_restaurant:
+    path:  /meal/menu/restaurant/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getForRestaurant, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_list_for_chainstore:
+    path:  /meal/chainstore/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getForChainStore, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_add_slot:
+    path:  /meal/{idMeal}/add/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:addSlotToMeal, _format: json }
+    methods: [POST]
+
+api_0_rest_meal_remove_slot:
+    path:  /meal/{idMeal}/add/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:removeSlotFromMeal, _format: json }
+    methods: [POST]
+
+api_0_rest_meal_create_slot_for_restaurant:
+    path:  /meal/create/restaurant/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:createMealSlotForRestaurant, _format: json }
+    methods: [POST]
+
+api_0_rest_meal_create_slot_for_chainstore:
+    path:  /meal/create/chainstore/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:createMealSlotForChainStore, _format: json }
+    methods: [POST]
+
+api_0_rest_meal_get_slot_for_restaurant:
+    path:  /meal/slot/list/restaurant/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getSlotForRestaurant, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_get_slot_for_chainstore:
+    path:  /meal/slot/list/chainstore/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getSlotForChainStore, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_available_list_for_menu:
+    path:  /meal/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:getAvailableforRestaurant, _format: json }
+    methods: [GET]
+
+api_0_rest_meal_delete:
+    path:  /meal/delete/{id}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:remove, _format: json }
+    methods: [DELETE]
+
+api_0_rest_meal_delete_for_menu:
+    path:  /meal/delete/{mealId}/menu/{menuId}
+    defaults: { _controller: ClabApiOldBundle:RestMeal:removeForRestaurantMenu, _format: json }
+    methods: [DELETE]

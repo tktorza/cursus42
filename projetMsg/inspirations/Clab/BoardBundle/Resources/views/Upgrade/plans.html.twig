@@ -1,0 +1,216 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+
+{% block body %}
+
+    <div class="container padding-v-10" id="onboard">
+        <div class="row">
+            {% if restaurant.isMobile == false %}
+            <div class="col-md-12">
+                <section class="panel">
+                    <div class="panel-body">
+                        <div class="text-center">
+                            <h1>Vous êtes à quelques clics de votre mise en ligne.</h1>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-md-10 col-md-offset-1">
+                                <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item active text-center">
+                                            Abonnements annuels
+                                        </a>
+                                        <a href="#" class="list-group-item text-center">
+                                            Abonnements mensuels
+                                        </a>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 bhoechie-tab">
+
+                                    <!-- Annual section -->
+                                    <div class="bhoechie-tab-content active">
+                                        <div class="row">
+                                            {% for plan in plans %}
+                                            {% if plan.id starts with 'clickeat-' %}
+                                                {% if plan.interval == 'year' %}
+                                                    <div class="col-md-6">
+                                                        <div class="well well2 text-center">
+                                                            <h4>{{ plan.name }}</h4>
+                                                            <br>
+                                                            {% set planAmountYear = ((plan.amount / 100)) %}
+                                                            <p class="lead"><strong>{{ planAmountYear|number_format(2, '.', ',') }}€ HT / an</strong></p>
+                                                            <p>Soit {{ (planAmountYear /12)|number_format(2, '.', ',
+                                                            ') }}€ HT /mois</p>
+                                                            <p>Commissions depuis :</p>
+                                                            <p><small>
+                                                                    Clickeat <strong>9%</strong><br>
+                                                                    {% if planAmountYear != 0 %}
+                                                                    Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                                                    Site internet <strong>{{ plan.id|last }}%</strong>
+                                                                        {% endif %}
+                                                                </small></p>
+                                                            <a href="{{ path('board_subscription_upgrade_pay_plan',{'slug':plan.id,
+                                                                'contextPk':contextPk}) }}"
+                                                               class="btn
+                                                btn-success">Choisir</a>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                    <div class="bhoechie-tab-content">
+                                        <div class="row">
+                                            {% for plan in plans %}
+                                            {% if plan.id starts with 'clickeat-' %}
+                                                {% if plan.interval == 'month' %}
+                                                    <div class="col-md-6">
+                                                        <div class="well well2 text-center">
+                                                            <h4>{{ plan.name }}</h4>
+                                                            <br>
+                                                            {% set planAmountMonth = ((plan.amount / 100)) %}
+                                                            <p class="lead"><strong>{{ planAmountMonth|number_format(2, '.', ',') }}€
+                                                                                                                                   HT /mois</strong></p>
+                                                            <p>Soit {{ (planAmountMonth * 12)|number_format(2, '.', ',') }}€ HT / an</p>
+                                                            <p>Commissions depuis :</p>
+                                                            <p><small>
+                                                                    Clickeat <strong>9%</strong><br>
+                                                                    {% if planAmountMonth != 0 %}
+                                                                    Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                                                    Site internet <strong>{{ plan.id|last }}%</strong>
+                                                                        {% endif %}
+                                                                </small></p>
+                                                            <a href="{{ path('board_subscription_upgrade_pay_plan',{'slug':plan.id,
+                                                                'contextPk':contextPk}) }}"
+                                                               class="btn
+                                                btn-success">Choisir</a>
+                                                        </div>
+                                                    </div>
+                                                {% endif %}
+                                                {% endif %}
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <p>En validant j’accepte les <a href="{{ path('board_subscription_terms', { contextPk: proxy.slug }) }}" data-target="ajaxModal">Conditions Générales d'Utilisation et de Vente de la Plateforme</a>.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+            {% else %}
+                <div class="col-md-12">
+                    <section class="panel">
+                        <div class="panel-body">
+                            <div class="text-center">
+                                <h1>Vous êtes à quelques clics de votre mise en ligne.</h1>
+                            </div>
+                            <br>
+                            <div class="row">
+                                <div class="col-md-10 col-md-offset-1">
+                                    <div class="col-lg-3 col-md-3 col-sm-3 col-xs-3 bhoechie-tab-menu">
+                                        <div class="list-group">
+                                            <a href="#" class="list-group-item active text-center">
+                                                Abonnements annuels
+                                            </a>
+                                            <a href="#" class="list-group-item text-center">
+                                                Abonnements mensuels
+                                            </a>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-9 col-md-9 col-sm-9 col-xs-9 bhoechie-tab">
+
+                                        <!-- Annual section -->
+                                        <div class="bhoechie-tab-content active">
+                                            <div class="row">
+                                                {% for plan in plans %}
+                                                    {% if plan.id starts with 'ttt-' %}
+                                                        {% if plan.interval == 'year' %}
+                                                            <div class="col-md-6">
+                                                                <div class="well well2 text-center">
+                                                                    <h4>{{ plan.name }}</h4>
+                                                                    <br>
+                                                                    {% set planAmountYear = ((plan.amount / 100)) %}
+                                                                    <p class="lead"><strong>{{ planAmountYear|number_format(2, '.', ',') }}€ HT / an</strong></p>
+                                                                    <p>Soit {{ (planAmountYear /12)|number_format(2, '.', ',
+                                                            ') }}€ HT /mois</p>
+                                                                    <p>Commissions depuis :</p>
+                                                                    <p><small>
+                                                                            Clickeat <strong>9%</strong><br>
+                                                                            Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                                                            Site internet <strong>{{ plan.id|last }}%</strong>
+                                                                        </small></p>
+                                                                    <a href="{{ path('board_subscription_upgrade_pay_plan',{'slug':plan.id,
+                                                                        'contextPk':contextPk}) }}"
+                                                                       class="btn
+                                                btn-success">Choisir</a>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                        <div class="bhoechie-tab-content">
+                                            <div class="row">
+                                                {% for plan in plans %}
+                                                    {% if plan.id starts with 'ttt-' %}
+                                                        {% if plan.interval == 'month' %}
+                                                            <div class="col-md-6">
+                                                                <div class="well well2 text-center">
+                                                                    <h4>{{ plan.name }}</h4>
+                                                                    <br>
+                                                                    {% set planAmountMonth = ((plan.amount / 100)) %}
+                                                                    <p class="lead"><strong>{{ planAmountMonth|number_format(2, '.', ',') }}€
+                                                                                                                                            HT /mois</strong></p>
+                                                                    <p>Soit {{ (planAmountMonth * 12)|number_format(2, '.', ',') }}€ HT / an</p>
+                                                                    <p>Commissions depuis :</p>
+                                                                    <p><small>
+                                                                            Clickeat <strong>9%</strong><br>
+                                                                            Facebook <strong>{{ plan.id|last }}%</strong><br>
+                                                                            Site internet <strong>{{ plan.id|last }}%</strong>
+                                                                        </small></p>
+                                                                    <a href="{{ path('board_subscription_upgrade_pay_plan',{'slug':plan.id,
+                                                                        'contextPk':contextPk}) }}"
+                                                                       class="btn
+                                                btn-success">Choisir</a>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <p>En validant j’accepte les <a href="{{ path('board_subscription_terms', { contextPk: proxy.slug }) }}" data-target="ajaxModal">Conditions Générales d'Utilisation et de Vente de la Plateforme</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+{%  block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("div.bhoechie-tab-menu>div.list-group>a").click(function(e) {
+                e.preventDefault();
+                $(this).siblings('a.active').removeClass("active");
+                $(this).addClass("active");
+                var index = $(this).index();
+                $("div.bhoechie-tab>div.bhoechie-tab-content").removeClass("active");
+                $("div.bhoechie-tab>div.bhoechie-tab-content").eq(index).addClass("active");
+            });
+        });
+    </script>
+{% endblock %}

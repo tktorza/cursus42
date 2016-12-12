@@ -1,0 +1,31 @@
+{% for product in products %}
+<tr
+    id="product-{{ product.slug }}"
+    class="mix {% if product.category %}category-{{ product.category.slug }}{% endif %} clickable"
+    data-target="drawer" data-name="{{ product.name }}" data-price="{{ product.price }}" data-category="{% if product.category %}{{ product.category.name }}{% else %}Zzzz{% endif %}" href="{{ path('board_product_edit', { context: context, contextPk: contextPk, slug: product.slug }) }}"
+>
+    <td class="name">
+        {% if product.gallery %}
+        <img src="{{ product.gallery.cover.webpath | imagine_filter('square_20') }}" class="img-circle margin-right">
+        {% endif %}
+        {{ product.name }}
+        {% if product.isPDJ == true %}
+            <i class="fa fa-clock-o" data-title='Plat du jour'></i>
+        {% endif %}
+        {% if product.isMealOnly == true %}
+            <i class="fa fa-cutlery" data-title='Formule uniquement'></i>
+        {% endif %}
+    </td>
+    <td>{% if product.category %}{{ product.category.name }}{% else %}<span class="text-muted">Non classé</span>{% endif %}</td>
+    <td>{{ product.price|number_format(2,',','.') }}€</td>
+    <td>
+        {% set optionCount = product.options|length %}
+        {% if optionCount > 0 %}
+            <span class="badge badge-success" data-toggle="popover" data-trigger="hover" data-placement="top" data-title="Options ajoutées" data-content="{% for option in product.options %}{{ option.name }}{% if not loop.last %}, {% endif %}{% endfor %}">{{ optionCount }}</span>
+        {% else %}
+            <span class="badge">{{ optionCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}
+

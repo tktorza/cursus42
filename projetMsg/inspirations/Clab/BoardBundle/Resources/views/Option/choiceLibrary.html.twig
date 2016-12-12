@@ -1,0 +1,67 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% if forcedPricing is defined and forcedPricing  %}
+        {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+            category: 'restaurant',
+            route:  'board_product_library',
+            forcedPricing: true,
+            forcedPricingLabel: 'Créer une option',
+        } %}
+    {% else %}
+        {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+            category: 'restaurant',
+            route: 'board_product_library',
+            rightLink: path('board_option_choice_edit', { contextPk: contextPk, context: context }),
+            rightLinkLabel: 'Créer une option',
+            rightLinkDrawer: true,
+        } %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="choices">
+    <ul class="nav nav-pills">
+        <li><a href="{{ path('board_product_library', { context: context, contextPk: contextPk }) }}">Mes produits</a></li>
+        <li><a href="{{ path('board_option_library', { context: context, contextPk: contextPk }) }}">Mes options</a></li>
+        <li class="active"><a href="{{ path('board_option_choice_library', { context: context, contextPk: contextPk }) }}">Mes choix d'option</a></li>
+    </ul>
+    <br>
+    <section class="panel">
+        <div class="panel-body">
+            <table class="table table-hover table-stripped table-bordered" id="datatable" width="100%">
+                <thead>
+                    <th>Nom</th>
+                    <th>Disponibilité</th>
+                    {#<th>Choix</th>
+                    <th>Produits</th>#}
+                </thead>
+                <tbody id="choiceList" data-url="{{ path('board_option_choice_library_list', { contextPk: contextPk, context: context }) }}">
+                    {% include 'ClabBoardBundle:Option:choiceLibraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+function mix()
+{
+    $('#choiceList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#choiceList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+</script>
+{% endblock %}

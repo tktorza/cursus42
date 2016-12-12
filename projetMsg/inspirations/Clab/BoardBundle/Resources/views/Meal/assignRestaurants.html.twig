@@ -1,0 +1,61 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Gérer les restaurants associés{% endblock %}
+{% form_theme form _self %}
+
+{% block body %}
+    {% if form.restaurants|length > 0 %}
+        <form method="post" id="form_assign_restaurants" action="{{ path('board_meal_assign_restaurant', { context: context, contextPk: contextPk, slug: meal.slug }) }}" class="ajax-form watch" data-callback="#mealList" data-changed="0">
+            <div class="input-list">
+                <div class="row input-row">
+                    <div class="col-md-1" id="checkAll">
+                        <input type="checkbox" class="icheck">
+                    </div>
+                    <div class="col-md-8">
+                        Tout selectionner
+                    </div>
+                </div>
+                {% for id, optionForm in form.restaurants %}
+                    {% set entity = form.restaurants.vars.choices[id].data %}
+                    <div class="row input-row">
+                        <div class="col-md-1">
+                            {{ form_widget(optionForm, { attr: { class: 'icheck' } }) }}
+                        </div>
+                        <div class="col-md-8">
+                            {{ entity.name }} - {{ entity.address.street }} {{ entity.address.city }}
+                        </div>
+                        <div class="col-md-2">
+                            <input class="form-control" type="text" name="price-{{ entity.slug }}" value="{% if meals is not empty and meals[entity.slug] is defined %}{{ meals[entity.slug].price|number_format(2,'.',',') }}{% else %}{{ meal.price|number_format(2,'.',',') }}{% endif %}">
+                        </div>
+                        <div class="col-md-1">&euro;</div>
+                    </div>
+
+                {% endfor %}
+            </div>
+
+            {{ form_rest(form) }}
+
+            <br>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                <button type="submit" class="btn btn-primary">Enregistrer</button>
+            </div>
+        </form>
+    {% else %}
+        <p>Aucune restaurant dans votre enseigne.</p>
+        <a href="{{ path('board_meal_library', { context: context, contextPk: contextPk }) }}" class="btn btn-primary">Créer mon premier restaurant</a>
+    {% endif %}
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#form_assign_restaurants').on('submit',function(){
+            $('#ajaxModal').modal('hide');
+        })
+        $('#checkAll').on('ifChecked',function(){
+                $('#form_assign_restaurants').find('input:checkbox:not(:checked)').iCheck('check');
+        })
+        $('#checkAll').on('ifUnchecked',function(){
+            $('#form_assign_restaurants').find('input:checkbox:checked').iCheck('uncheck');
+        })
+    </script>
+{% endblock %}

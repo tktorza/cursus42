@@ -1,0 +1,15 @@
+api_0_rest_push:
+    path:  /push
+    defaults: { _controller: ClabApiOldBundle:RestPush:push, _format: json }
+    methods: [POST]
+
+api_0_rest_push_to_restaurant:
+    path:  /push/restaurant
+    defaults: { _controller: ClabApiOldBundle:RestPush:pushToRestaurantDevices, _format: json }
+    methods: [POST]
+
+api_0_rest_push_register_device:
+    path:  /push/register/device
+    defaults: { _controller: ClabApiOldBundle:RestPush:registerDevice, _format: json }
+    methods: [POST]
+

@@ -1,0 +1,35 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_restaurant_preorder',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/features/icon-preorder.png') }}">
+                    <br><br>
+                    <h2>La commande en ligne à emporter</h2>
+                    <span class="label label-primary">Gratuit</span>
+                    <br><br>
+                    <p>
+                        Vos clients commandent en ligne et viennent récupérer dans votre restaurant. Accessible depuis votre profil Clickeat, votre page Facebook ou votre site web. Un service en plus pour vos clients, des commandes en plus pour vous.
+                    </p>
+                    <br><br>
+                    {% if proxy.isMobile %}
+                        <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'preorder' }) }}">Activer</a>
+                    {% else %}
+                        <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'preorder' }) }}">Activer</a>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

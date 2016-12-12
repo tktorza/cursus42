@@ -1,0 +1,8 @@
+<p>Prise de contact sur votre site Byclickeat</p>
+
+<p><strong>Nom :</strong> {{ form.name }}</p>
+<p><strong>Email :</strong> {{ form.email }}</p>
+{% if form.phone %}
+<p><strong>Téléphone :</strong> {{ phone_number_format(form.phone, 'NATIONAL') }}</p>
+{% endif %}
+<p><strong>Message :</strong> {{ form.message }}</p>

@@ -1,0 +1,44 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Message personnalisé{% endblock %}
+
+{% block body %}
+<form method="post" action="{{ path('board_validation_publish', { contextPk: contextPk, date: date, start: start }) }}">
+    <div class="richEdit">
+        <div class="form-group">
+            <textarea class="form-control" rows="3" name="message"></textarea>
+        </div>
+        <br>
+        <div class="btn-group">
+            <a class="btn btn-default btn-xs insert-name">{{ 'pro.communication.conf.ttt.validationMessage.nameButton'|trans }}</a>
+            <a class="btn btn-default btn-xs insert-address">{{ 'pro.communication.conf.ttt.validationMessage.addressButton'|trans }}</a>
+            <a class="btn btn-default btn-xs insert-time">{{ 'pro.communication.conf.ttt.validationMessage.hourButton'|trans }}</a>
+        </div>
+    </div>
+    <br>
+    <p><small>
+        {{ 'pro.communication.conf.ttt.validationMessage.nameHelp'|trans }}<br>
+        {{ 'pro.communication.conf.ttt.validationMessage.addressHelp'|trans }}<br>
+        {{ 'pro.communication.conf.ttt.validationMessage.hourHelp'|trans }}<br>
+    </small></p>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+        <button type="submit" class="btn btn-primary">Enregistrer</button>
+    </div>
+</form>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('a.insert-name').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '{% if event is defined and event %}{{ event.address.name }}{% else %}[[nom]]{% endif %}');
+});
+$('a.insert-address').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '{% if event is defined and event %}{{ event.address.street }}, {{ event.address.zip }} {{ event.address.city }}{% else %}[[adresse]]{% endif %}');
+});
+$('a.insert-time').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '{% if event is defined and event %}De {{ event.start|date('H:i') }} à {{ event.end|date('H:i') }}, {{ event.address.zip }} {{ event.address.city }}{% else %}[[heure]]{% endif %}');
+});
+</script>
+{% endblock %}

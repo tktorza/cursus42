@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>myClickeat</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="shortcut icon" href="{{ asset('front/bundle/board/img/favicon/favicon.ico') }}" />
+    <link rel="stylesheet" href="{{ asset('front/bundle/board/build/css/base.css') }}?v=1.1.6">
+    <link rel="stylesheet" href="{{ asset('vendors/datatables.net-dt/css/jquery.dataTables.min.css') }}?v=1.1.6">
+    {% block stylesheets %}{% endblock %}
+
+    {# Google analytics #}
+    {% if app.environment == 'prod' %}
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+                    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+            ga('create', 'UA-36162511-2', 'auto', {'allowLinker': true});
+            ga('require', 'linker');
+            ga('linker:autoLink', ['click-eat.fr', 'order.click-eat.fr'] );
+            ga('send', 'pageview');
+            {% if app.user is not null and is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            ga('set', '&uid', {{ app.user.id }});
+            {% endif %}
+        </script>
+    {% endif %}
+</head>
+<body class="{% block bodyClass %}{% endblock %}" style="background-color: #fff">
+    {% block nav %}
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation" id="mainNav">
+            <div class="container">
+                <div class="navbar-header" >
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#mainNav-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="{{ path("clab_call_center_homepage") }}">
+                        <div id="spinner" style="display:none;">
+                            <div class="bounce1"></div>
+                            <div class="bounce2"></div>
+                            <div class="bounce3"></div>
+                        </div>
+                        <div id="svg-logo-call">
+                            <svg
+                                    id="svg3093"
+                                    viewBox="0 0 250 250"
+                                    preserveAspectRatio="xMinYMin meet">
+                                <path
+                                        style="fill:#D8003C;fill-opacity:1;stroke:#D8003C;stroke-width:0.50000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+                                        d="M 235.03125,153.46875 187,105.40625 c -0.96747,2.90887 -1.76104,5.83107 -2.3125,8.8125 -0.55146,2.98143 -0.8601,6.05089 -0.9375,9.25 -0.0774,3.19911 0.0765,6.53184 0.53125,10.09375 0.45471,3.56191 1.20513,7.33641 2.25,11.40625 -1.21902,-0.0806 -2.38196,-0.25491 -3.5,-0.5 -1.11804,-0.24509 -2.19081,-0.55919 -3.21875,-0.96875 -1.02794,-0.40956 -2.02002,-0.89472 -2.96875,-1.46875 -0.94873,-0.57403 -1.8696,-1.23025 -2.75,-1.96875 -1.7608,-1.47701 -3.38471,-3.30261 -4.9375,-5.4375 -1.55279,-2.13489 -3.03689,-4.58223 -4.46875,-7.375 l -26.15625,48.53125 -23.17248,17.4187 41.76623,39.92505 c 38.12506,-11.09908 67.84374,-41.42654 77.90625,-79.65625 z"
+                                        id="path4160" />
+                                <path
+                                        style="fill:#ff0047;fill-opacity:1;stroke:#ff0047;stroke-width:0.30000001;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+                                        d="M 125,12.25 C 62.130461,12.25 11.15625,62.734975 11.15625,125 c 0,62.26503 50.974211,112.75 113.84375,112.75 11.16845,0 21.92684,-1.65608 32.125,-4.625 L 115.80438,193.69735 138.53125,175.78125 164.6875,127.25 c 1.43186,2.79277 2.91596,5.24011 4.46875,7.375 1.55279,2.13489 3.1767,3.96049 4.9375,5.4375 0.8804,0.7385 1.80127,1.39472 2.75,1.96875 0.94873,0.57403 1.94081,1.05919 2.96875,1.46875 1.02794,0.40956 2.10071,0.72366 3.21875,0.96875 1.11804,0.24509 2.28098,0.41938 3.5,0.5 -1.04487,-4.06984 -1.79529,-7.84434 -2.25,-11.40625 -0.45471,-3.56191 -0.60865,-6.89464 -0.53125,-10.09375 0.0774,-3.19911 0.38604,-6.26857 0.9375,-9.25 0.55146,-2.98143 1.34503,-5.90363 2.3125,-8.8125 l 48.03125,48.0625 c 2.39767,-9.10929 3.8125,-18.61574 3.8125,-28.46875 C 238.84375,62.734975 187.86954,12.25 125,12.25 z"
+                                        id="path3107" />
+                                <path
+                                        style="fill:#D8003C;stroke:#D8003C;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;fill-opacity:1;stroke-miterlimit:4;stroke-dasharray:none"
+                                        d="m 127.40806,59.763573 48.27057,48.270577 -11.27408,13.24431 z"
+                                        id="path4162" />
+                                <path
+                                        style="fill:#fff;fill-opacity:1;stroke:#fff;stroke-width=0.3px;"
+                                        d="M 118.5 55.71875 C 113.78252 55.933688 108.16505 70.006891 104.65625 87.90625 C 101.64268 88.994344 98.767868 90.424167 96.09375 92.09375 C 82.083243 100.84119 73.124999 116.38822 73.125 126.53125 C 73.238753 139.17838 83.939725 151.99184 93.125 157.65625 C 97.34582 160.25916 101.76625 161.91226 105.9375 162.78125 C 108.38703 175.64449 113.29232 197.07989 119.8125 195.5 C 122.29482 194.53747 150.90975 172.93628 163.40625 131.71875 C 163.57427 131.30323 163.69953 130.97269 163.8125 130.65625 C 171.52717 145.81578 183.51042 147.20717 185.84375 145.78125 C 188.50653 144.24726 185.76111 134.68769 185.625 125.4375 C 185.5255 114.30803 189.06282 106.83119 186.71875 105.53125 C 177.18987 103.35555 169.59267 111.48846 164.53125 118.96875 C 151.75131 83.653278 129.34229 57.681367 118.875 55.71875 C 118.74923 55.704238 118.62716 55.712956 118.5 55.71875 z M 119.5625 62.125 C 123.47078 61.738313 137.6963 77.975261 149.3125 98.5 C 135.05147 86.383296 121.32692 83.829556 109.5625 86.46875 C 112.1654 77.977974 115.33269 70.177569 119.3125 62.15625 C 119.38889 62.131166 119.47577 62.133581 119.5625 62.125 z M 117.625 91.40625 C 134.38297 91.209927 152.70656 101.58003 161 124.71875 C 160.82004 125.03155 160.6039 125.39441 160.4375 125.6875 C 152.8795 139.99169 148.52354 153.54445 119.96875 163.09375 C 131.52716 164.38402 140.72068 160.026 147.65625 154.03125 L 147.125 154.78125 C 141.65215 165.32562 125.53552 187.13449 119.84375 188.375 C 117.65104 189.38435 112.65869 172.18645 108.59375 163.25 C 112.47142 163.74972 116.04339 163.52504 118.875 162.65625 C 106.01379 159.91982 96.995259 153.99605 90.34375 147.59375 C 81.799763 139.36988 79.1891 131.74162 79.25 126.3125 C 80.113988 116.02555 87.273033 106.18468 94.09375 100.34375 C 97.002456 97.852876 100.16158 95.891183 103.5 94.4375 C 101.78616 105.25185 100.89168 116.93852 101.4375 127.59375 C 103.13102 113.96495 105.13375 102.85922 107.75 92.90625 C 110.96179 91.960455 114.27752 91.445465 117.625 91.40625 z M 180.5625 110.25 C 181.06177 110.22848 181.28996 110.51705 181.125 111.15625 C 179.53474 122.34384 181.12046 137.18604 181.28125 139.78125 C 181.42088 141.80991 169.88425 134.46815 166.25 124.375 C 170.52895 116.55986 178.33211 110.34616 180.5625 110.25 z "
+                                        id="path3879" />
+                            </svg>
+
+                        </div>
+                    </a>
+                </div>
+                {% if customer is defined and customer is not null %}
+                    <div class="clientInfos"  href="{{ path('clab_call_center_user_info',{userId : customer.id}) }}">
+                        <i class="fa fa-user fa-2x"></i>
+                    </div>
+                    <p class="customer-name">{{ customer.firstName ? customer.firstName : '' }} - {{ customer.lastName ? customer.lastName : '' }} | {{ customer.email }}</p>
+                {% endif %}
+            </div>
+        </div>
+    {% endblock %}
+
+    {% block subnav %}
+    {% endblock %}
+
+    <div id="viewport">
+        <div id="mainView">
+            {% block body %}
+            {% endblock %}
+        </div>
+
+        <div id="drawer">
+        </div>
+    </div>
+
+    <div class="modal fade" id="ajaxModal" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Confirmation</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Cette opération est irréversible, êtes-vous sûr de vouloir poursuivre ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <form method="post" action="">
+                        <button type="submit" class="btn btn-danger">Confirmer</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ajaxUserFound" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Nous avons trouvé un utilisateur!</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Souhaitez vous pré-remplir le formulaire avec les données trouvées?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button class="btn btn-primary user-found" data-dismiss="modal">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="ajaxFormChangeModal" aria-labelledby="modal" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Modifications non enregistrées</h4>
+                </div>
+                <div class="modal-body">
+                    <p>Afin de poursuivre, vous devez enregistrer vos modifications ou les annuler.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Annuler</button>
+                    <button type="button" class="btn btn-primary btn-save">Enregistrer</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://maps.googleapis.com/maps/api/js?sensor=false&amp;libraries=places,geometry"></script>
+    <script type="text/javascript" src="https://dme0ih8comzn4.cloudfront.net/js/feather.js"></script>
+    <script src="{{ asset('front/bundle/board/build/js/app.min.js') }}?v=1.1.6"></script>
+    <script src="{{ asset('vendors/datatables.net/js/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('vendors/datatables.net-buttons/js/dataTables.buttons.min.js') }}"></script>
+    <script type="text/javascript">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+        sweetAlert('Oops...', '{{ flashMessage|trans|escape('js') }}', 'error');
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'success');
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('danger') %}
+        sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'error');
+        {% endfor %}
+        {% if customer is defined and customer is not null %}
+            $('.clientInfos').click(function(event){
+                event.preventDefault();
+                rowUser = $(this);
+                $.get($(this).attr('href')).done(function(data){
+                        $('#drawer').html(data);
+                        $('.userModal').modal();
+                        $('.toggle-orders').click(function(){
+                            $('section.orders').toggle();
+                        });
+                        $('#userForm').submit(function(e){
+                            e.preventDefault();
+                            $form = $(this);
+                            var values = {};
+                            $.each( $form.serializeArray(), function(i, field) {
+                                values[field.name] = field.value;
+                            });
+
+                            $.post($form.attr( 'action' ),values)
+                                    .done(function(data){
+                                        $('.userModal').modal('hide');
+                                        sweetAlert('', "Modifications prise en compte", 'success');
+                                    });
+                        })
+
+                });
+            })
+        {% endif %}
+    </script>
+    {% block javascripts %}
+    {% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block body %}
+    <div class="container padding-v-10 padding-h-40" id="dashboard">
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <section class="panel">
+                    <div class="panel-body text-center">
+                        <img src="{{ vich_uploader_asset(application, 'imageFile')| imagine_filter('square_150') }}"
+                             alt="{{ application.name }}" />
+                        <br><br>
+                        <h2>{{ application.name }}</h2>
+                        <small>{{ application.shortDescription }}</small><br/><br/><br/>
+                        {% if application.type == 0  %}
+                            <a class="btn btn-lg btn-success" href="{{ path('board_app_add',{"slug": app.app.slug,contextPk: contextPk}) }}">Activer</a>
+                        {% elseif application.type == 10 %}
+                            <a class="btn btn-lg btn-success" href="{{ path('board_subscription_upgrade',
+                            {contextPk: contextPk}) }}">Améliorer mon offre</a>
+                        {% else %}
+                            <span class="label label-success">Paye {{ application.price }}</span>
+                        {% endif %}
+                        <br><br><br/>
+                        {{ application.description|raw }}
+                        <br><br>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+{% endblock %}

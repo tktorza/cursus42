@@ -1,0 +1,35 @@
+board_social_dashboard:
+    path:  /social/dashboard
+    defaults: { _controller: ClabBoardBundle:Social:postDashboard }
+
+board_social_post_fb:
+    path:  /social/post
+    defaults: { _controller: ClabBoardBundle:Social:pushtoFb }
+
+board_social_post:
+    path:  /social/post/{type}
+    defaults: { _controller: ClabBoardBundle:Social:post }
+    requirements:
+        culture:  message|product|meal|discount|location
+
+board_social_quick_post:
+    path:  /social/quick-post/{backUrl}
+    defaults: { _controller: ClabBoardBundle:Social:quickPost, backUrl: null }
+    requirements:
+        culture:  message|product|meal|discount|location
+
+board_social_configuration:
+    path:  /social/configuration
+    defaults: { _controller: ClabBoardBundle:Social:configuration }
+
+board_social_configuration_remove:
+    path:  /social/configuration/remove/{type}
+    defaults: { _controller: ClabBoardBundle:Social:configurationRemove }
+
+board_social_configuration_choose_page:
+    path:  /social/configuration/choose-page/{type}
+    defaults: { _controller: ClabBoardBundle:Social:chooseFacebookPage, type: null }
+
+board_social_add_page_tab:
+    path:  /social/add-page-tab/{tab}/{backUrl}
+    defaults: { _controller: ClabBoardBundle:Social:addPageTab }

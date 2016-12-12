@@ -1,0 +1,259 @@
+{% extends 'ClabManagerBundle:Dashboard2:layout.html.twig' %}
+
+{% block page %}
+<div data-role="page">
+
+    <div data-role="header" data-theme="b">
+        <h1><img src="{{ asset('images/logo-white.png') }}" style="height:20px;"/></h1>
+        <a href="#mainMenu" data-icon="bars" class="ui-btn-left menu-toggle" data-theme="a">Menu</a>
+        <div id="mainMenu" data-theme="a" hidden>
+            <ul data-role="listview" data-inset="true">
+                <li><a href="{{ path('manager_dashboard') }}" data-ajax="false">Commandes</a></li>
+                <li><a href="{{ path('manager_switch_restaurant') }}" data-ajax="false">Changer restaurant</a></li>
+            </ul>
+        </div>
+        <a href="#help" data-icon="phone" class="ui-btn-right menu-toggle" data-theme="a">Besoin d'aide ?</a>
+        <div id="help" data-overlay-theme="b" data-theme="b" hidden>
+            <div data-role="header" data-theme="a">
+                <h1>Besoin d'aide ?</h1>
+            </div>
+            <div role="main" class="ui-content">
+                <ul>
+                    <li>Appelez-nous au 01 75 43 21 40 ou au 06 78 82 48 92</li>
+                    <li><a href="mailto:support@click-eat.fr">support@click-eat.fr</a></li>
+                </ul>
+            </div>
+        </div>
+    </div><!-- /header -->
+
+
+    <div role="main" class="ui-content">
+        <div data-role="tabs">
+            <div data-role="navbar">
+                <ul>
+                    <li><a id="online-toggle"  href="#online-status" data-ajax="false" class="ui-btn-active">Gestion du catalogue</a></li>
+                </ul>
+            </div>
+            <div id="online-status" class="ui-body-d ui-content">
+                {{ render(controller('ClabManagerBundle:Catalog:getCatalog', { 'slug': restaurant.slug })) }}
+            </div>
+        </div>
+        <div data-role="tabs" id="tabs">
+            <div data-role="navbar">
+                <ul>
+                    <li><a href="#current" data-ajax="false" class="ui-btn-active">Commandes en cours</a></li>
+                    <li><a href="#closed" data-ajax="false">Commandes terminées</a></li>
+                </ul>
+            </div>
+            <div id="current" class="ui-body-d ui-content">
+
+                <div class="client">
+                </div>
+
+                <br />
+
+                <div class="server">
+                </div>
+                <table class="table table-stripped table-bordered table-hover datatable">
+                    <thead>
+                    <th>Id</th>
+                    <th>Payment en ligne</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Statut de préparation</th>
+                    <td>Actions</td>
+                    </thead>
+                    <tbody>
+                    {% for key, order in results %}
+                        <tr>
+                            <td>{{ order.order.id }}</td>
+                            <td class="{{ order.order.state== 400 or order.order.onlinePayment ? "header-online-payment" : "header-direct-payment" }} text-center" style="line-height: 45px;">{{ order.order.onlinePayment  or (not order.order.onlinePayment and order.order.company is defined and order.order.company is not null) ? "En ligne" : "Sur place" }}</td>
+                            <td class="text-center" style="line-height: 45px;">{% if order.order.orderType.id == 3 %}
+                                    <i class="fa fa-motorcycle" style="font-size: 18px;"
+                                                           data-popover="true"
+                                                           data-html=true
+                                                           data-content="Commande livraison"></i>
+                                {% elseif order.order.orderType.id == 1 %}
+                                    <i class="fa fa-shopping-bag" style="font-size: 18px;"
+                                                            data-popover="true"
+                                                            data-html=true
+                                                            data-content="Commande à emporter"></i>
+                                {% else %}
+                                    <i class="fa fa-shopping-bag" style="font-size: 18px;"
+                                                           data-popover="true"
+                                                           data-html=true
+                                                           data-content="Commande à emporter"></i>
+                                {% endif %}</td>
+                            <td class="text-center" style="line-height: 45px;">{{ order.order.time|date('Y-m-d G:i') }}</td>
+                            <td class="text-center" style="line-height: 45px;">{{ order.order.profile.fullName }} | {{ order.order.profile.phone }}</td>
+                            <td>
+                                <select class="form-control preparation-state" data-id="{{ order.order.id }}" placeholder="statut de préparation">
+                                    <option value="0" {% if order.order.preparationstate == 0 %}selected{% endif %}>statut de preparation</option>
+                                    <option value="1" {% if order.order.preparationstate == 1 %}selected{% endif %}>En préparation</option>
+                                    {% if order.order.orderType.id ==3 %}
+                                        <option value="2" {% if order.order.preparationstate == 2 %}selected{% endif %}>En livraison</option>
+                                    {% endif %}
+                                    <option value="3" {% if order.order.preparationstate == 3 %}selected{% endif %}>Délivrée</option>
+                                </select>
+                            </td>
+                            <td class="text-center" style="line-height: 45px;">
+                                <a href="{{ path('manager_order_dialog', { id: order.order.id }) }}" target="_blank">{% if order.order.delivery %}Détail livraison{% else %}Détail commande{% endif %}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <div id="closed" class="ui-body-d ui-content">
+                <table class="table table-stripped table-bordered table-hover datatable">
+                    <thead>
+                    <th>Id</th>
+                    <th>Payment en ligne</th>
+                    <th>Type</th>
+                    <th>Date</th>
+                    <th>Client</th>
+                    <th>Statut de préparation</th>
+                    <td>Actions</td>
+                    </thead>
+                    <tbody>
+                    {% for key, order in resultsClosed %}
+                        <tr>
+                            <td>{{ order.order.id }}</td>
+                            <td class="{{ order.order.state== 400 ? "header-online-payment" : "header-direct-payment" }} text-center" style="line-height: 45px;">{{ order.order.onlinePayment  or (not order.order.onlinePayment and order.order.company is defined and order.order.company is not null) ? "En ligne" : "Sur place" }}</td>
+                            <td class="text-center" style="line-height: 45px;">{% if order.order.orderType.id == 3 %}
+                                    <i class="fa fa-motorcycle" style="font-size: 18px;"
+                                       data-popover="true"
+                                       data-html=true
+                                       data-content="Commande livraison"></i>
+                                {% elseif order.order.orderType.id == 1 %}
+                                    <i class="fa fa-shopping-bag" style="font-size: 18px;"
+                                       data-popover="true"
+                                       data-html=true
+                                       data-content="Commande à emporter"></i>
+                                {% else %}
+                                    <i class="fa fa-shopping-bag" style="font-size: 18px;"
+                                       data-popover="true"
+                                       data-html=true
+                                       data-content="Commande à emporter"></i>
+                                {% endif %}</td>
+                            <td class="text-center" style="line-height: 45px;">{{ order.order.time|date('Y-m-d G:i') }}</td>
+                            <td class="text-center" style="line-height: 45px;">{{ order.order.profile.fullName }} | {{ order.order.profile.phone }}</td>
+                            <td>
+                                <select class="form-control preparation-state" data-id="{{ order.order.id }}" placeholder="statut de préparation">
+                                    <option value="0" {% if order.order.preparationstate == 0 %}selected{% endif %}>statut de preparation</option>
+                                    <option value="1" {% if order.order.preparationstate == 1 %}selected{% endif %}>En préparation</option>
+                                    {% if order.order.orderType.id ==3 %}
+                                        <option value="2" {% if order.order.preparationstate == 2 %}selected{% endif %}>En livraison</option>
+                                    {% endif %}
+                                    <option value="3" {% if order.order.preparationstate == 3 %}selected{% endif %}>Délivrée</option>
+                                </select>
+                            </td>
+                            <td class="text-center" style="line-height: 45px;">
+                                <a href="{{ path('manager_order_dialog', { id: order.order.id }) }}" target="_blank">{% if order.order.delivery %}Détail livraison{% else %}Détail commande{% endif %}</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div><!-- /content -->
+</div><!-- /page -->
+{% endblock %}
+
+{% block js_top %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            if (Notification.permission !== "granted")
+                Notification.requestPermission();
+        });
+    </script>
+    {% if restaurant.autoPrint %}
+        <script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+        <script>
+
+            var socket = io.connect('http://{{ serverSocketIo }}:8081');
+            console.log('check 1', socket.connected);
+            socket.on('connect', function() {
+                console.log('check 2', socket.connected);
+            });
+            socket.on('{{ restaurant.slug }}', function (data) {
+                var route = "{{ path('manager_order_dialog') }}";
+                var url = route + "/" + data;
+                var win = window.open(url, '_blank');
+                win.focus();
+                if (!Notification) {
+                    alert('Notification impossible. Essayez un autre navigateur internet');
+                    return;
+                }
+
+                if (Notification.permission !== "granted")
+                    Notification.requestPermission();
+                else {
+                    var notification = new Notification('Nouvelle commande', {
+                        icon: 'http://click-eat.fr/images/logo.png',
+                        body: "Vous avez reçu une nouvelle commande",
+                    });
+
+                    notification.onclick = function () {
+                        console.log(url)
+                        window.open(url, '_blank');
+                        win.focus();
+                    };
+
+                }
+                window.location.reload(url);
+            });
+        </script>
+    {% endif %}
+    <script type="text/javascript">
+        idleTime = 0;
+
+        $(document).ready(function () {
+            //Increment the idle time counter every minute.
+            var idleInterval = setInterval("timerIncrement()", 60000); // 1 minute
+
+            //Zero the idle timer on mouse movement.
+            $(this).mousemove(function (e) {
+                idleTime = 0;
+            });
+            $(this).keypress(function (e) {
+                idleTime = 0;
+            });
+            $("#online-status").hide();
+            $("#online-toggle").click(function(){
+                $("#online-status").slideToggle();
+            });
+            $('.menu-toggle').click(function(){
+                var id = $(this).attr('href');
+                $(id).is(':visible')?$(id).slideUp():$(id).slideDown();
+            });
+
+            var preparationStateUrl = "{{ path('manager_order_preparation_status', {id: "PLACEHOLDER"}) }}";
+
+            $('.preparation-state').on('change', function(){
+                var state = $(this).find(':selected').val(),
+                        url = preparationStateUrl.replace('PLACEHOLDER', $(this).attr('data-id'));
+
+                $.post(url, {preparationstate: state}, function(data){
+                    if(state == 3) {
+                        window.location.reload();
+                    }
+                }).fail(function(){
+                    alert('Erreur serveur veuillez recommencer');
+                });
+            });
+        });
+        function timerIncrement() {
+            idleTime = idleTime + 1;
+            if (idleTime > 1) { // 20 minutes
+                window.location.reload();
+            }
+        }
+
+
+    </script>
+
+{% endblock %}

@@ -1,0 +1,721 @@
+{% extends 'ClabCallCenterBundle:Default:base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    {% include 'ClabCallCenterBundle:Default:breadcrumb.html.twig' with { step: 'payment' } %}
+
+    <br><br>
+    <section class="panel">
+        <div class="panel-body">
+            <h2>4. Paiement</h2>
+            <h4>{{ restaurant.name ~ ' - ' ~ restaurant.address }} | {{ cart.orderType == 3 ? 'En livraison' : 'A emporter' }}</h4>
+            <hr>
+            <main id="main">
+                <div id="order">
+                    <div class="row">
+                        <div class="col-sm-8">
+                            <div class="order">
+                                {% include "ClabCallCenterBundle:Order:sauceModal.html.twig" with {form: sauceForm, freeSauces: freeSauces, slug: restaurant.slug, cart: cart} %}
+                                {{ form_start(form,{'attr': {'id': 'order-form'}}) }}
+                                    <h4 class="text-center">1. Infos client</h4>
+                                    <div class="text-center margin-bottom">
+                                        <div class="row margin-bottom">
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form_widget(form.profile.first_name, {'attr': {'class': 'form-control', 'placeholder':'Prénom'}}) }}
+                                            </div>
+                                            <div class="col-xs-12 col-md-6">
+                                                {{ form_widget(form.profile.last_name, {'attr': {'class': 'form-control', 'placeholder':'Nom'}}) }}
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-xs-12 col-md-8">
+                                                {{ form_widget(form.profile.email, {'attr': {'class': 'form-control', 'readonly':'true'}}) }}
+                                            </div>
+                                            <div class="col-xs-12 col-md-4">
+                                                {{ form_widget(form.phone, {'attr': {'class': 'form-control order-phone', 'placeholder': 'Telephone', 'value': currentUser.phone, 'data-toggle':"tooltip", 'title':"Saisissez un numéro français, exemple : 0612345678"}}) }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    {% if form.address is defined %}
+                                        <hr>
+                                        <h4 class="text-center">2. Adresse {{ cart.orderType == 3 ? 'de livraison' : 'à emporter' }}</h4>
+                                        <hr>
+                                        <div class="text-center margin-bottom">
+                                            {{ form_widget(form.entryCode, {'attr': {'class': 'form-control', 'placeholder': 'code d\'entrée'}}) }}
+                                            {{ form_widget(form.appartmentNumber, {'attr': {'class': 'form-control', 'placeholder': 'numéro d\'appartement'}}) }}
+                                            {{ form_widget(form.address, {'attr': {'class': 'form-control', 'placeholder': 'addresse'}}) }}
+                                            {{ form_widget(form.zip, {'attr': {'class': 'form-control', 'placeholder': 'code postal'}}) }}
+                                            {{ form_widget(form.city, {'attr': {'class': 'form-control', 'placeholder': 'ville'}}) }}
+                                            {{ form_widget(form.addressComment, {'attr': {'class': 'form-control', 'placeholder': 'commentaires'}}) }}
+                                        </div>
+                                    {% endif %}
+                                    <h4 class="text-center">{% if cart.orderType == 3 %}3. Heure de livraison{% else %}2. Heure de retrait{% endif %}</h4>
+                                    <div class="text-center margin-bottom row">
+                                        <div class="col-xs-12 col-md-6 col-md-offset-3">
+                                            {{ form_widget(form.slots, {'attr': {'class': 'form-control'}}) }}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div id="coupon-div" class="margin-bottom">
+                                        <h4 class="text-center">{% if form.address is defined %}4{% else %}3{% endif %}. Coupon de réduction</h4>
+                                        {% if cart.coupon is not null %}
+                                            <div class="input-wrap order-phone well">
+                                            <span class="text-center">{{ cart.coupon.name }} ({{ cart.coupon.verbose }})</span>
+                                                <a id="coupon-remove"
+                                                        class="btn btn-pinky pull-right"
+                                                        style="line-height: 15px;margin-top: -0.3em;background: #2f302f;color: white;">
+                                                    Retirer
+                                                </a>
+                                            </div>
+                                        {% else %}
+                                            <div class="input-wrap order-phone">
+                                                <input id="code" type="text" name="code" class="form-control" placeholder="{{
+                                                'Code pour moins dépenser?'|trans }}">
+                                                <center class="pull-right">
+                                                <button id="coupon-ok"
+                                                        class="btn btn-pinky"
+                                                        style="font-size: 12px;line-height: 15px;margin-left: 19em;background: #2f302f;margin-top: -4.6em;color: white;">
+                                                    Valider
+                                                </button>
+                                                </center>
+                                            </div>
+                                        {% endif %}
+                                    </div>
+                                    <hr>
+                                    <div class="margin-bottom row padding-h-20">
+                                        <h4 class="text-center">{% if form.address is defined %}5{% else %}4{% endif %}.Assaisonnements et baguettes</h4>
+                                        <div class="col-sm-6 background-white padding-v-15 margin-bottom">
+                                            <label>Assaisonnements</label>
+                                            <div class="line-height-30 primary"><a href="#" data-toggle="modal" data-target="#sauceModal">Choisir</a></div>
+                                        </div>
+                                        <div class="col-sm-6 margin-v-2-5 no-padding margin-bottom">
+                                            <label for="{{ form.woodSticks.vars.id }}">Nombre de baguettes</label>
+                                            {{ form_widget(form.woodSticks, {'attr': {'class': 'form-control order-woodsticks col-sm-12', 'Placeholder': 'Baguettes'}}) }}
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="margin-bottom">
+                                        <h4 class="text-center">{% if form.address is defined %}6{% else %}5{% endif %}.Primes fidélité</h4>
+                                        {% for loyalty in loyalties %}
+                                            <div class="col-sm-12 background-transparent padding-v-15 loyalty-select margin-bottom" data-loyalty="{{ loyalty.id }}">
+                                                <div class="col-sm-10">{{ loyalty.orderType ? "Prime de bienvenue " ~ loyalty.value : "Prime fidélité " ~ loyalty.value  }} &euro;</div>
+                                                <div class="col-sm-2 line-height-30 color-red-matsuri">
+                                                    <span class="fa-stack">
+                                                      <i class="fa fa-circle fa-stack-2x {% if loyalty.id in selectedLoyalties %}color-red-matsuri{% else %}color-grey{% endif %}"></i>
+                                                      <i class="fa fa-check fa-stack-1x color-white"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        {% else %}
+                                            <div class="col-sm-12 background-transparent padding-v-15 margin-bottom">
+                                                <div class="col-sm-12">Ce client ne dispose d'aucune prime fidélité</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                    <hr>
+
+                                {% if cards is defined and cards is not null and cards|length >0 %}
+                                    {{ form_widget(form.card,{ attr:{'value':cards[0].id},id:'card-token'}) }}
+                                {% else %}
+                                    {{ form_widget(form.card,{ attr:{'value':""},id:'card-token'}) }}
+                                {% endif %}
+                                <hr>
+                                    <h4 class="text-center">{% if form.address is defined %}7{% else %}6{% endif %}. Paiement</h4>
+                                    <ul class="nav nav-tabs nav-justified margin-top">
+                                        <li class="active">
+                                            <div style="display: none;">
+                                                {{ form_widget(form.children.online_payment[0])}}
+                                            </div>
+                                            <a href="#payment1" data-toggle="tab"  class="paymentToggle">
+                                                {{ form.children.online_payment[0].vars['label']}}
+                                            </a>
+                                        </li>
+                                        <li  >
+                                            <div style="display: none;">
+                                                {{ form_widget(form.children.online_payment[1])}}
+                                            </div>
+                                            <a data-toggle="tab" href="#payment2" class="paymentToggle">
+                                                Autres moyens
+                                            </a>
+                                        </li>
+                                        {% if form.children.online_payment[2] is defined %}
+                                            <li  >
+                                                <div style="display: none;">
+                                                    {{ form_widget(form.children.online_payment[2])}}
+                                                </div>
+                                                <a data-toggle="tab" href="#payment3" class="paymentToggle">
+                                                    {{ form.children.online_payment[2].vars['label']}}
+                                                </a>
+                                            </li>
+                                        {% endif %}
+                                    </ul>
+                                {{ form_widget(form.cash, {'attr':{'class':'on-site-payment-input-form'}}) }}
+                                {% if form.cbOnSite is defined %}
+                                    {{ form_widget(form.cbOnSite, {'attr':{'class':'on-site-payment-input-form'}}) }}
+                                {% endif %}
+                                {% if form.ticketResto is defined %}
+                                    {{ form_widget(form.ticketResto, {'attr':{'class':'on-site-payment-input-form'}}) }}
+                                {% endif %}
+                                {{ form_rest(form) }}
+                                {{ form_end(form) }}
+                                        <div class="tab-content">
+                                            <div id="payment1" class="tab-pane fade in active margin-top">
+                                                <ul id="cards" class="list-group row">
+
+                                                </ul>
+                                                <div class="col-xs-3 col-xs-offset-2 margin-bottom">
+                                                    <a id="cardFormToggle">Saisir une nouvelle carte</a>
+                                                </div>
+                                                <div id="cardForm" class="well col-xs-12">
+                                                    {{ render(controller('ClabCallCenterBundle:Order:createCard',{userId: currentUser.id})) }}
+                                                </div>
+
+                                            </div>
+                                            <div id="payment2" class="tab-pane fade">
+                                                <div class="well">
+                                                    <div style="height: 140px;">
+                                                        <h4 class="text-center">Payer {{ cart.orderType == 3 ? 'à la livraison' : 'sur place' }}: {{ "%s %s %s" | format(restaurant.address.street, restaurant.address.zip, restaurant.address.city) }}</h4>
+
+                                                        <div class="col-xs-12 background-transparent margin-bottom">
+                                                            <div class="col-xs-10 col-sm-7 line-height-30">Espèces</div>
+                                                            <div class="col-xs-10 col-sm-4 no-padding on-site-payment-input" style="display: none;"><input id="cash-on-site" type="text" placeholder="Préciser le montant" required="required" class="form-control background-transparent line-height-30 on-site-p" /></div>
+                                                            <div class="line-height-30 pull-right">
+                                                                <span class="fa-stack on-site-payment" style="cursor:pointer;">
+                                                                  <i class="fa fa-circle fa-stack-2x color-grey-5"></i>
+                                                                  <i class="fa fa-check fa-stack-1x color-white"></i>
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        {% if form.cbOnSite is defined or (cart.orderType == 3 and hasOrderedInDelivery is defined and hasOrderedInDelivery) %}
+                                                            <div class="col-xs-12 background-transparent margin-bottom">
+                                                                {% if cart.orderType == 3 %}
+                                                                    {% if hasOrderedInDelivery is defined and hasOrderedInDelivery %}<div class="col-xs-10 col-sm-7 line-height-30">Paiement par chèque à la livraison</div>{% endif %}
+                                                                {% else %}
+                                                                    <div class="col-xs-10 col-sm-7 line-height-30">Paiement CB au retrait en caisse</div>
+                                                                {% endif %}
+                                                                <div class="line-height-30 pull-right">
+                                                                    <span class="fa-stack on-site-payment others" style="cursor:pointer;">
+                                                                      <i class="fa fa-circle fa-stack-2x color-grey-5"></i>
+                                                                      <i class="fa fa-check fa-stack-1x color-white"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                        {% if form.ticketResto is defined or cart.orderType == 3 %}
+                                                            <div class="col-xs-12 background-transparent margin-bottom">
+                                                                <div class="col-xs-10 col-sm-7 line-height-30">Titres Restaurant</div>
+                                                                <div class="line-height-30 pull-right">
+                                                                    <span class="fa-stack on-site-payment others" style="cursor:pointer;">
+                                                                      <i class="fa fa-circle fa-stack-2x color-grey-5"></i>
+                                                                      <i class="fa fa-check fa-stack-1x color-white"></i>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {% if form.children.online_payment[2] is defined %}
+                                                <div id="payment3" class="tab-pane fade">
+                                                    <div class="well">
+                                                        <h4 class="text-center">Facturer le compte de la société: {{ "%s - %s" | format(currentUser.company.name, currentUser.company.phone) }}
+                                                        <br>
+                                                            {% if currentUser.company.address %}
+                                                                {{ "Adresse: %s %s %s"|format(currentUser.company.address.street, currentUser.company.address.zip, currentUser.company.address.city) }}
+                                                            {% endif %}
+                                                        </h4>
+                                                    </div>
+                                                </div>
+                                            {% endif %}
+                                        </div>
+                                    <div class="row margin-top">
+                                        <button id="submit-form" type="submit" class="btn btn-secondary btn-lg btn-order col-xs-6 col-xs-offset-3">Commander</button>
+                                    </div>
+                                </div>
+                        </div>
+                        <div id="cart-anchor-fixed" class="col-xs-12 col-sm-4">
+                            <div id="cart-toggle">
+                                <i class="fa fa-shopping-cart" aria-hidden="true" style="
+                                    position: absolute;
+                                    color: white;
+
+                                    top: 13px;
+                                    left: 13px;"></i>
+                            </div>
+                            <div id="main-cart">
+                                {% include 'ClabCallCenterBundle:Default:cart.html.twig' with {'noInteraction':true} %}
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </section>
+</div>
+
+{% endblock  %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('vendors/jcf/js/jcf.js') }}"></script>
+    <script src="{{ asset('vendors/jcf/js/jcf.radio.js')}}"></script>
+    <script src="{{ asset('vendors/jcf/js/jcf.checkbox.js')}}"></script>
+    <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+    <script type="text/javascript" src="{{ asset('vendors/jquery-creditcardvalidator/jquery.creditCardValidator.js')
+    }}"></script>
+    <script type="text/javascript">
+        jcf.replaceAll();
+        $(window).on('resize',function(){
+            if ($(this).width() >=768 && !$('#main-cart').is(':visible')) {
+                $('#main-cart').slideToggle();
+            }
+        });
+        $('#cart').css({'box-shadow':'0px 0px 6px #d1d1d1','border-radius': '4px 4px 0px 0px','border-bottom':'none'});
+        $('#cart-toggle').click(function(){
+            $('#main-cart').slideToggle();
+            $(this).find('i').toggleClass('fa-shopping-cart fa-times');
+        });
+
+
+        $(document).ready(function() {
+
+            $('.paymentToggle').click(function(){
+                $(this).parent().find('span.jcf-radio').click();
+            });
+
+            $(".card-select").click(function(){
+                $(this).parent().find('span.jcf-radio').click();
+            });
+
+
+            $('input[name="cards"]').click(function(){
+                $("#card-token").val($(this).val());
+            });
+
+            $("#submit-form").click(function(){
+                var regex = /^(0|\+33)[1-9]([-. ]?[0-9]{2}){4}$/;
+                var otherPayments = false;
+
+                $('.on-site-payment-input-form').each(function(){
+                    if($(this).val()  && $(this).val() > 0) {
+                        otherPayments = true;
+                    }
+                });
+
+                if ($('#{{ form.children.online_payment[0].vars.id }}').is(':checked') && $("#card-token").val() == '') {
+                    sweetAlert('Oops...','Veuillez selectionner une carte de paiement.','error');
+                } else if (!$('.order-phone')[0].checkValidity() || !regex.test($('.order-phone').val())) {
+                    sweetAlert('Oops...','Veuillez indiquer un numéro de téléphone valide','error');
+                } else if($('#{{ form.children.online_payment[1].vars.id }}').is(':checked') && !otherPayments){
+                    sweetAlert('Oops...','Veuillez indiquer un moyent de payement.','error');
+                } else {
+                    $("#order-form").submit();
+                }
+            });
+
+            $("#cardFormToggle").click(function(){
+                if(!$('#cardForm').is(":visible")){
+                    $(this).html('Fermer');
+                    $("#cardForm").slideDown();
+                }
+                else{
+                    $(this).html('Saisir une nouvelle carte');
+                    $("#cardForm").slideUp();
+                }
+            })
+            $(".cardFormToggle").click(function(){
+                if(!$('#cardForm').is(":visible")){
+                    $('#cardFormToggle').html('Fermer');
+                    $("#cardForm").slideDown();
+                }
+                else{
+                    $('#cardFormToggle').html('Saisir une nouvelle carte');
+                    $("#cardForm").slideUp();
+                }
+            })
+
+            $('.remove-card').click(function(){
+                var ul = "{{ path('clab_call_center_card_remove',{user:app.session.get('customer'), card:'PLACEHOLDER'}) }}"
+                ul = ul.replace('PLACEHOLDER',$(this).attr('idCard'));
+                var id= "#"+$(this).attr('idCard');
+                $.ajax({
+                    type        : 'GET',
+                    url         : ul,
+                    beforeSend: function(){
+                        $(id).slideUp('slow');
+                    },
+                    success     : function(data) {
+                        if ($("#card-token").val() == $(this).attr('idCard')) {
+                            $("#card-token").val("");
+                        }
+                        $(id).remove();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        $(id).slideDown('slow');
+                        alert('Error : ' + errorThrown);
+                    }
+                });
+            })
+
+            var isAmex = false;
+            $(function () {
+
+                $('#clab_stripe_cardformtype_card').validateCreditCard(function (result) {
+                    isAmex = false;
+                    if (result.card_type == null) {
+                        $('.log').html('<i class="fa fa-credit-card"></i>');
+                    }
+                    else if (result.card_type.name == 'mastercard') {
+                        $('.log').html('<i class="fa fa-cc-mastercard"></i>');
+                    }
+                    else if (result.card_type.name == 'visa') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                    else if (result.card_type.name == 'amex') {
+                        sweetAlert('Oops...','Nous n\'acceptons pas d\'American express.','error')
+                        $('.log').html('<i class="fa fa-cc-amex"></i>');
+                        isAmex=true;
+                    }
+                    else if (result.card_type.name == 'visa_electron') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                    else if (result.card_type.name == 'maestro') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                });
+            });
+            Stripe.setPublishableKey('{{ publishableKey }}');
+
+            var errorMessages = {
+                incorrect_number: "Le numéro de carte est incorrect.",
+                invalid_number: "Le numéro de carte est invalide.",
+                invalid_expiry_month: "La date d'expiration est incorrecte.",
+                invalid_expiry_year: "L'année d'expiration est invalide.",
+                invalid_cvc: "Le code de sécurité de la carte est invalide.",
+                expired_card: "La carte est expirée.",
+                incorrect_cvc: "Le code de sécurité de la carte est incorrect.",
+                incorrect_zip: "Le code postal de la carte est incorrect.",
+                card_declined: "La carte a été refusée.",
+                missing: "Erreur.",
+                processing_error: "Une erreur est survenue lors du traitement de votre carte.",
+                rate_limit:  "Une erreur est survenue lors du traitement de votre carte. Veuillez nous en faire part si le probleme persiste"
+            };
+
+            var stripeResponseHandler = function (status, response) {
+                var $form = $('#payment-form');
+                if (response.error || isAmex) {
+                    sweetAlert('Oops...', '' + errorMessages[ response.error.code ], 'error');
+                    $form.find('button').prop('disabled', false);
+                } else {
+                    // token contains id, last4, and card type
+                    var token = response.id;
+                    // Insert the token into the form so it gets submitted to the server
+                    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                    // and re-submit
+                    var values = {};
+                    $.each( $form.serializeArray(), function(i, field) {
+                        values[field.name] = field.value;
+                    });
+                    $form.find('.fa-spin').show();
+                    $.ajax({
+                        type        : $form.attr( 'method' ),
+                        url         : $form.attr( 'action' ),
+                        data        : values,
+                        success     : function(data) {
+                            $form.find('.fa-spin').hide();
+                            var countries = ['AT','US', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH'];
+                            $form.find('button').prop('disabled', false);
+                            $('#cards').html('');
+                            for(var i = 0;i<data.data.length;i++){
+                                if(countries.indexOf(data.data[i].country)>=0 && data.data[i].name == 'CALL_CENTER_CARD') {
+                                    var cardIcon = "";
+                                    if (data.data[i].brand == 'MasterCard') {
+                                        cardIcon+='<i class="fa fa-cc-mastercard"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Visa') {
+                                        cardIcon+='<i class="fa fa-cc-visa"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Visa_electron') {
+                                        cardIcon+='<i class="fa fa-cc-visa"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Maestro') {
+                                        cardIcon+='<i class="fa fa-cc-visa"></i>';
+                                    }else{
+                                        cardIcon+='<i class="fa fa-credit-card"></i>';
+                                    }
+                                    $('#cards').append('<li class="list-group-item col-xs-8 col-xs-offset-2" id="'+data.data[i].id+'">'+
+                                            '<div class="col-xs-1">'+
+                                            '<input type="radio" name="cards" value="'+data.data[i].id+'" '+(i==0 ? 'checked' : '')+'>'+
+                                            '</div>'+
+                                            '<div class="col-xs-1 card-select">'+cardIcon+'</div>'+
+                                            '<div class="col-xs-4 card-select">'+
+                                            'Se terminant par:<br>'+data.data[i].last4+'</div>'+
+                                            '<div class="col-xs-3 card-select">'+
+                                            'Expirant le:<br>'+data.data[i].exp_month+' / '+data.data[i].exp_year+'</div>'+
+                                            '<a class="col-xs-1 remove-card text-center pull-right" idCard="'+data.data[i].id+'" data-toggle="tooltip" title="supprimer"><i class="fa fa-times" style="font-size: 20px;"></i></a>'+
+                                            '</li>');
+                                }
+                            }
+                            $("#card-token").val(data.data[0].id);
+                            jcf.replaceAll();
+                            $('.remove-card').click(function(){
+
+
+                                var ul = "{{ path('clab_call_center_card_remove',{user:app.session.get('customer'), card:'PLACEHOLDER'}) }}"
+                                ul = ul.replace('PLACEHOLDER',$(this).attr('idCard'));
+                                var id= "#"+$(this).attr('idCard');
+                                $.ajax({
+                                    type        : 'GET',
+                                    url         : ul,
+                                    beforeSend: function(){
+                                        $(id).slideUp('slow');
+                                    },
+                                    success     : function(data) {
+                                        $(id).remove();
+                                    },
+                                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                                    {
+                                        $(id).slideDown('slow');
+                                        alert('Error : ' + errorThrown);
+                                    }
+                                });
+                            });
+                            $('input[name="cards"]').click(function(){
+                                $("#card-token").val($(this).val());
+                            });
+                            $(".card-select").click(function(){
+                                $(this).parent().find('span.jcf-radio').click();
+                            });
+                            $("#cardFormToggle").html('Saisir une nouvelle carte');
+                            $("#cardForm").slideUp();
+                        },
+                        error: function(XMLHttpRequest, textStatus, errorThrown)
+                        {
+                            $form.find('.fa-spin').hide();
+                            $form.find('button').prop('disabled', false);
+                            alert('Error : ' + errorThrown);
+                        }
+                    });
+                }
+            };
+
+            $('#payment-form').submit(function (e) {
+                var $form = $(this);
+                // Disable the submit button to prevent repeated clicks
+                $form.find('button').prop('disabled', true);
+                Stripe.card.createToken($form, stripeResponseHandler);
+                // Prevent the form from submitting with the default action
+                return false;
+            });
+
+
+            $("#form_online_payment_0").prop("checked", true);
+            $('a.back').click(function () {
+                parent.history.back();
+                return false;
+            });
+
+            $('a[data-toggle="tab"]').click(function () {
+                $('.payment_method_choice').prop('checked', false);
+                var id = $(this).attr('href');
+                $(id).find('.payment_method_choice').prop('checked', true);
+            });
+        });
+        $(window).load(function(){
+
+            var addCoupon = function(e){
+                e.preventDefault();
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('clab_call_center_cart_coupon',{slug:restaurant.slug}) }}",
+                    data: { code: $("#code").val()},
+                    success:function(result){
+                        if(result.success == false)
+                        {
+                            sweetAlert("Erreur", result.message, "error");
+                        }
+                        else
+                        {
+                            $("#cart-anchor").html(result.cart);
+                            $("#coupon-div").html(
+                                    '<h4 class="text-center">3. Coupon de réduction</h4>'+
+                                    '<div class="input-wrap order-phone well">'+
+                                    '<span class="text-center">'+result.couponname + '(' +result.couponverbose +')</span>'+
+                                    '<a id="coupon-remove" class="btn btn-pinky pull-right" style="line-height: 15px;margin-top: -0.3em;background: #2f302f;color: white;">'+
+                                    'Retirer</a></div>');
+                            $('#coupon-remove').click(removeCoupon);
+                            sweetAlert("Bravo", "Le coupon est ajouté à votre panier", "success");
+                        }
+
+                    }});
+            };
+
+            var removeCoupon = function(){
+                $.ajax({
+                    type: "POST",
+                    url: "{{ path('clab_call_center_cart_coupon_remove',{slug:restaurant.slug}) }}",
+                    success:function(result){
+                        $("#cart-anchor").html(result);
+                        $("#coupon-div").html(
+                                '<h4 class="text-center">3. Coupon de réduction</h4>'+
+                                '<div class="input-wrap order-phone">'+
+                                '<input id="code" type="text" name="code" class="form-control" placeholder="Code pour moins dépenser?">'+
+                                '<center class="pull-right">'+
+                                '<button id="coupon-ok" class="btn btn-pinky" style="font-size: 12px;line-height: 15px;margin-left: 19em;background: #2f302f;margin-top: -4.6em;color: white;">'+
+                                'Valider'+
+                                '</button>'+
+                                '</center>'+
+                                '</div>');
+                        sweetAlert("Bravo", "Le coupon est retiré de votre votre panier", "success");
+                        $("#coupon-ok").click(addCoupon);
+                    }
+                });
+            };
+            $("#coupon-ok").click(addCoupon);
+
+            $('#coupon-remove').click(removeCoupon);
+
+            $('.loyalty-select').on('click', function(){
+
+                let
+                        url = "{{ path('clab_call_center_cart_update_loyalties',{slug:restaurant.slug, loyaltyId: 'LOYALTY_ID'}) }}",
+                        loyaltyId = $(this).attr('data-loyalty'),
+                        $self = $(this)
+                        ;
+
+                $.ajax({
+                    type: "POST",
+                    url: url.replace('LOYALTY_ID', loyaltyId),
+                    success:function(result){
+                        $("#main-cart").html(result);
+                        $self.find('.fa-circle').hasClass('color-red-matsuri')
+                                ? $self.find('.fa-circle').removeClass('color-red-matsuri').addClass('color-grey')
+                                : $self.find('.fa-circle').removeClass('color-grey').addClass('color-red-matsuri');
+                    }
+                });
+            });
+        });
+    </script>
+    <script>
+        var countSauces = 0,
+                freeSauces = originalFreeSauces = {{ freeSauces }},
+                sugar = {{ cart.sugarySoja+cart.freeSugarySoja }},
+                salt = {{ cart.saltySoja+cart.freeSaltySoja }};
+
+        $('.sauce-info .list-group-item').on('click', function(){
+            $self = $(this);
+            $self.parent().find('a.list-group-item').removeClass('active');
+            $self.toggleClass('active');
+            if($self.hasClass('free')) {
+                $self.parents('.sauce-info').find('input').not('.free').val(0);
+                $self.parents('.sauce-info').find('input.free').val($self.attr('value'));
+            } else {
+                console.log($self.attr('value'));
+                console.log(originalFreeSauces-salt);
+                $self.parents('.sauce-info').find('input').not('.free').val($self.attr('value'));
+                $self.parents('.sauce-info').find('input.free').val(originalFreeSauces);
+
+                if($self.parent().attr('id') == "sugar") {
+                    $self.parents('.sauce-info').find('input.free').val(originalFreeSauces-salt);
+                }
+                if($self.parent().attr('id') == "salt") {
+                    $self.parents('.sauce-info').find('input.free').val(originalFreeSauces-sugar);
+                }
+            }
+        });
+
+        $('#sugar a').on('click' ,function(){
+
+            sugar = parseInt($(this).find('span').html());
+
+            if(sugar >= originalFreeSauces){
+                sugar = originalFreeSauces
+            }
+
+            freeSauces = originalFreeSauces - (salt + sugar);
+            if (freeSauces < 0) {
+                freeSauces = 0;
+            }
+            if(freeSauces >= 0 && salt < originalFreeSauces) {
+                for(let i = 0; i <= freeSauces + salt; i++) {
+                    $('#salt a').eq(i).attr('value',i).addClass('free').html('<span class="color-red-matsuri">'+i+'</span>');
+                }
+
+                for(let i = freeSauces  + salt +1 , j = 1; i <= 6; i++, j++) {
+                    $('#salt a').eq(i).attr('value',i - freeSauces).removeClass('free').html('<span class="color-red-matsuri">'+i+'</span>'+(j*{{ saltySojaPrice }}).toFixed(2)+' &euro;');
+                }
+            }
+        });
+
+
+        $('#salt a').on('click' ,function(){
+
+            salt = parseInt($(this).find('span').html());
+            if(salt >= originalFreeSauces){
+                salt = originalFreeSauces
+            }
+
+            freeSauces = originalFreeSauces - (salt + sugar);
+            if (freeSauces < 0) {
+                freeSauces = 0;
+            }
+            if(freeSauces >= 0 && sugar < originalFreeSauces) {
+                for(let i = 0; i <= freeSauces + sugar; i++) {
+                    $('#sugar a').eq(i).attr('value',i).addClass('free').html('<span class="color-red-matsuri">'+i+'</span>');
+                }
+
+                for(let i = freeSauces + sugar +1, j = 1; i <= 6; i++, j++) {
+                    $('#sugar a').eq(i).attr('value',i - freeSauces).removeClass('free').html('<span class="color-red-matsuri">'+i+'</span>'+(j*{{ sugarySojaPrice }}).toFixed(2)+' &euro;');
+                }
+            }
+
+        });
+
+        function postForm( $form ){
+
+            var values = {};
+            $.each( $form.serializeArray(), function(i, field) {
+                values[field.name] = field.value;
+            });
+
+            $.ajax({
+                type        : $form.attr( 'method' ),
+                url         : $form.attr( 'action' ),
+                data        : values,
+                success     : function(data) {
+                    $('#main-cart').html(data);
+                    $('#sauceModal').modal('hide');
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    sweetAlert('Oops...', 'Une erreur est survenue lors de l\'ajout de vos assaisonnement veuillez réessayer.', 'error');
+                }
+            });
+        }
+
+        $('#sauce-form').on('submit', function(e){
+            e.preventDefault();
+            postForm($(this))
+        });
+
+        $('.on-site-payment').click(function(){
+            $('.on-site-payment-input-form').val(0);
+            $('.on-site-payment').find('i').removeClass('color-red-matsuri').addClass('color-grey-5');
+            $('.on-site-payment-input').val(' ').hide();
+
+            $(this).find('i:eq(0)').toggleClass('color-grey-5 color-red-matsuri');
+            $('.on-site-payment-input').eq($(this).index('.on-site-payment')).toggle();
+
+        });
+
+        $('.others').click(function(){
+            console.log($(this).index('.on-site-payment'));
+            $('.on-site-payment-input-form').eq($(this).index('.on-site-payment')).val(1);
+        });
+
+        $('.on-site-p').change(function(){
+            $('.on-site-payment-input-form').eq($(this).index('.on-site-p')).val($(this).val());
+        });
+
+    </script>
+{% endblock %}

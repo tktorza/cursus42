@@ -1,0 +1,65 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_album_library',
+        rightLink: path('board_album_edit', { contextPk: contextPk, context: context }),
+        rightLinkLabel: 'Créer un album',
+        rightLinkDrawer: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="products">
+    <div class="filters">
+        <input type="text" id="search" class="search form-control input input-lg square pull-right" placeholder="Rechercher..." style="width: 200px; display: inline;">
+    </div>
+    <br><br><br>
+
+    <section class="panel">
+        <div class="panel-body" id="albumTable">
+            <table class="table table-hover table-stripped table-bordered" id="datatable" width="100%">
+                <thead>
+                    <th>Nom</th>
+                    <th>État</th>
+                    <th>Images</th>
+                </thead>
+                <tbody id="albumList" data-url="{{ path('board_album_library_list', { contextPk: contextPk, context: context }) }}" class="list">
+                    {% include 'ClabBoardBundle:Gallery:albumLibraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+function mix()
+{
+    $('#albumList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+
+    var albumList = new List('albumTable', {
+        valueNames: [ 'name' ],
+        searchClass: 'search'
+    });
+
+    $('#search').keyup(function() {
+        albumList.search($(this).val());
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#albumList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+</script>
+{% endblock %}

@@ -1,0 +1,40 @@
+{
+  "name" : "clicklab/userbundle",
+  "description" : "User Bundle",
+  "type" : "symfony-bundle",
+  "authors" : [{
+    "name" : "sacha",
+    "email" : "sacha@click-eat.fr"
+  }],
+  "keywords" : [
+    "user bundle"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "require" : {
+    "gedmo/doctrine-extensions":"2.4.*",
+    "friendsofsymfony/user-bundle": "~2.0@dev",
+    "hwi/oauth-bundle": "0.5.x-dev",
+    "clicklab/reviewbundle":"^1.0",
+    "clicklab/deliverybundle":"^1.0",
+    "clicklab/restaurantbundle":"^1.0",
+    "symfony/symfony": "2.7.*",
+    "doctrine/orm": "^2.4.8",
+    "doctrine/doctrine-bundle": "~1.4"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "Clab\\UserBundle" : ""
+    }
+  },
+  "target-dir" : "Clab/UserBundle",
+  "repositories" : [{
+     "type": "vcs", "url": "https://github.com/click-lab/user-bundle"
+  }],
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "master"
+    }
+  }
+}

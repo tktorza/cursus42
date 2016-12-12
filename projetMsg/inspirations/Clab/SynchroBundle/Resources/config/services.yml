@@ -1,0 +1,14 @@
+services:
+#    synchrobundle_user_listener:
+ #       class: Clab\SynchroBundle\Listener\UserListener
+  #      arguments: []
+   #     tags:
+    #        - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
+    #      - { name: doctrine.event_listener, event: postPersist, method: postPersist }
+    #synchrobundle_loyalty_listener:
+    #    class: Clab\SynchroBundle\Listener\LoyaltyListener
+     #   arguments: []
+
+      #  tags:
+       #     - { name: doctrine.event_listener, event: preUpdate, method: preUpdate }
+        #    - { name: doctrine.event_listener, event: postPersist, method: postPersist }

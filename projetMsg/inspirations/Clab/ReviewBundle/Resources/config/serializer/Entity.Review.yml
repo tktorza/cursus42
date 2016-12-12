@@ -1,0 +1,28 @@
+Clab\ReviewBundle\Entity\Review:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        title:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        body:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        score:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        author:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]
+        image:
+            expose: true
+            read_only: true
+            groups: [app,public,pro]

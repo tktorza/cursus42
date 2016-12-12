@@ -1,0 +1,25 @@
+## POS Printer ##
+api_0_rest_post_printer_list:
+    path:  /restaurant/{id}/posprinters
+    defaults: { _controller: ClabApiOldBundle:RestPOSPrinter:list, _format: json }
+    methods: [GET]
+
+api_0_rest_post_printer_get:
+    path:  /restaurant/{idRestaurant}/posprinters/{id}
+    defaults: { _controller: ClabApiOldBundle:RestPOSPrinter:get, _format: json }
+    methods: [GET]
+
+api_0_rest_post_printer_new:
+    path:  /restaurant/{id}/new/posprinters
+    defaults: { _controller: ClabApiOldBundle:RestPOSPrinter:new, _format: json }
+    methods: [POST]
+
+api_0_rest_post_printer_edit:
+    path:  /restaurant/{idRestaurant}/posprinters/edit/{id}
+    defaults: { _controller: ClabApiOldBundle:RestPOSPrinter:edit, _format: json }
+    methods: [PUT,PATCH]
+
+api_0_rest_post_printer_delete:
+    path:  /restaurant/{idRestaurant}/posprinters/delete/{id}
+    defaults: { _controller: ClabApiOldBundle:RestPOSPrinter:delete, _format: json }
+    methods: [DELETE]

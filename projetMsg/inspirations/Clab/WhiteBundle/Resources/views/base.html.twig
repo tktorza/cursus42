@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ clientName | upper }} {% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block metaDescription %}{{ clientName | upper }} mangez sans attendre dans nos restaurants : commande de repas à emporter avec retrait prioritaire.{% endblock %}">
+    <meta name="keywords" content="{% block metaKeywords %}restaurant, repas à emporter, vente à emporter, coupe-file, Paris repas, {{ clientName }}, commander en ligne repas, restaurant à emporter, click-eat{% endblock %}">
+    <meta property="og:title" content="{{ clientName | upper }} | {% block ogtitle %}{{ metaTitle }}{% endblock %}" />
+    <meta property="og:description" content="{% block ogdescription %}{{ clientName | upper }} mangez sans attendre dans nos restaurants : commande de repas à emporter avec retrait prioritaire.{% endblock %}" />
+    <link href='https://fonts.googleapis.com/css?family=Lora:700%7CLato:400,700%7COpen+Sans:100,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu:300" rel="stylesheet">
+    <link href="{{ asset('vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="{{ asset('bundles/clabwhite/dist/css/main.css') }}?version=1.0">
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" />
+
+    </head>
+    <body class="{% block bodyClass%}{% endblock %} {% if is_mobile() %}overflow-x-hidden{% endif %}">
+    <header {% block headerClass %}{% endblock %}>
+    {% include 'ClabWhiteBundle::popupLogin.html.twig' %}
+        <nav class="topbar navbar navbar-default navbar-fixed-top center first-block {% block navClass %}{% endblock %}">
+            {% block nav %}
+            <ul class="nav navbar-nav col-sm-12" {% block widthChange %} {% endblock %}>
+                <li class="col-sm-2">
+                    <a href="{{ path('clab_white_homepage') }}" class="logo-header">
+                        <svg viewBox="0 0 125.12 27.71" class="svg-logo-header">
+                            <path class="cls-2" d="M14.59,11.07c1.38-2,3.45-2.9,6.24-2.9,3.59,0,7.51,2.46,7.51,7.92V27.18h-4V16.67a3.91,3.91,0,0,0-3.55-4.24h-.45a4.22,4.22,0,0,0-4.25,3.08V27.18h-4V16.67a3.92,3.92,0,0,0-3.57-4.24H8.09A4.21,4.21,0,0,0,4,15.5V27.18H0V8.65H3.81v2c.54-1.39,2.39-2.46,5-2.46A6.94,6.94,0,0,1,14.59,11.07Z"/>
+                            <path class="cls-2" d="M33.29,11.47a8.52,8.52,0,0,1,7-3.3c4.83,0,8,2.64,8,7.29V27.18H44.51V25.57c-.91,1.28-3.19,2.09-5.19,2.09-4.06,0-7-2.31-7-6.08s3.34-6,7.29-6a7.33,7.33,0,0,1,4.72,1.36v-.76c0-2.75-2.14-3.81-4.57-3.81a6.81,6.81,0,0,0-5.48,2.42ZM44.36,20.6c-.47-.88-2.21-1.39-4-1.39-2.54,0-4,.84-4,2.27s1.45,2.27,4,2.27c1.78,0,3.52-.77,4-1.8Z"/>
+                            <path class="cls-2" d="M64.9,25.47a5.18,5.18,0,0,1-4.39,2.24c-4,0-5.92-2.13-5.92-6.3v-8.5H51.36V11.63l6-7.66h1.2V8.66h6.13v4.25H58.55v7.7c0,2.05,1,2.86,2.69,2.86a3.62,3.62,0,0,0,2.83-1.39Z"/>
+                            <path class="cls-2" d="M72.43,18.84c-2.76-1.43-4.17-3.19-4.17-5.42,0-2.93,2.25-5.24,5.84-5.24a6.59,6.59,0,0,1,5.44,2.64l-.73,3.56a6.88,6.88,0,0,0-4.72-2c-1.05,0-1.85.33-1.85,1.17s.65,1.17,1.74,1.76l1.89,1c2.94,1.54,4.46,3,4.46,5.72,0,3.26-2.54,5.68-6.49,5.68a7,7,0,0,1-6.1-3.26L68.79,21a6.52,6.52,0,0,0,5.26,2.57c1.23,0,2.36-.44,2.36-1.58,0-.92-.83-1.54-2.25-2.27Z"/>
+                            <path class="cls-2" d="M84.17,19.28V8.65h4V18.84c0,3,1.85,4.62,4.25,4.62,2.14,0,4.14-1.32,4.5-3.15V8.65h4V27.18H97v-2c-.51,1.39-2.29,2.46-5,2.46C88.19,27.71,84.17,25.18,84.17,19.28Z"/>
+                            <path class="cls-2" d="M116.57,13.26a4.17,4.17,0,0,0-2.5-.84,4,4,0,0,0-4,3.33V27.18h-4V8.65H110v2.46a4.07,4.07,0,0,1,4.17-2.93,3.51,3.51,0,0,1,3,1.47Z"/>
+                            <path class="cls-2" d="M122.26,0a2.79,2.79,0,1,1-2.72,2.86V2.79A2.77,2.77,0,0,1,122.26,0Zm-2,8.65h4V27.18h-4Z"/>
+                        </svg>
+                    </a>
+                </li>
+                <li class="hidden-xs col-sm-6 text-center mid-nav col-sm-offset-1">
+                    <ul class="row">
+                        <li class="col-sm-4"><a href="#">Livraison de sushi</a></li>
+                        <li class="col-sm-4"><a href="#">Sushi à emporter</a></li>
+                        <li class="col-sm-4"><a href="#">Restaurant sushi-bar</a></li>
+                    </ul>
+                </li>
+
+                <li class="dropdown col-sm-2 icons col-sm-offset-1">
+                        {% if is_mobile() %}
+                            <a href="#" class="cart-link hamburger menuOpened" id="mobile_menu">
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 15.96 13">
+                                    <line class="cls-3" x1="15.46" y1="0.5" x2="0.5" y2="0.5"/>
+                                    <line class="cls-3" x1="15.46" y1="4.5" x2="0.5" y2="4.5"/>
+                                    <line class="cls-3" x1="15.46" y1="8.5" x2="0.5" y2="8.5"/>
+                                    <line class="cls-3" x1="15.46" y1="12.5" x2="0.5" y2="12.5"/>
+                                </svg>
+                            </a>
+                            <a class="cart-link" href="{% if cartLink is defined %}{{ cartLink }}" data-toggle="tooltip" title="Retour au catalogue" data-placement="bottom"{% else %}#" data-toggle="modal" data-target="#cartModal"{% endif %}>
+                            <span class="count" style="display: none"></span>
+                        {% else %}
+                            <a class="cart-link" href="{% if cartLink is defined %}{{ cartLink }}" data-toggle="tooltip" title="Retour au catalogue" data-placement="bottom"{% else %}{{ path('clab_white_homepage') }}"{% endif %}>
+                        {% endif %}
+                        <svg viewBox="0 0 24 22" class="svg-logo-social">
+                            <polygon class="cls-3" points="20.5 21.5 3.5 21.5 1.5 10.5 22.5 10.5 20.5 21.5"/>
+                            <rect class="cls-3" x="0.5" y="8.5" width="23" height="2"/>
+                            <line class="cls-3" x1="3.5" y1="6.5" x2="9.5" y2="0.5"/>
+                            <line class="cls-3" x1="20.5" y1="6.5" x2="14.5" y2="0.5"/>
+                        </svg>
+                    </a>
+                {% if app.user %}
+                        <a href="{{ path('clab_white_user_profile') }}">
+                            <svg viewBox="0 0 24 24" class="svg-logo-social">
+                                <path class="cls-3" d="M12,23.5H23.5a10.13,10.13,0,0,0-1-4.06c-.75-1.49-4-2.5-8-4v-3a3.75,3.75,0,0,0,1.5-3c.5,0,1-2,0-2.5,0-.3,1.34-2.8,1-4.5-.5-2.5-7.5-2.5-8-.5-3,0-1,4.59-1,5-1,.5-.5,2.5,0,2.5a3.75,3.75,0,0,0,1.5,3v3c-4,1.5-7.25,2.51-8,4a10.13,10.13,0,0,0-1,4.06Z"/>
+                            </svg>
+                        </a>
+                    </li>
+                {% else %}
+                        <a href="#login-modal" data-toggle="modal" data-target="#login-modal" class="my-account">
+                            <svg viewBox="0 0 24 24" class="svg-logo-social">
+                                <path class="cls-3" d="M12,23.5H23.5a10.13,10.13,0,0,0-1-4.06c-.75-1.49-4-2.5-8-4v-3a3.75,3.75,0,0,0,1.5-3c.5,0,1-2,0-2.5,0-.3,1.34-2.8,1-4.5-.5-2.5-7.5-2.5-8-.5-3,0-1,4.59-1,5-1,.5-.5,2.5,0,2.5a3.75,3.75,0,0,0,1.5,3v3c-4,1.5-7.25,2.51-8,4a10.13,10.13,0,0,0-1,4.06Z"/>
+                            </svg>
+                        </a>
+                    </li>
+                {% endif %}
+            </ul>
+
+            {% endblock %}
+        </nav>
+    </header>
+
+    {% block body %}{% endblock %}
+    {% block footer %}
+    <footer class="col-sm-12 no-padding container-footer {% block footerClass %}{% endblock %}">
+        <div class="footer infos col-sm-12 {% block upperFooterClass %}{% endblock %}" style="padding-bottom: 15px">
+            {% if is_mobile() %}
+                <section class="col-sm-12">
+                        <div class="margin-bottom-25 spacing-top">Service client</div>
+                        <div class="col-sm-12 margin-bottom-10 contacts">
+                            <div class="col-sm-4">
+                                <svg viewBox="0 0 24 22.25" class="svg-logo-contact">
+                                    <path class="cls-3" d="M23.5,9.88c0,5.18-5.15,9.38-11.5,9.38a13.8,13.8,0,0,1-4-.59L1.36,21.75,4,16.58A8.61,8.61,0,0,1,.5,9.88C.5,4.7,5.65.5,12,.5S23.5,4.7,23.5,9.88Z"/>
+                                    <circle class="cls-3" cx="6" cy="10" r="1.5"/>
+                                    <circle class="cls-3" cx="12" cy="10" r="1.5"/>
+                                    <circle class="cls-3" cx="18" cy="10" r="1.5"/>
+                                </svg>
+                                <p><a href="#">Live chat</a></p>
+                            </div>
+                            <div class="col-sm-4">
+                                <svg viewBox="0 0 24 22" class="svg-logo-contact">
+                                    <polygon class="cls-3" points="23.5 0.5 0.5 10 9.5 13.5 23.5 0.5"/>
+                                    <polygon class="cls-3" points="23.5 0.5 19.5 19 9.5 13.5 23.5 0.5"/>
+                                    <polyline class="cls-3" points="9.5 13.5 9.5 21.5 13 15.5"/>
+                                </svg>
+                                <p>
+                                    <a href="mailto:contact@matsuri.fr?Subject=" target="_top">Courriel</a>
+                                </p>
+                            </div>
+                            <div class="col-sm-4">
+                                <svg viewBox="0 0 23 23" class="svg-logo-contact">
+                                    <path class="cls-3" d="M8.59,6.9a2.31,2.31,0,0,0,0-3.27L6.13,1.18a2.31,2.31,0,0,0-3.27,0L1.52,2.52a3.46,3.46,0,0,0-.44,4.37,53.78,53.78,0,0,0,15,15,3.47,3.47,0,0,0,4.37-.44l1.35-1.35a2.31,2.31,0,0,0,0-3.27l-2.45-2.45a2.31,2.31,0,0,0-3.27,0l-.82.82A54.84,54.84,0,0,1,7.77,7.72Z"/>
+                                </svg>
+                                <p><span class="phone">0.15&euro;<br />min</span> <a href="#">0 820 23 11 11</a></p>
+                            </div>
+                        </div>
+                    </section>
+                <section class="col-md-5">
+                    <div class="col-md-12 margin-bottom-25 spacing-top">Informations</div>
+                    <div class="col-sm-12 col-md-4 no-padding links">
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/recrutement" target="_blank">Recrutement</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="#">Restaurants sushi-bar</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/resources/uploads/allergenes/1436430626-Tableau%20des%20allerg%C3%A8nes%202015%20final.pdf" target="_blank">Allergenes</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5 no-padding links">
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/franchises" target="_blank">Franchise</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="#">Sushi à emporter</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://blog.matsuri.fr/" target="_blank">Blog</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 no-padding margin-bottom-15 links">
+                        <div class="col-sm-4 col-md-12">
+                            <a href="http://www.matsuri.fr/conditions-generales-vente" target="_blank">Mentions / CVG</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12">
+                            <a href="#">Livraison de sushi</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12">
+                            <a href="#">FAQ</a>
+                        </div>
+                    </div>
+                    <div class="col-md-12 col-sm-12 links"><a href="#">À propos de nos restaurants sushi-bar Matsuri</a></div>
+                </section>
+                <section class="col-md-4">
+                <div class="col-md-12 spacing-top">Nous suivre</div>
+                <div class="col-md-12 logos">
+                    <div class="col-xs-2">
+                        <a href="https://fr.pinterest.com/MatsuriOfficiel/" target="_blank">
+                            <svg viewBox="0 0 15.81 20.42" class="svg-logo-social">
+                                <path class="cls-2" d="M9.48,14.76A3.36,3.36,0,0,1,6.62,13.3s-.68,2.7-.83,3.22a12.52,12.52,0,0,1-2.12,3.84.15.15,0,0,1-.28-.07,13.17,13.17,0,0,1,0-4.46L4.94,9.44a4.51,4.51,0,0,1-.38-1.86c0-1.74,1-3,2.26-3A1.57,1.57,0,0,1,8.41,6.31a25,25,0,0,1-1,4.16,1.82,1.82,0,0,0,1.85,2.26c2.22,0,3.72-2.86,3.72-6.24C12.94,3.93,11.21,2,8.06,2A5.56,5.56,0,0,0,2.29,7.62,3.74,3.74,0,0,0,2.6,9.21l-1.93,1A6,6,0,0,1,0,7.33C0,4,2.81,0,8.38,0c4.48,0,7.43,3.24,7.43,6.72C15.81,11.32,13.25,14.76,9.48,14.76Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="https://www.facebook.com/matsuri.officiel/" target="_blank">
+                            <svg viewBox="0 0 10.6 19.85" class="svg-logo-social">
+                                <path class="cls-2" d="M10.6,6H6.91V4.37a.84.84,0,0,1,.87-1h2.58V0H6.63c-3.39,0-4,2.54-4,4.17V6H0V9.48H2.59V19.85H6.91V9.48h3.33Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="https://plus.google.com/102012952801597106798" target="_blank">
+                            <svg viewBox="0 0 25.76 17.57" class="svg-logo-social">
+                                <path class="cls-2" d="M17,7.45H8v3.19h5.62a4.54,4.54,0,0,1-4.82,3.73,5.59,5.59,0,1,1,3.67-9.81l.36.31,2.34-2.17-.42-.39a8.78,8.78,0,1,0-6,15.25C14.87,17.57,17,13,17,8.78q0-.43,0-.85Z"/>
+                                <polygon class="cls-2" points="23.63 7.45 23.63 5.32 20.44 5.32 20.44 7.45 18.31 7.45 18.31 10.65 20.44 10.65 20.44 12.78 23.63 12.78 23.63 10.65 25.76 10.65 25.76 7.45 23.63 7.45"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="https://www.instagram.com/matsuriofficiel/" target="_blank">
+                            <svg viewBox="0 0 19.46 19.46" class="svg-logo-social">
+                                <path class="cls-2" d="M9.73,1.75c2.6,0,2.91,0,3.93.06a5.39,5.39,0,0,1,1.81.34,3,3,0,0,1,1.12.73A3,3,0,0,1,17.32,4a5.39,5.39,0,0,1,.34,1.81c0,1,.06,1.33.06,3.93s0,2.91-.06,3.93a5.39,5.39,0,0,1-.34,1.81,3.22,3.22,0,0,1-1.85,1.85,5.38,5.38,0,0,1-1.81.34c-1,0-1.33.06-3.93.06s-2.91,0-3.93-.06A5.38,5.38,0,0,1,4,17.32a3,3,0,0,1-1.12-.73,3,3,0,0,1-.73-1.12,5.39,5.39,0,0,1-.34-1.81c0-1-.06-1.33-.06-3.93s0-2.91.06-3.93A5.39,5.39,0,0,1,2.15,4a3,3,0,0,1,.73-1.12A3,3,0,0,1,4,2.15,5.39,5.39,0,0,1,5.8,1.81c1,0,1.33-.06,3.93-.06M9.73,0c-2.64,0-3,0-4,.06A7.14,7.14,0,0,0,3.36.51,4.77,4.77,0,0,0,1.63,1.63,4.77,4.77,0,0,0,.51,3.36,7.14,7.14,0,0,0,.06,5.72c0,1-.06,1.37-.06,4s0,3,.06,4a7.14,7.14,0,0,0,.45,2.36,4.77,4.77,0,0,0,1.12,1.72A4.77,4.77,0,0,0,3.36,19a7.14,7.14,0,0,0,2.36.45c1,0,1.37.06,4,.06s3,0,4-.06A7.14,7.14,0,0,0,16.11,19,5,5,0,0,0,19,16.11a7.14,7.14,0,0,0,.45-2.36c0-1,.06-1.37.06-4s0-3-.06-4A7.14,7.14,0,0,0,19,3.36a4.77,4.77,0,0,0-1.12-1.72A4.77,4.77,0,0,0,16.11.51,7.14,7.14,0,0,0,13.74.06c-1,0-1.37-.06-4-.06"/>
+                                <path class="cls-2" d="M9.73,4.73a5,5,0,1,0,5,5,5,5,0,0,0-5-5m0,8.24A3.24,3.24,0,1,1,13,9.73,3.24,3.24,0,0,1,9.73,13"/>
+                                <path class="cls-2" d="M16.09,4.54a1.17,1.17,0,1,1-1.17-1.17,1.17,1.17,0,0,1,1.17,1.17"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-xs-2">
+                        <a href="https://twitter.com/matsuriofficiel" target="_blank">
+                            <svg viewBox="0 0 21.91 17.57" class="svg-logo-social">
+                                <path class="cls-2" d="M21.91,2.28a2.37,2.37,0,0,1-2.17,0c.92-.55,1-.93,1.29-2A8.88,8.88,0,0,1,18.21,1.4a4.44,4.44,0,0,0-7.56,4A12.59,12.59,0,0,1,1.51.81,4.44,4.44,0,0,0,2.88,6.73a4.42,4.42,0,0,1-2-.55s0,0,0,.06a4.44,4.44,0,0,0,3.56,4.35,4.45,4.45,0,0,1-2,.08,4.44,4.44,0,0,0,4.14,3.08A8.92,8.92,0,0,1,0,15.58a12.56,12.56,0,0,0,6.8,2A12.53,12.53,0,0,0,19.42,4.95c0-.19,0-.38,0-.57A9.49,9.49,0,0,0,21.91,2.28Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </section>
+            {% else %}
+                <section class="col-md-5">
+                    <div class="col-md-12 margin-bottom-25">Informations</div>
+                    <div class="col-sm-12 col-md-4 no-padding">
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/recrutement" target="_blank">Recrutement</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/franchises" target="_blank">Franchises</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12">
+                            <a href="http://www.matsuri.fr/conditions-generales-vente" target="_blank">Mentions / CVG</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-5 no-padding">
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="#">Restaurants sushi-bar</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="#">Sushi à emporter</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12">
+                            <a href="#">Livraison de sushi</a>
+                        </div>
+                    </div>
+                    <div class="col-sm-12 col-md-3 no-padding margin-bottom-15">
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://www.matsuri.fr/resources/uploads/allergenes/1436430626-Tableau%20des%20allerg%C3%A8nes%202015%20final.pdf" target="_blank">Allergenes</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12 margin-bottom-15">
+                            <a href="http://blog.matsuri.fr/" target="_blank">Blog</a>
+                        </div>
+                        <div class="col-sm-4 col-md-12">
+                            <a href="#">FAQ</a>
+                        </div>
+                    </div>
+                    <br />
+                    <div class="col-md-12 col-sm-12"><a href="#">À propos de nos restaurants sushi-bar Matsuri</a></div>
+                </section>
+                <section class="col-md-3">
+                    <div class="col-md-12 margin-bottom-25">Service client</div>
+                    <div class="col-md-12 margin-bottom-10">
+                        <div class="col-md-2">
+                            <svg viewBox="0 0 24 22.25" class="svg-logo-contact">
+                                <path class="cls-3" d="M23.5,9.88c0,5.18-5.15,9.38-11.5,9.38a13.8,13.8,0,0,1-4-.59L1.36,21.75,4,16.58A8.61,8.61,0,0,1,.5,9.88C.5,4.7,5.65.5,12,.5S23.5,4.7,23.5,9.88Z"/>
+                                <circle class="cls-3" cx="6" cy="10" r="1.5"/>
+                                <circle class="cls-3" cx="12" cy="10" r="1.5"/>
+                                <circle class="cls-3" cx="18" cy="10" r="1.5"/>
+                            </svg>
+                        </div>
+                        <div class="col-md-10">
+                            <p><a href="#">Live chat</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 margin-bottom-10">
+                        <div class="col-md-2">
+                            <svg viewBox="0 0 24 22" class="svg-logo-contact">
+                                <polygon class="cls-3" points="23.5 0.5 0.5 10 9.5 13.5 23.5 0.5"/>
+                                <polygon class="cls-3" points="23.5 0.5 19.5 19 9.5 13.5 23.5 0.5"/>
+                                <polyline class="cls-3" points="9.5 13.5 9.5 21.5 13 15.5"/>
+                            </svg>
+                        </div>
+                        <div class="col-md-10">
+                            <p><a href="mailto:contact@matsuri.fr?Subject=" target="_top">Courriel</a></p>
+                        </div>
+                    </div>
+                    <div class="col-md-12 showPopin">
+                        <div class="popup_anchor" id="u192144popup">
+                            <div class="ContainerGroup clearfix" id="u192144" style="width: 0px; height: 0px;"><!-- stack box -->
+                                <div class="Container clearfix grpelem wp-panel" id="u192145" role="tabpanel" aria-labelledby="u192152" style="display: none;"><!-- group -->
+                                    <div class="clearfix grpelem" id="u192146"><!-- group -->
+                                        <div class="transition rounded-corners grpelem" id="u192148"><!-- simple frame --></div>
+                                        <div class="grpelem" id="u192147" data-mu-ie-matrix="progid:DXImageTransform.Microsoft.Matrix(M11=0.7071,M12=0.7071,M21=-0.7071,M22=0.7071,SizingMethod='auto expand')" data-mu-ie-matrix-dx="-4" data-mu-ie-matrix-dy="-4"><!-- simple frame --></div>
+                                    </div>
+                                    <div class="rounded-corners clearfix grpelem" id="u192150-10"><!-- content -->
+                                        <p id="u192150-2"><span id="u192150">À votre écoute 7/7</span></p>
+                                        <p id="u192150-4">De 10h30 à 15h00</p>
+                                        <p id="u192150-6"><span id="u192150-5">De 17h30 à 23h00</span></p>
+                                        <p id="u192150-8">Coût de l'appel : 0,15€/minute</p>
+                                    </div>
+                                    <div class="rounded-corners transition clearfix grpelem" id="u192149-4"><!-- content -->
+                                        <p><a href="tel:0820231111">Appeler</a></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <svg viewBox="0 0 23 23" class="svg-logo-contact">
+                                <path class="cls-3" d="M8.59,6.9a2.31,2.31,0,0,0,0-3.27L6.13,1.18a2.31,2.31,0,0,0-3.27,0L1.52,2.52a3.46,3.46,0,0,0-.44,4.37,53.78,53.78,0,0,0,15,15,3.47,3.47,0,0,0,4.37-.44l1.35-1.35a2.31,2.31,0,0,0,0-3.27l-2.45-2.45a2.31,2.31,0,0,0-3.27,0l-.82.82A54.84,54.84,0,0,1,7.77,7.72Z"/>
+                            </svg>
+                        </div>
+                        <div class="col-md-10">
+                            <p><a href="#">0 820 23 11 11 <span class="phone">0.15&euro;/min</span></a></p>
+                        </div>
+                    </div>
+                </section>
+                <section class="col-md-4">
+                <div class="col-md-12" style="margin-bottom:60px;">Nous suivre</div>
+                <div class="col-md-12 margin-bottom-15">
+                    <svg viewBox="0 0 125.12 27.71" class="svg-logo-footer">
+                        <path class="cls-2" d="M14.59,11.07c1.38-2,3.45-2.9,6.24-2.9,3.59,0,7.51,2.46,7.51,7.92V27.18h-4V16.67a3.91,3.91,0,0,0-3.55-4.24h-.45a4.22,4.22,0,0,0-4.25,3.08V27.18h-4V16.67a3.92,3.92,0,0,0-3.57-4.24H8.09A4.21,4.21,0,0,0,4,15.5V27.18H0V8.65H3.81v2c.54-1.39,2.39-2.46,5-2.46A6.94,6.94,0,0,1,14.59,11.07Z"/>
+                        <path class="cls-2" d="M33.29,11.47a8.52,8.52,0,0,1,7-3.3c4.83,0,8,2.64,8,7.29V27.18H44.51V25.57c-.91,1.28-3.19,2.09-5.19,2.09-4.06,0-7-2.31-7-6.08s3.34-6,7.29-6a7.33,7.33,0,0,1,4.72,1.36v-.76c0-2.75-2.14-3.81-4.57-3.81a6.81,6.81,0,0,0-5.48,2.42ZM44.36,20.6c-.47-.88-2.21-1.39-4-1.39-2.54,0-4,.84-4,2.27s1.45,2.27,4,2.27c1.78,0,3.52-.77,4-1.8Z"/>
+                        <path class="cls-2" d="M64.9,25.47a5.18,5.18,0,0,1-4.39,2.24c-4,0-5.92-2.13-5.92-6.3v-8.5H51.36V11.63l6-7.66h1.2V8.66h6.13v4.25H58.55v7.7c0,2.05,1,2.86,2.69,2.86a3.62,3.62,0,0,0,2.83-1.39Z"/>
+                        <path class="cls-2" d="M72.43,18.84c-2.76-1.43-4.17-3.19-4.17-5.42,0-2.93,2.25-5.24,5.84-5.24a6.59,6.59,0,0,1,5.44,2.64l-.73,3.56a6.88,6.88,0,0,0-4.72-2c-1.05,0-1.85.33-1.85,1.17s.65,1.17,1.74,1.76l1.89,1c2.94,1.54,4.46,3,4.46,5.72,0,3.26-2.54,5.68-6.49,5.68a7,7,0,0,1-6.1-3.26L68.79,21a6.52,6.52,0,0,0,5.26,2.57c1.23,0,2.36-.44,2.36-1.58,0-.92-.83-1.54-2.25-2.27Z"/>
+                        <path class="cls-2" d="M84.17,19.28V8.65h4V18.84c0,3,1.85,4.62,4.25,4.62,2.14,0,4.14-1.32,4.5-3.15V8.65h4V27.18H97v-2c-.51,1.39-2.29,2.46-5,2.46C88.19,27.71,84.17,25.18,84.17,19.28Z"/>
+                        <path class="cls-2" d="M116.57,13.26a4.17,4.17,0,0,0-2.5-.84,4,4,0,0,0-4,3.33V27.18h-4V8.65H110v2.46a4.07,4.07,0,0,1,4.17-2.93,3.51,3.51,0,0,1,3,1.47Z"/>
+                        <path class="cls-2" d="M122.26,0a2.79,2.79,0,1,1-2.72,2.86V2.79A2.77,2.77,0,0,1,122.26,0Zm-2,8.65h4V27.18h-4Z"/>
+                    </svg>
+                </div>
+                <div class="col-md-12 logos">
+                    <div class="col-md-1 no-padding">
+                        <a href="https://fr.pinterest.com/MatsuriOfficiel/" target="_blank">
+                            <svg viewBox="0 0 15.81 20.42" class="svg-logo-social">
+                                <path class="cls-2" d="M9.48,14.76A3.36,3.36,0,0,1,6.62,13.3s-.68,2.7-.83,3.22a12.52,12.52,0,0,1-2.12,3.84.15.15,0,0,1-.28-.07,13.17,13.17,0,0,1,0-4.46L4.94,9.44a4.51,4.51,0,0,1-.38-1.86c0-1.74,1-3,2.26-3A1.57,1.57,0,0,1,8.41,6.31a25,25,0,0,1-1,4.16,1.82,1.82,0,0,0,1.85,2.26c2.22,0,3.72-2.86,3.72-6.24C12.94,3.93,11.21,2,8.06,2A5.56,5.56,0,0,0,2.29,7.62,3.74,3.74,0,0,0,2.6,9.21l-1.93,1A6,6,0,0,1,0,7.33C0,4,2.81,0,8.38,0c4.48,0,7.43,3.24,7.43,6.72C15.81,11.32,13.25,14.76,9.48,14.76Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-md-1 no-padding">
+                        <a href="https://www.facebook.com/matsuri.officiel/" target="_blank">
+                            <svg viewBox="0 0 10.6 19.85" class="svg-logo-social">
+                                <path class="cls-2" d="M10.6,6H6.91V4.37a.84.84,0,0,1,.87-1h2.58V0H6.63c-3.39,0-4,2.54-4,4.17V6H0V9.48H2.59V19.85H6.91V9.48h3.33Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-md-1 no-padding">
+                        <a href="https://plus.google.com/102012952801597106798" target="_blank">
+                            <svg viewBox="0 0 25.76 17.57" class="svg-logo-social">
+                                <path class="cls-2" d="M17,7.45H8v3.19h5.62a4.54,4.54,0,0,1-4.82,3.73,5.59,5.59,0,1,1,3.67-9.81l.36.31,2.34-2.17-.42-.39a8.78,8.78,0,1,0-6,15.25C14.87,17.57,17,13,17,8.78q0-.43,0-.85Z"/>
+                                <polygon class="cls-2" points="23.63 7.45 23.63 5.32 20.44 5.32 20.44 7.45 18.31 7.45 18.31 10.65 20.44 10.65 20.44 12.78 23.63 12.78 23.63 10.65 25.76 10.65 25.76 7.45 23.63 7.45"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="https://www.instagram.com/matsuriofficiel/" target="_blank">
+                            <svg viewBox="0 0 19.46 19.46" class="svg-logo-social">
+                                <path class="cls-2" d="M9.73,1.75c2.6,0,2.91,0,3.93.06a5.39,5.39,0,0,1,1.81.34,3,3,0,0,1,1.12.73A3,3,0,0,1,17.32,4a5.39,5.39,0,0,1,.34,1.81c0,1,.06,1.33.06,3.93s0,2.91-.06,3.93a5.39,5.39,0,0,1-.34,1.81,3.22,3.22,0,0,1-1.85,1.85,5.38,5.38,0,0,1-1.81.34c-1,0-1.33.06-3.93.06s-2.91,0-3.93-.06A5.38,5.38,0,0,1,4,17.32a3,3,0,0,1-1.12-.73,3,3,0,0,1-.73-1.12,5.39,5.39,0,0,1-.34-1.81c0-1-.06-1.33-.06-3.93s0-2.91.06-3.93A5.39,5.39,0,0,1,2.15,4a3,3,0,0,1,.73-1.12A3,3,0,0,1,4,2.15,5.39,5.39,0,0,1,5.8,1.81c1,0,1.33-.06,3.93-.06M9.73,0c-2.64,0-3,0-4,.06A7.14,7.14,0,0,0,3.36.51,4.77,4.77,0,0,0,1.63,1.63,4.77,4.77,0,0,0,.51,3.36,7.14,7.14,0,0,0,.06,5.72c0,1-.06,1.37-.06,4s0,3,.06,4a7.14,7.14,0,0,0,.45,2.36,4.77,4.77,0,0,0,1.12,1.72A4.77,4.77,0,0,0,3.36,19a7.14,7.14,0,0,0,2.36.45c1,0,1.37.06,4,.06s3,0,4-.06A7.14,7.14,0,0,0,16.11,19,5,5,0,0,0,19,16.11a7.14,7.14,0,0,0,.45-2.36c0-1,.06-1.37.06-4s0-3-.06-4A7.14,7.14,0,0,0,19,3.36a4.77,4.77,0,0,0-1.12-1.72A4.77,4.77,0,0,0,16.11.51,7.14,7.14,0,0,0,13.74.06c-1,0-1.37-.06-4-.06"/>
+                                <path class="cls-2" d="M9.73,4.73a5,5,0,1,0,5,5,5,5,0,0,0-5-5m0,8.24A3.24,3.24,0,1,1,13,9.73,3.24,3.24,0,0,1,9.73,13"/>
+                                <path class="cls-2" d="M16.09,4.54a1.17,1.17,0,1,1-1.17-1.17,1.17,1.17,0,0,1,1.17,1.17"/>
+                            </svg>
+                        </a>
+                    </div>
+                    <div class="col-md-1">
+                        <a href="https://twitter.com/matsuriofficiel" target="_blank">
+                            <svg viewBox="0 0 21.91 17.57" class="svg-logo-social">
+                                <path class="cls-2" d="M21.91,2.28a2.37,2.37,0,0,1-2.17,0c.92-.55,1-.93,1.29-2A8.88,8.88,0,0,1,18.21,1.4a4.44,4.44,0,0,0-7.56,4A12.59,12.59,0,0,1,1.51.81,4.44,4.44,0,0,0,2.88,6.73a4.42,4.42,0,0,1-2-.55s0,0,0,.06a4.44,4.44,0,0,0,3.56,4.35,4.45,4.45,0,0,1-2,.08,4.44,4.44,0,0,0,4.14,3.08A8.92,8.92,0,0,1,0,15.58a12.56,12.56,0,0,0,6.8,2A12.53,12.53,0,0,0,19.42,4.95c0-.19,0-.38,0-.57A9.49,9.49,0,0,0,21.91,2.28Z"/>
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+
+            </section>
+            {% endif %}
+        </div>
+
+    </footer>
+    {% endblock %}
+    {% block javascripts %}
+        <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCW6HjPWnexLQ1H-Q82JmcLmDFC4t-u9SE&libraries=places"></script>
+        <script src="{{ asset('bundles/clabwhite/dist/js/app.min.js') }}?version=1.0"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="https://use.typekit.net/twn8ddp.js"></script>
+        <script type="text/javascript" src="{{ asset('vendors/select2/dist/js/select2.full.min.js') }}"></script>
+        <script type="text/javascript">
+
+            var secondNavHasMenu = $('.second-block').find('ul');
+
+            if (!secondNavHasMenu.length) {
+                $('.second-block').hide();
+            }
+            var dropdown = $('.dropdown'),
+                    icon = $('.dropdown i'),
+                    dropdownContent = $('.dropdown-content');
+
+            dropdown.click( function(e) {
+                var currentIcon = $(this).find(icon),
+                        currentContent = $(this).find(dropdownContent);
+
+                if(currentContent.css('display') == 'none') {
+                    currentContent.show();
+                    currentIcon.css('transform',  'rotate(-87deg)');
+                } else {
+                    currentContent.hide();
+                    currentIcon.css('transform',  'rotate(87deg)');
+                }
+            });
+
+            $('.showPopin').hover(function () {
+                $('#u192145').fadeIn();
+            }, function () {
+                $('#u192145').fadeOut();
+            });
+
+            $('.hamburger').click(function () {
+                if ($(this).hasClass('menuOpened')) {
+                    $(this).removeClass('menuOpened');
+                    $('.nav-menu').slideUp();
+                    $('#mobile_container').removeClass('padding-top-container');
+                    $('#mobile_container_profile').removeClass('padding-top-container-profile');
+                } else {
+                    $(this).addClass('menuOpened');
+                    $('.nav-menu').slideDown();
+                    $('#mobile_container').addClass('padding-top-container');
+                    $('#mobile_container_profile').addClass('padding-top-container-profile');
+                }
+                $('#steps_status').slideToggle(400);
+
+            });
+
+            setTimeout(function () {
+            if (!$('footer').hasClass('full')) {
+                    $('.footer').removeClass('col-sm-10 col-sm-offset-1').addClass('col-sm-12');
+                }
+            }, 1000);
+
+            countCartProduct();
+
+            function countCartProduct() {
+                if ($('.count').length) {
+                    var number = 0;
+
+                    $('.cart-tooltip').each(function () {
+                        number += parseInt($(this).find(':selected').val());
+                    });
+
+                    if (!number) {
+                        $('.count').hide();
+                    } else {
+                        $('.count').fadeIn();
+                    }
+
+                    $('.count').html(number);
+                }
+            }
+        </script>
+    {% endblock %}
+    <script>
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+        sweetAlert('Oops...', '{{ flashMessage|trans|escape('js') }}', 'error');
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('success') %}
+        sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'success');
+        {% endfor %}
+        {% for flashMessage in app.session.flashbag.get('danger') %}
+        sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'danger');
+        {% endfor %}
+    </script>
+    </body>
+</html>

@@ -1,0 +1,30 @@
+{% extends 'ClabBoardBundle:Mail:base.html.twig' %}
+{% import 'ClabBoardBundle:Mail:macro/mail.html.twig' as mail %}
+
+{% set todoList = '' %}
+{% for step in todo %}
+    {% set todoList = todoList ~ '• ' ~ step ~ '<br>' %}
+{% endfor %}
+
+{% block body %}
+    {% include 'ClabBoardBundle:Mail:partials/blockWhite.html.twig' with {
+        block1: true,
+        title1: "Bonjour " ~ restaurant.owner.profile.fullName,
+        content1: "
+            Votre période d’essai sur Track the Truck prend fin dans moins de " ~ days ~ " jours.<br>
+            <br>
+            Votre profil Track The Truck est complété à " ~ percent ~ " %.  Vous êtes à quelques clics de devenir accessible aux affamés de streetfood présents sur Track The Truck.<br>
+            <br>
+            Encore " ~ todo|length ~ " étape(s) :
+            <br>
+            " ~ todoList ~ "
+        ",
+        button1: true,
+        button1Label: "Accéder à mon tableau de bord",
+        button1Link: url('board_dashboard', { context: 'restaurant', contextPk: restaurant.slug }),
+    } %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockAppstore.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockHelp.html.twig' %}
+{% endblock %}

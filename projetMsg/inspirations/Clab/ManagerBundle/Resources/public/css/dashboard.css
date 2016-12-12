@@ -1,0 +1,98 @@
+@media print {
+  .dashboard-page
+  {
+    display: none !important;
+  }
+  .print-page
+  {
+    display: block !important;
+  }
+}
+
+.ui-bar-b, .ui-page-theme-b .ui-bar-inherit, html .ui-bar-b .ui-bar-inherit, html .ui-body-b .ui-bar-inherit, html body .ui-group-theme-b .ui-bar-inherit {
+  background-color: #383f43;
+  border-color: #383f43;
+}
+.print-page
+{
+  display: none;
+}
+
+.order-box {
+  padding: 20px;
+}
+
+.order-box .ui-btn-right {
+  top: -0.3em;
+  padding-left: 1.6em;
+}
+
+.ui-body {
+  min-height: 150px;
+}
+
+.btn-detail {
+  position: absolute;
+  left: 20px;
+  right: 20px;
+  bottom: 10px;
+}
+
+.header-online-payment {
+  background-color: #2ecc71;
+  border-color: #27ae60;
+  color: #fff;
+  text-shadow: 0 1px 0 #27ae60;
+  font-weight: 700;
+}
+
+.header-company-payment {
+  background-color: #477bcc;
+  border-color: #4874ae;
+  color: #fff;
+  text-shadow: 0 1px 0 #4874ae;
+  font-weight: 700;
+}
+
+.header-direct-payment {
+  background-color: #e74c3c;
+  border-color: #c0392b;
+  color: #fff;
+  text-shadow: 0 1px 0 #c0392b;
+  font-weight: 700;
+}
+
+.header-canceled {
+  background-color: #e67e22;
+  border-color: #d35400;
+  color: #fff;
+  text-shadow: 0 1px 0 #d35400;
+  font-weight: 700;
+}
+
+@media (max-width: 767px) {
+  .ui-grid-b>.ui-block-a, .ui-grid-b>.ui-block-b, .ui-grid-b>.ui-block-c {
+    width: 100%;
+  }
+
+  .order-box {
+    padding: 20px 0px;
+  }
+}
+
+.ui-page-theme-a .ui-btn.ui-btn-active, .ui-state-active .ui-btn {
+  background-color: #565c60;
+  border-color: #565c60;
+  box-shadow: none;
+  color: #fff;
+  text-shadow: 0 1px 0 #059;
+}
+
+.ui-dialog-contain {
+  margin: 3% auto 1em;
+}
+
+.ui-dialog-contain .ui-header .ui-btn-right {
+  padding-left: 1.2em;
+  font-size: 16.5px;
+}

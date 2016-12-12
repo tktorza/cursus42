@@ -1,0 +1,173 @@
+{% extends 'ClabWhiteBundle::base.html.twig'  %}
+{% block metaDescription %}Déjeunez chez {{ client.name }} Trouvez menu, plats dujour, avis et commande en ligne avec retrait prioritaire.{% endblock %}
+{% block metaKeywords %}{{ client.name }}, repas à emporter,idées restaurant, repas à emporter, vente à emporter,
+    Paris, Clickeat, commande en ligne, menu, avis{% endblock %}
+{% block title %}Restaurant {{ client.name }}{% endblock %}
+{% block bodyClass %}{{ is_mobile() ? 'background-grey-6' : 'homeBody' }}{% endblock %}
+{% if is_mobile() %}
+    {% block headerClass %}background-transparent{% endblock %}
+{% endif %}
+{% block navClass %}background-transparent{% endblock %}
+{% if is_mobile() %}
+    {% block nav %}{% endblock %}
+{% endif %}
+{% block body %}
+    <section id="{{ is_mobile() ? 'serp' : 'locator' }}" class="col-lg-12 col-md-12 col-sm-12 locator container">
+        {% if not is_mobile() %}
+        <div class="container order-delivery row home-header">
+            <div class="col-xs-12">
+                <div class="logo item">
+                    <svg  viewBox="0 0 125.02 141.53"
+                          preserveAspectRatio="xMinYMin meet">
+                        <path class="cls-1" d="M114.84,50.37A50.33,50.33,0,1,1,64.52,0a50.34,50.34,0,0,1,50.33,50.37"/>
+                        <path class="cls-2" d="M92.62,44.17l.1-1.1,0-.27v0h0l-1.26-1.26h-.12l-.17,0-.65.11a14.61,14.61,0,0,0-2.45.86,12.51,12.51,0,0,0-5.53,5.16,56.48,56.48,0,0,0-3.64-8.6c-3.15-6.49-7.42-12.9-12.37-17.21a16.49,16.49,0,0,0-1.92-1.45l-.93-.69-.47-.34-.12-.07v0l-1.62.41,0,0,0,.07-.1.24c-.68,1.28-1.33,2.49-1.84,3.61-.92,2.28-1.69,4.12-2,5.36-.56,1.87-1,3.54-1.39,5.17A19.84,19.84,0,0,0,46.52,41a20.28,20.28,0,0,0-3.44,6.48,12,12,0,0,0-.67,3.81,20.45,20.45,0,0,0,.8,3.3,21,21,0,0,0,5.13,8.07,17.23,17.23,0,0,0,8.25,4.63c.25,1.39.58,2.75,1,4.13a56.4,56.4,0,0,0,1.74,5.38c.41.91.77,1.87,1.27,2.89l.79,1.51.09.2.06.11,0,0v0h0l1.67.37v0l.35-.29.7-.55C68.67,78.4,78,66.74,82.67,53.67a12,12,0,0,0,2.93,3.52,12.17,12.17,0,0,0,3.23,1.91,9.43,9.43,0,0,0,1.44.52l.67.16.35.06.19,0,1.27-1.28h0v-.11c-.14-1.42-.23-2.2-.23-2.2a51.26,51.26,0,0,1-.22-8.05c.1-1.26.18-2.61.32-4M59.68,29.72a49.5,49.5,0,0,1,1.95-5.16c.38-.82.82-1.66,1.29-2.58l.39.27a21.61,21.61,0,0,1,1.76,1.34c4.36,3.8,8.33,9.57,11.33,15.51a19.45,19.45,0,0,0-8.16-5.21A18.44,18.44,0,0,0,62.66,33a12.72,12.72,0,0,0-4.11.44c.33-1.19.71-2.43,1.13-3.74M56.25,65.54A26.76,26.76,0,0,1,49.93,61a18.86,18.86,0,0,1-4.52-7.19c-1.84-3.69.42-7.77,2.94-11.39a17.44,17.44,0,0,1,7.19-5.6,61.83,61.83,0,0,0-.65,15.09,124.2,124.2,0,0,1,3-15.91,14.29,14.29,0,0,1,4.8-.68c-.24-.16,8.71-.18,13.94,7.62A35,35,0,0,1,80,48.71l.7,1.52.27.61c-.41,1-.87,1.93-1.31,2.81a31,31,0,0,1-4.88,7.24c-4.15,4.12-7.23,5.69-12.35,6.6a15.24,15.24,0,0,0,13.38-4.4c-4.53,8.1-10,14.36-13,16.16l-.3-.6c-.49-.91-.88-1.85-1.31-2.71-.78-1.77-1.45-3.44-2.11-5.06-.43-1.13-.86-2.24-1.27-3.38a19.44,19.44,0,0,0,4.58,0A26.54,26.54,0,0,1,57.35,66M89.69,57a10.52,10.52,0,0,1-2.63-1.57,11.12,11.12,0,0,1-3.34-4.82,10.82,10.82,0,0,1,5.38-6c.39-.18.8-.33,1.2-.46-.14,1.39-.24,2.71-.31,3.92a49.16,49.16,0,0,0,.25,8.42s0,.27.06.74c-.2-.06-.39-.15-.61-.23"/>
+                        <path class="cls-2" d="M14.59,124.89c1.38-2,3.45-2.9,6.24-2.9,3.59,0,7.51,2.46,7.51,7.92V141h-4V130.49a3.91,3.91,0,0,0-4-4.25,4.22,4.22,0,0,0-4.25,3.08V141h-4V130.49a3.92,3.92,0,0,0-4-4.25A4.21,4.21,0,0,0,4,129.32V141H0V122.47H3.81v2c.54-1.39,2.39-2.46,5-2.46A6.94,6.94,0,0,1,14.59,124.89Z"/>
+                        <path class="cls-2" d="M33.29,125.29a8.52,8.52,0,0,1,7-3.3c4.83,0,8,2.64,8,7.29V141H44.51v-1.61c-.91,1.28-3.19,2.09-5.19,2.09-4.06,0-7-2.31-7-6.08s3.34-6,7.29-6a7.33,7.33,0,0,1,4.72,1.36V130c0-2.75-2.14-3.81-4.57-3.81a6.81,6.81,0,0,0-5.48,2.42Zm11.07,9.13c-.47-.88-2.21-1.39-4-1.39-2.54,0-4,.84-4,2.27s1.45,2.27,4,2.27c1.78,0,3.52-.77,4-1.8Z"/>
+                        <path class="cls-2" d="M64.9,139.29a5.18,5.18,0,0,1-4.39,2.24c-4,0-5.92-2.13-5.92-6.3v-8.5H51.36v-1.28l6-7.66h1.2v4.69h6.13v4.25H58.55v7.7c0,2.05,1.05,2.86,2.69,2.86a3.62,3.62,0,0,0,2.83-1.39Z"/>
+                        <path class="cls-2" d="M72.43,132.66c-2.76-1.43-4.17-3.19-4.17-5.42,0-2.93,2.25-5.24,5.84-5.24a6.59,6.59,0,0,1,5.44,2.64l-.73,3.56a6.88,6.88,0,0,0-4.72-2c-1.05,0-1.85.33-1.85,1.17s.65,1.17,1.74,1.76l1.89,1c2.94,1.54,4.46,3,4.46,5.72,0,3.26-2.54,5.68-6.49,5.68a7,7,0,0,1-6.1-3.26l1.05-3.41a6.52,6.52,0,0,0,5.26,2.57c1.23,0,2.36-.44,2.36-1.58,0-.92-.83-1.54-2.25-2.27Z"/>
+                        <path class="cls-2" d="M84.17,133.1V122.47h4v10.19c0,3,1.85,4.62,4.25,4.62,2.14,0,4.14-1.32,4.5-3.15V122.47h4V141H97v-2c-.51,1.39-2.29,2.46-5,2.46C88.19,141.53,84.17,139,84.17,133.1Z"/>
+                        <path class="cls-2" d="M116.57,127.08a4.17,4.17,0,0,0-2.5-.84,4,4,0,0,0-4,3.33V141h-4V122.47H110v2.46a4.07,4.07,0,0,1,4.17-2.93,3.51,3.51,0,0,1,3,1.47Z"/>
+                        <path class="cls-2" d="M122.26,113.82a2.79,2.79,0,1,1-2.72,2.79A2.77,2.77,0,0,1,122.26,113.82Zm-2,8.65h4V141h-4Z"/>
+                    </svg>
+                </div>
+            </div>
+        </div>
+        {% else %}
+            <div class="col-xs-12"><a href="{{ path('clab_white_homepage') }}"><img class="close" src="{{ asset('images/g-close.svg') }}"></a></div>
+        {% endif %}
+        <div class="row serp">
+            <div class="serp-container">
+                <div class="col-sm-12">
+                    <p class="color-grey-1 choose-resto-text text-center">Choisissez votre restaurant</p>
+                </div>
+                <div class="resto-section col-sm-6 no-padding">
+                    <ul class="restaurant-list">
+                        {% set page = 0 %}
+                        {% for restaurantData in restaurants %}
+                            {% set restaurant = restaurantData[0]  %}
+                            <li {% if loop.index > 3 %}hidden{% endif %} data-page="{{ page }}" data-restaurant="{{ restaurant.slug }}">
+                                <div class="col-sm-7 col-xs-5"{% if is_mobile() %} style="margin-right: 30px;" {% endif %}>
+                                    <p {% if is_mobile() %}class="change-font-10"{% endif %}>
+                                        <span {% if is_mobile() %}class="change-font-16"{% endif %}>{{ restaurant.name }}</span><br>
+                                        {{ restaurant.address.street }}<br>
+                                        {{ restaurant.address.zip }} {{ restaurant.address.city }}<br>
+                                        {% for time in planning[restaurant.slug] %}
+                                            {% if not loop.first %} et {% endif %} {{ time.start|date('H')}}h{{ time.start|date('i') != '00' ? time.start|date('i') : '' }} - {{ time.end|date('H')}}h{{ time.end|date('i') != '00' ? time.end|date('i') : '' }}
+                                        {% endfor %}
+                                    </p>
+                                </div>
+                                {% if restaurant.status == 3000 and restaurant.isOpen %}
+                                    <div class="col-xs-6 col-sm-5">
+                                        {% if isDelivery %}
+                                            <a href="{{ path('clab_white_order_home',{slug:restaurant.slug, isDelivery: isDelivery, lat: lat, lng: lng, address: address}) }}"><button class="btn {% if is_mobile() %}border-grey-5{% endif %}"><p>{% if is_mobile() %}Choisir</br>pour commander{% else %}Choisir ce restaurant</br>et commander{% endif %}</p></button></a>
+                                        {% else %}
+                                            <a href="{{ path('clab_white_order_home',{slug:restaurant.slug }) }}"><button class="btn {% if is_mobile() %}border-grey-5{% endif %}"><p {% if is_mobile() %}class="change-font-10"{% endif %}>{% if is_mobile() %}Choisir</br>pour commander{% else %}Choisir ce restaurant</br>et commander{% endif %}</p></button></a>
+                                        {% endif %}
+                                        {% if is_mobile() %}
+                                            <a class="maps-link col-xs-12" target="_blank" href="https://maps.google.com?q={{ restaurant.address }}" style="padding-left: 0px !important; padding-right: 31px !important">Voir la maps</a>
+                                        {% endif %}
+                                    </div>
+                                {% endif %}
+                            </li>
+                            {% if loop.index % 3 == 0 %}{% set page = page + 1 %}{% endif %}
+                        {% endfor %}
+                    </ul>
+                    {% if restaurantData is defined and restaurantData | length > 3 %}
+                    <div class="row">
+                        <i class="fa fa-angle-left fa-2x col-xs-2 color-grey-4 previous"></i>
+                        <p class="col-xs-7 text-center color-grey-4">{{ is_mobile() ? 'Restaurants suivants' : 'Voir les restaurants suivants' }}</p>
+                        <i class="fa fa-angle-right fa-2x col-xs-2 color-grey-4 next" style="text-align: right;"></i>
+                    </div>
+                    {% endif %}
+                </div>
+                {% if not is_mobile() %}
+                    <div id="map_canvas" class="col-sm-6">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        {% if is_mobile() %}
+        $('footer').remove();
+        {% endif %}
+        $('footer').addClass('full');
+        $('.navbar-nav').addClass('homepage');
+
+        var
+            map,
+            markers = [],
+            infoWindows = []
+        ;
+
+        map = new google.maps.Map(document.getElementById('map_canvas'), {
+            center: {lat: {{ lat }}, lng: {{ lng}} },
+            scrollwheel: true,
+            zoom: 14
+        });
+
+        {% for restaurantData in restaurants %}
+            {% set restaurant = restaurantData[0]  %}
+            markers['{{ restaurant.slug }}'] = new google.maps.Marker({
+                map: map,
+                position: {lat: {{ restaurant.address.latitude }}, lng: {{ restaurant.address.longitude }} },
+                title: "{{ restaurant.name }}"
+            });
+            infoWindows["{{ restaurant.slug }}"] = new google.maps.InfoWindow({
+                content: '<h4 class="color-grey-2">{{ restaurant.name }}</h4><br>'
+            });
+
+            markers['{{ restaurant.slug }}'].addListener('click', function() {
+                for(var key in infoWindows)
+                    infoWindows[key].close();
+
+                infoWindows["{{ restaurant.slug }}"].open(map, markers['{{ restaurant.slug }}']);
+            });
+            {% if loop.index > 3 %}
+                markers['{{ restaurant.slug }}'].setVisible(false);
+            {% endif %}
+        {% endfor %}
+
+        var
+            page = 0,
+            nbPages = Math.round({{ restaurants|length }} / 3)
+        ;
+
+
+        $('.previous').click(function(){
+            page--;
+            page = page < 0 ? nbPages : page;
+
+            showPages();
+        });
+
+        $('.next').click(function(){
+            page++;
+            page = page > nbPages ?  0 : page;
+
+            showPages();
+        });
+
+        var showPages = function(){
+            console.log(page);
+            for (var key in markers) {
+                markers[key].setVisible(false);
+            }
+            $('ul.restaurant-list').find('li').hide();
+            $('ul.restaurant-list').find('li').each(function(){
+                if ($(this).attr('data-page') == page) {
+                    console.log($(this));
+                    $(this).show();
+                    markers[$(this).attr('data-restaurant')].setVisible(true);
+                }
+            });
+
+
+        }
+
+    </script>
+{% endblock %}

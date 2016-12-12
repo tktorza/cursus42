@@ -1,0 +1,14 @@
+<div class="modal-dialog {% block modalClass %}{% endblock %}">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="fa fa-remove fa-lg"></i></button>
+
+            <h3 class="modal-title">{% block title %}{% endblock %}</h3>
+        </div>
+
+        <div class="modal-body">
+            {% block body %}{% endblock %}
+            {% block javascripts %}{% endblock %}
+        </div>
+    </div>
+</div>

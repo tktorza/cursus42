@@ -1,0 +1,51 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'settings',
+        route: 'board_settings_mails',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding" id="planning">
+    <form method="post" action="{{ path('board_settings', { contextPk: contextPk, type: type }) }}">
+    <div class="row">
+        <div class="col-md-8 padding-v-40 padding-h-40 bg-white">
+
+            {% for flashMessage in app.session.flashbag.get('success') %}
+                <div class="alert alert-success" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <h3>Mails</h3>
+
+            <div class="form-group">
+                {{ form_row(form.notification_mails, { attr: { class: 'form-control input-lg', rows: 4 } }) }}
+                <small>Plusieurs mails peuvent être saisis, veuillez-les séparer par une virgule.</small>
+            </div>
+            <div class="form-group">
+                {{ form_row(form.emailPayment, { attr: { class: 'form-control input-lg', rows: 4 } }) }}
+                <small>Mail unique.</small>
+            </div>
+            {% if form.tttEventValidationMail is defined %}
+            <div class="form-group">
+                {{ form_row(form.tttEventValidationMail, { attr: { class: 'form-control input-lg', rows: 4 } }) }}
+                <small>Plusieurs mails peuvent être saisis, veuillez-les séparer par une virgule.</small>
+            </div>
+            {% endif %}
+
+            <br><br><br><br><br><br><br><br>
+
+            {{ form_rest(form) }}
+        </div>
+
+        <div class="col-md-4 padding-v-40 padding-h-40">
+        </div>
+    </div>
+    {% include 'ClabBoardBundle:Base:formBottom.html.twig' %}
+    </form>
+</div>
+{% endblock %}

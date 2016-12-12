@@ -1,0 +1,43 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_print',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="social">
+    <div class="row">
+        <div class="col-md-8">
+            <section class="panel">
+                <header class="panel-heading">Impression de ticket de caisse</header>
+                <div class="panel-body">
+                    {{ form_start(form) }}
+                        <h2>Impression</h2>
+                        <br>
+                        <div class="form-group>">
+                            {{ form_row(form.autoPrint, { attr: { class: 'icheck inline' } }) }}
+                        </div>
+                        <div class="form-group>">
+                            {{ form_row(form.footerPrint, { attr: { class: 'form-control ' } }) }}
+                        </div>
+                        <div class="form-group>">
+                            {{ form_row(form.printImageFile, { attr: { class: 'form-control ' } }) }}
+                        </div>
+
+
+
+                        <hr>
+
+                        <button type="submit" class="btn btn-primary btn-block">Enregister</button>
+                    {{ form_rest(form) }}
+                    {{ form_errors(form) }}
+                    {{ form_end(form) }}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

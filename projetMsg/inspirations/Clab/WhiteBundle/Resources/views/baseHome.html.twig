@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="fr" xml:lang="fr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{{ clientName | upper }} {% block title %}{% endblock %}</title>
+    <meta name="description" content="{% block metaDescription %}{% endblock %}">
+    <meta name="keywords" content="{% block metaKeywords %}{% endblock %}">
+    <meta property="og:title" content="{{ clientName | upper }} {% block ogtitle %}{{ metaTitle }}{% endblock %}" />
+    <meta property="og:description" content="{% block ogdescription %}{% endblock %}" />
+    <link href='https://fonts.googleapis.com/css?family=Lora:700%7CLato:400,700%7COpen+Sans:100,400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/css/bootstrap-datepicker.min.css">
+    {% block head %}{% endblock %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
+    <link rel="stylesheet" href="{{ asset('bundles/clabwhite/dist/css/main.css') }}?version=1.0">
+    <link rel="stylesheet" href="{{ asset('vendors/bootstrap-select/dist/css/bootstrap-select.min.css') }}?version=1.0">
+    <link rel="icon" href="{{ asset('images/favicon.ico') }}" />
+
+    </head>
+    <body class="{% block bodyClass%}{% endblock %}">
+        {% include 'ClabWhiteBundle::popupLogin.html.twig' %}
+        <div id="content">
+        {% block body %}
+
+        {% endblock %}
+
+        <div class="modal fade" id="modal" aria-labelledby="modal" aria-hidden="true">
+        </div>
+
+        {% block javascripts %}
+            <script src="https://code.jquery.com/jquery-2.2.1.min.js"></script>
+            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+            <script src="https://maps.google.com/maps/api/js?libraries=places&key=AIzaSyBM13V8VgC3ZlPvtwAj6Svogy-xYlXQirU"></script>
+            <script src="{{ asset('bundles/clabwhite/dist/js/app.min.js') }}?version=1.0"></script>
+            <script src="{{ asset('vendors/jquery.cookie/jquery.cookie.js') }}"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.js"></script>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.0/js/bootstrap-datepicker.min.js"></script>
+            <script src="https://use.typekit.net/twn8ddp.js"></script>
+            <script>Typekit.load({ async: true });</script>
+            <script type="text/javascript">
+                {% for flashMessage in app.session.flashbag.get('notice') %}
+                sweetAlert('Oops...', '{{ flashMessage|trans|escape('js') }}', 'error');
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'success');
+                {% endfor %}
+                {% for flashMessage in app.session.flashbag.get('danger') %}
+                sweetAlert('', '{{ flashMessage|trans|escape('js') }}', 'danger');
+                {% endfor %}
+            </script>
+        {% endblock %}
+    </body>
+</html>

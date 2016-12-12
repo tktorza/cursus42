@@ -1,0 +1,49 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_iframe',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding" id="planning">
+    <form method="post" action="{{ path('board_appstore_iframe', { contextPk: contextPk }) }}">
+
+        <div class="row">
+            <div class="col-md-8 padding-v-40 padding-h-40 bg-white">
+                <h2>Site web marchand</h2>
+
+                <br>
+
+                <p>Votre site marchand est disponible en accès direct, ou directement intégré sur votre site web.</p>
+
+                <p>Avec un lien direct :</p>
+                <pre><a href="{{ url }}" target="_blank">{{ url }}</a></pre>
+
+                <p>Afin d'intégrer la commande en ligne sur votre site, il suffit de copier-coller ce code à l'endroit ou vous souhaitez voir apparaitre l'interface.</p>
+                {% set code = '
+                    <div id="clickeat"></div><script type="text/javascript" src="http://' ~ assetUrl ~ asset('front/bundle/iframe/build/js/embed.min.js') ~ '"></script><script type="text/javascript">var pymParent = new pym.Parent("clickeat", "' ~ url ~ '", {});</script>
+                ' %}
+                <pre class="prettyprint">{% spaceless %}{{ code }}{% endspaceless %}</pre>
+
+            </div>
+
+            <div class="col-md-4 padding-v-40 padding-h-40">
+                <a href="{{ url }}" target="_blank" class="btn btn-primary btn-lg btn-block"><i class="fa fa-eye icon-left"></i>Voir l'interface</a>
+
+                <br>
+
+                <div class="big-label">
+                    {{ form_row(form.is_online, { attr: { class: 'icheck' } }) }}
+                </div>
+
+                {{ form_rest(form) }}
+            </div>
+        </div>
+
+        {% include 'ClabBoardBundle:Base:formBottom.html.twig' with { cancelRoute: path('board_appstore_iframe', { contextPk: contextPk }) } %}
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,86 @@
+<form method="post" action="{{ path('board_meal_slot_edit', { context: context, contextPk: contextPk, slug: slot.slug }) }}" novalidation novalidate class="ajax-form" data-callback="#mealSlotList">
+    <div class="drawer-scroll">
+        {% if context == 'client' %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-warning icon-left"></i>Les modifications s'appliqueront sur tous vos restaurants.</p>
+        </div>
+        {% elseif slot.parent %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-lock icon-left"></i>Cette étape provient de votre enseigne, les options d'édition peuvent être limitées.</p>
+        </div>
+        {% endif %}
+
+        {% if form.name is defined %}
+        <div class="form-group" {% if slot.parent %}style="display:none;"{% endif %}>
+            {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+        </div>
+        {% endif %}
+
+        <div id="choice-fields-list" class="input-list sortable">
+        {% for category in slot.productCategories %}
+            {% for product in category.products %}
+                <div class="row input-row choice-field">
+                    <div class="col-md-1">
+                        {{ form_widget(form['product_' ~ product.id ~ '_disabled'], { attr: { class: 'icheck' }, label_render: false }) }}
+                    </div>
+                    <div class="col-md-2">
+                        <img src="{{ asset(product.gallery.cover.webPath) | imagine_filter('square_50') }}">
+                    </div>
+                    <div class="col-md-3">
+                        {{ product.name }}
+                    </div>
+                    <div class="col-md-3">
+                        {{ form_widget(form['product_' ~ product.id ~ '_price'], { attr: { class: 'form-control input-right', placeholder: 0 } }) }}
+                    </div>
+                    <div class="col-md-1">
+                        €
+                    </div>
+                </div>
+            {% endfor %}
+        {% endfor %}
+        </div>
+
+        <br><br>
+
+        {% if slot.id and not slot.parent %}
+        <a class="btn btn-sm btn-primary btn-block ladda-button btn-form-watch" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_meal_slot_categories', { context: context, contextPk: contextPk, slug: slot.slug }) }}">Ajouter/supprimer des catégories</a>
+        {% endif %}
+
+        {{ form_rest(form) }}
+
+        {% if slot.meals|length > 0 %}
+        <hr>
+        <h4>Formules utilisant cette étape</h4>
+        <p><small>Chaque modification affectera ces formules.</small></p>
+        <ul class="list-group">
+            {% for meal in slot.meals %}
+            <li class="list-group-item">
+                <img src="{{ meal.gallery.cover.webPath | imagine_filter('square_40') }}">
+                &nbsp;&nbsp;
+                {{ meal.name }}
+            </li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: slot.id and not slot.parent ? path('board_meal_slot_delete', { context: context, contextPk: contextPk, slug: slot.slug }) : null } %}
+</form>
+
+<script type="text/javascript">
+$('.sortable').sortable({
+    handle: '.handle',
+    cursor: 'move',
+    helper: function(event, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    },
+    update: function(event, ui) {
+        $('.choice-field').each(function() {
+            $(this).find('.choice-position').val($(this).index() + 1);
+        });
+    }
+});
+</script>

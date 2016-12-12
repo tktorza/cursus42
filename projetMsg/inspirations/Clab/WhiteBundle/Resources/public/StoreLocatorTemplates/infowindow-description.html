@@ -1,0 +1,64 @@
+{{#location}}
+<div class="map-tooltip">
+    <h4 class="title restaurant-title">
+        <a href="{{link}}">{{name}}</a>
+    </h4>
+    <p class="tags">
+        {{#if tags}}
+        {{#each tags}}
+        {{#ifCond @index "==" 0}}
+        {{this}}
+        {{else}}
+        , {{this}}
+        {{/ifCond}}
+        {{/each}}
+        {{/if}}
+    </p>
+    <dl>
+        {{#if averagePrice}}
+        <dt>Prix moyen :</dt>
+        <dd>
+            {{#ifCond averagePrice '==' 1}}
+            <div data-toggle="tooltip" title="Moins de 6 &euro;">
+                <i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro"></i><i class="fa fa-euro"></i><i class="fa fa-euro"></i>
+            </div>
+            {{/ifCond}}
+            {{#ifCond averagePrice '==' 2}}
+            <div data-toggle="tooltip" title="Entre 6 &euro; et 12 &euro;">
+                <i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro"></i><i class="fa fa-euro"></i>
+            </div>
+            {{/ifCond}}
+            {{#ifCond averagePrice '==' 3}}
+            <div data-toggle="tooltip" title="Entre 12 &euro; et 16 &euro;">
+                <i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro"></i>
+            </div>
+            {{/ifCond}}
+            {{#ifCond averagePrice '==' 4}}
+            <div data-toggle="tooltip" title="Plus de 16 &euro;">
+                <i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i><i class="fa fa-euro" style="color: #00a0c4"></i>
+            </div>
+            {{/ifCond}}
+        </dd>
+        {{/if}}
+    </dl>
+    <dl>
+        {{#if planning}}
+        <dt>Horaires du jour:</dt>
+        <dd>
+            {{planning}}
+        </dd>
+        {{/if}}
+    </dl>
+    <div class="clearfix actions">
+        <div class="pull-right">
+            <a href="{{link}}" class="btn btn-default">
+                Profil
+            </a>
+            {{#ifCond status '==' 3000}}
+            <a href="{{link}}/commande" class="btn btn-success btn-order">Commande</a>
+            {{else}}
+            {{/ifCond}}
+        </div>
+    </div>
+</div>
+{{/location}}

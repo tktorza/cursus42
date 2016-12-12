@@ -1,0 +1,24 @@
+    <div class="col-md-6 col-bordered">
+        <h5 class="uppercase">Connexion</h5>
+        <form action="{{ path("fos_user_security_check") }}" method="post" id="formLogin" class="login-form">
+            <div class="form-group">
+                <input type="email" id="_username" name="_username" value="{{ last_username }}" required="required" class="form-control"  placeholder="Email *">
+            </div>
+
+            <div class="form-group">
+                <input required type="password" name="_password" class="form-control" placeholder="Mot de passe *" />
+            </div>
+
+            <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+            <p class="text-center"><button type="submit" id="buttonLogin" class="buttonLogin btn btn-primary">Connectez-vous</button></p>
+
+            <p class="text-center"><small><a href="{{ path('fos_user_resetting_request') }}">Mot de passe perdu ?</a></small></p>
+        </form>
+        {#<p class="text-center">
+            <a href="{{ path('facebook_login') }}" class="fb-button btn btn-primary color-white margin-v-15">Facebook Connect</a>
+        </p>
+        <p class="text-center">
+            <a href="{{ path('google_login') }}" class="google-button btn btn-primary color-white margin-v-15">Google Connect</a>
+        </p>#}
+    </div>
+

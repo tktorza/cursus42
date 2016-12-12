@@ -1,0 +1,42 @@
+Clab\RestaurantBundle\Entity\Restaurant:
+    properties:
+        name:
+            - NotBlank: ~
+        tags:
+            - Count:
+                max: 3
+                maxMessage: "Vous ne pouvez pas en spécifier plus de {{ limit }}"
+
+Clab\RestaurantBundle\Entity\Product:
+    properties:
+        name:
+            - NotBlank: ~
+        price:
+            - NotBlank: ~
+        tax:
+            - NotBlank: ~
+        unlimitedStock:
+            - NotNull: ~
+        stock:
+            - NotNull: ~
+        restaurantMenus:
+            - Count:
+                min: 1
+                minMessage: "Vous devez associer le produit à au moins une carte"
+
+Clab\RestaurantBundle\Entity\ProductCategory:
+    properties:
+        name:
+            - NotBlank: ~
+
+Clab\RestaurantBundle\Entity\Meal:
+    properties:
+        name:
+            - NotBlank: ~
+        price:
+            - NotBlank: ~
+
+Clab\RestaurantBundle\Entity\StaffMember:
+    properties:
+        name:
+            - NotBlank: ~

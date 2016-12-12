@@ -1,0 +1,4 @@
+Clab\MediaBundle\Entity\Album:
+    properties:
+        name:
+            - NotBlank: ~

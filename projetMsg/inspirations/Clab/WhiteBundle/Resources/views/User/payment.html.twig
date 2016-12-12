@@ -1,0 +1,294 @@
+{% extends 'ClabWhiteBundle::baseHome.html.twig' %}
+
+{% block body %}
+
+    <section id="account" class="container">
+        <div class="row">
+            <div class="col-md-4">
+                {%  include 'ClabWhiteBundle:User:profileBase.html.twig' %}
+            </div>
+
+
+            <div class="col-md-8">
+                <div id="payment1">
+                    <ul id="cards" class="list-group row">
+                        {% if cards is defined and cards is not null and cards|length >0 %}
+<h3>Mes cartes enregistrées</h3>
+                            <hr />
+                            {% for card in cards %}
+                                <li class="list-group-item col-xs-8 col-xs-offset-2" id="{{ card.id }}">
+                                    <div class="col-xs-1">
+                                        {% if card.brand == 'Visa' %}
+                                            <i class="fa fa-cc-visa"></i>
+                                        {% elseif card.brand == 'MasterCard' %}
+                                            <i class="fa fa-cc-mastercard"></i>
+                                        {% elseif card.brand == 'Visa-electron' or card.brand == 'Maestro' %}
+                                            <i class="fa fa-cc-visa"></i>
+                                        {% else %}
+                                            <i class="fa fa-credit-card"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div class="col-xs-4">
+                                        Se terminant par:<br>{{ card.last4 }}
+                                    </div>
+                                    <div class="col-xs-3">
+                                        Expirant le:<br>{{ card.exp_month|date('m') }} / {{ card.exp_year }}
+                                    </div>
+                                    <a class="col-xs-1 remove-card text-center pull-right" idCard="{{ card.id }}"
+                                       data-toggle="tooltip" title="Supprimer"><i class="fa fa-times" style="font-size: 20px;"></i></a>
+                                </li>
+                            {% endfor %}
+                        {% else %}
+                            <h3 id="noCard">Vous n'avez pas de cartes enregistrées</h3>
+                        {% endif %}
+                    </ul>
+                    <div class="col-xs-3 col-xs-offset-2">
+                        <a id="cardFormToggle">Saisir une nouvelle carte</a>
+                    </div>
+
+
+                    <br>
+                    <div id="cardForm" class="well col-xs-8 col-xs-offset-2" style="background-color: transparent!important;"{% if cards is defined and cards is not null and cards|length>0 %}hidden{% endif %}>
+                        {{ render(controller('ClabWhiteBundle:Order:createCard',{user: app.user})) }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+{% block footerClass %}relative background-black-matsuri{% endblock %}
+{% block upperFooterClass %}background-black-matsuri{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+    <script type="text/javascript" src="{{ asset('vendors/jquery-creditcardvalidator/jquery.creditCardValidator.js')
+    }}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+            $("#cardFormToggle").click(function () {
+                if (!$('#cardForm').is(":visible")) {
+                    $(this).html('Fermer');
+                    $("#cardForm").slideDown();
+                }
+                else {
+                    $(this).html('Saisir une nouvelle carte');
+                    $("#cardForm").slideUp();
+                }
+            });
+            $(".cardFormToggle").click(function(){
+                if(!$('#cardForm').is(":visible")){
+                    $('#cardFormToggle').html('Fermer');
+                    $("#cardForm").slideDown();
+                }
+                else{
+                    $('#cardFormToggle').html('Saisir une nouvelle carte');
+                    $("#cardForm").slideUp();
+                }
+            })
+
+            $('.remove-card').click(function () {
+                var ul = "{{ path('clab_white_card_remove',{user:app.user.id, card:'PLACEHOLDER'}) }}"
+                ul = ul.replace('PLACEHOLDER', $(this).attr('idCard'));
+                var id = "#" + $(this).attr('idCard');
+                $.ajax({
+                    type:       'GET',
+                    url:        ul,
+                    beforeSend: function () {
+                        $(id).slideUp('slow');
+                    },
+                    success:    function (data) {
+                        $(id).remove();
+                        if($('#cards').find('li').length <=0){
+                            $('#cards').html('<h3 id="noCard">Vous n\'avez pas de cartes enregistrées</h3>')
+                            $('#cardFormToggle').html('Fermer');
+                            $("#cardForm").slideDown();
+                        }
+                    },
+                    error:      function (XMLHttpRequest, textStatus, errorThrown) {
+                        $(id).slideDown('slow');
+                        alert('Error : ' + errorThrown);
+                    }
+                });
+            })
+
+            var isAmex = false;
+            $(function () {
+
+                $('#clab_stripe_cardformtype_card').validateCreditCard(function (result) {
+                    isAmex = false;
+                    if (result.card_type == null) {
+                        $('.log').html('<i class="fa fa-credit-card"></i>');
+                    }
+                    else if (result.card_type.name == 'mastercard') {
+                        $('.log').html('<i class="fa fa-cc-mastercard"></i>');
+                    }
+                    else if (result.card_type.name == 'visa') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                    else if (result.card_type.name == 'amex') {
+                        sweetAlert('Oops...', 'Nous n\'acceptons pas d\'American express.', 'error')
+                        $('.log').html('<i class="fa fa-cc-amex"></i>');
+                        isAmex = true;
+                    }
+                    else if (result.card_type.name == 'visa_electron') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                    else if (result.card_type.name == 'maestro') {
+                        $('.log').html('<i class="fa fa-cc-visa"></i>');
+                    }
+                });
+            });
+            Stripe.setPublishableKey('{{ publishableKey }}');
+
+            var errorMessages = {
+                incorrect_number: "Le numéro de carte est incorrect.",
+                invalid_number: "Le numéro de carte est invalide.",
+                invalid_expiry_month: "La date d'expiration est incorrecte.",
+                invalid_expiry_year: "L'année d'expiration est invalide.",
+                invalid_cvc: "Le code de sécurité de la carte est invalide.",
+                expired_card: "La carte est expirée.",
+                incorrect_cvc: "Le code de sécurité de la carte est incorrect.",
+                incorrect_zip: "Le code postal de la carte est incorrect.",
+                card_declined: "La carte a été refusée.",
+                missing: "Erreur.",
+                processing_error: "Une erreur est survenue lors du traitement de votre carte.",
+                rate_limit:  "Une erreur est survenue lors du traitement de votre carte. Veuillez nous en faire part si le probleme persiste"
+            };
+
+            var stripeResponseHandler = function (status, response) {
+                var $form = $('#payment-form');
+                if (response.error || isAmex) {
+                    sweetAlert('Oops...', '' + errorMessages[ response.error.code ], 'error');
+                    $form.find('button').prop('disabled', false);
+                } else {
+                    // token contains id, last4, and card type
+                    var token = response.id;
+                    // Insert the token into the form so it gets submitted to the server
+                    $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                    // and re-submit
+                    var values = {};
+                    $.each($form.serializeArray(), function (i, field) {
+                        values[field.name] = field.value;
+                    });
+                    $form.find('.fa-spin').show();
+                    $.ajax({
+                        type:    $form.attr('method'),
+                        url:     $form.attr('action'),
+                        data:    values,
+                        success: function (data) {
+                            $form.find('.fa-spin').hide();
+                            var countries = [
+                                'AT',
+                                'US',
+                                'BE',
+                                'BG',
+                                'HR',
+                                'CY',
+                                'CZ',
+                                'DK',
+                                'EE',
+                                'FI',
+                                'FR',
+                                'DE',
+                                'GB',
+                                'EL',
+                                'HU',
+                                'IE',
+                                'IT',
+                                'LV',
+                                'LT',
+                                'LU',
+                                'MT',
+                                'NL',
+                                'NO',
+                                'PL',
+                                'PT',
+                                'RO',
+                                'SK',
+                                'SI',
+                                'ES',
+                                'SE',
+                                'CH'];
+                            $form.find('button').prop('disabled', false);
+                            $('#cards').html('');
+                            for (var i = 0; i < data.data.length; i++) {
+                                if (countries.indexOf(data.data[i].country) >= 0) {
+                                    var cardIcon = "";
+                                    if (data.data[i].brand == 'MasterCard') {
+                                        cardIcon += '<i class="fa fa-cc-mastercard"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Visa') {
+                                        cardIcon += '<i class="fa fa-cc-visa"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Visa_electron') {
+                                        cardIcon += '<i class="fa fa-cc-visa"></i>';
+                                    }
+                                    else if (data.data[i].brand == 'Maestro') {
+                                        cardIcon += '<i class="fa fa-cc-visa"></i>';
+                                    } else {
+                                        cardIcon += '<i class="fa fa-credit-card"></i>';
+                                    }
+                                    console.log(cardIcon);
+                                    $('#cards').append('<li class="list-group-item col-xs-8 col-xs-offset-2" id="' + data.data[i].id + '">' +
+                                            '<div class="col-xs-1">' +
+                                            '<input type="radio" name="cards" value="' + data.data[i].id + '">' +
+                                            '</div>' +
+                                            '<div class="col-xs-1">' + cardIcon + '</div>' +
+                                            '<div class="col-xs-4">' +
+                                            'Se terminant par:<br>' + data.data[i].last4 + '</div>' +
+                                            '<div class="col-xs-3">' +
+                                            'Expirant le:<br>' + data.data[i].exp_month + ' / ' + data.data[i].exp_year + '</div>' +
+                                            '<a class="col-xs-1 remove-card text-center pull-right" idCard="' + data.data[i].id + '" data-toggle="tooltip" title="supprimer"><i class="fa fa-times" style="font-size: 20px;"></i></a>' +
+                                            '</li>');
+                                }
+                            }
+                            jcf.replaceAll();
+                            $('.remove-card').click(function () {
+
+
+                                var ul = "{{ path('clab_white_card_remove',{user:app.user.id, card:'PLACEHOLDER'}) }}"
+                                ul = ul.replace('PLACEHOLDER', $(this).attr('idCard'));
+                                var id = "#" + $(this).attr('idCard');
+                                $.ajax({
+                                    type:       'GET',
+                                    url:        ul,
+                                    beforeSend: function () {
+                                        $(id).slideUp('slow');
+                                    },
+                                    success:    function (data) {
+                                        $(id).remove();
+                                    },
+                                    error:      function (XMLHttpRequest, textStatus, errorThrown) {
+                                        $(id).slideDown('slow');
+                                        alert('Error : ' + errorThrown);
+                                    }
+                                });
+                            })
+                            $('input[name="cards"]').click(function () {
+                                $("#card-token").val($(this).val());
+                            })
+                            $("#cardFormToggle").html('Saisir une nouvelle carte');
+                            $("#cardForm").slideUp();
+                        },
+                        error:   function (XMLHttpRequest, textStatus, errorThrown) {
+                            $form.find('button').prop('disabled', false);
+                            alert('Error : ' + errorThrown);
+                        }
+                    });
+                }
+            };
+
+            $('#payment-form').submit(function (e) {
+                var $form = $(this);
+                // Disable the submit button to prevent repeated clicks
+                $form.find('button').prop('disabled', true);
+                Stripe.card.createToken($form, stripeResponseHandler);
+                // Prevent the form from submitting with the default action
+                return false;
+            });
+        });
+    </script>
+{% endblock %}

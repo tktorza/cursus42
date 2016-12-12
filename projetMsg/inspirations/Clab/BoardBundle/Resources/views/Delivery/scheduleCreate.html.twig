@@ -1,0 +1,13 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Création tournée{% endblock %}
+
+{% block body %}
+    <a class="btn btn-success btn-lg btn-block" href="{{ path('board_delivery_schedule_edit', { context:context, contextPk: contextPk }) }}">
+        <i class="fa fa-retweet icon-left"></i>Créer une tournée récurrente
+    </a>
+    <br>
+    <a class="btn btn-primary btn-lg btn-block" href="{{ path('board_delivery_schedule_edit_event', { context:context, contextPk: contextPk }) }}">
+        <i class="fa fa-calendar icon-left"></i>Créer une tournée évènement
+    </a>
+{% endblock %}

@@ -1,0 +1,7 @@
+board_tools_synch:
+    path:  /synch
+    defaults: { _controller: ClabBoardBundle:Tools:synch }
+
+board_tools_loyalty:
+    path:  /loyalty
+    defaults: { _controller: ClabBoardBundle:Tools:loyalty }

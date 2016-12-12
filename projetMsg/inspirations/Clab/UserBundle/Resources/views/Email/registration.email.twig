@@ -1,0 +1,16 @@
+{% block subject %}
+{% autoescape false %}
+Confirmation d'inscription @Click Eat
+{% endautoescape %}
+{% endblock %}
+
+{% block body_text %}
+{% endblock %}
+
+{% block body_html %}
+Bonjour {{ user.username }},
+
+Pour confirmer votre inscription sur Click Eat, cliquez sur ce lien: {{ confirmationUrl }}
+
+A bientôt sur Click Eat.
+{% endblock %}

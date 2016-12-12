@@ -1,0 +1,48 @@
+{% extends 'ClabMultisiteBundle::base.html.twig' %}
+
+{% block title %}Notre menu - {% endblock %}
+{% block ogtitle %}Notre menu - {% endblock %}
+{% block metaDescription %}Consultez notre menu.{% endblock %}
+{% block ogdescription %}Consultez notre menu.{% endblock %}
+{% block metaKeywords %}menu, horaires,avis, commande en ligne, informations, photo, contact{% endblock %}
+
+{% block subnav %}
+    {% include 'ClabMultisiteBundle::subnav.html.twig' with { currentPage: 'menu' } %}
+{% endblock %}
+
+{% block body %}
+<section class="container padding-v-60" id="menu">
+    {% for category in categories %}
+        {% if loop.first or (loop.index + 1) % 2 == 0 %}<div class="row">{% endif %}
+
+        <div class="col-md-6">
+            <h3 class="thin">{{ category.name }}</h3>
+
+            {% for product in products if product.category == category %}
+            <div class="media product {% if product.coverDefault %}no-cover{% endif %}">
+                {% if not product.coverDefault %}
+                <div class="media-left">
+                    <a href="#" data-url="{{ url('multisite_menu_product', { slug: product.slug }) }}" class="modalAction">
+                        <img class="media-object img-circle" src="{{ product.cover }}" alt="{{ product.name }}">
+                    </a>
+                </div>
+                {% endif %}
+                <div class="media-body">
+                    <div class="media-heading">
+                        <h4>{{ product.name }}</h4> 
+                        <h5 class="price text-info">{{ product.price }}€</h5>
+                    </div>
+                    <p>{{ product.description }}</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if loop.last or loop.index % 2 == 0 %}</div><br><br>{% endif %}
+    {% endfor %}
+</section>
+{% endblock %}
+
+{% block javascripts %}
+    {% include 'ClabClickeatBundle:Mixpanel:mixpanel.html.twig' with { mixpanelTrack: 'View menu', mixpanelTrackProperties: { 'Restaurant': restaurant.name } } %}
+{% endblock %}

@@ -1,0 +1,23 @@
+Clab\DeliveryBundle\Entity\DeliveryMan:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,public,pro,follow]
+        created:
+            expose: true
+            groups: [app,public,pro,follow]
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+            groups: [app,public,pro,follow]
+        name:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getName
+            groups: [app,public,pro,follow]

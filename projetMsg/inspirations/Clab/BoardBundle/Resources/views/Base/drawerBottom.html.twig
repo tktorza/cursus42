@@ -1,0 +1,109 @@
+<div class="drawer-bottom">
+    <div class="flash-message">
+        {% for flashMessage in app.session.flashbag.get('formSuccess') %}
+          <div class="success"><i class="fa fa-check-circle icon-left"></i>{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('formError') %}
+          <div class="error"><i class="fa fa-warning icon-left"></i>{{ flashMessage }}</div>
+        {% endfor %}
+    </div>
+    <div class="form-footer">
+        {% if deleteLink is defined and deleteLink and review is not defined %}
+        <a class="btn btn-default confirmModal" data-route="{{ deleteLink }}"><i class="fa fa-trash-o"></i></a>
+        {% endif %}
+        {% if review is defined and viewLink %}
+                {% if review.isRead == true %}
+                    <a href="{{path('board_review_view', { contextPk: contextPk, id: review.id }) }}" class="btn
+                   btn-default"><i class="fa
+                    fa-eye-slash"></i></a>
+                {% else %}
+                    <a href="{{path('board_review_view', { contextPk: contextPk, id: review.id }) }}" class="btn
+                    btn-default"><i class="fa fa-eye"></i></a>
+                {% endif %}
+        {% endif %}
+        {% if restaurant is defined and restaurant %}
+        <a class="btn btn-default" data-toggle="modal" data-target="#modal-fb"><i class="fa
+        fa-facebook-official"></i></a>
+        {% endif %}
+        {% if duplicateLink is defined and duplicateLink %}
+        <a class="btn btn-default" href="{{ duplicateLink }}"><i class="fa fa-files-o"></i></a>
+        {% endif %}
+        <div class="pull-right">
+            <a class="btn btn-default" data-target="drawer-close">Annuler</a>
+            {% if review is not defined %}
+            <button type="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">Enregistrer</span></button>
+            {% else %}
+                <button type="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">Poster</span></button>
+            {% endif %}
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div id="modal-fb" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Partage sur facebook</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="img-uploader">
+                            {% if meal is defined %}
+                                {% if meal.cover %}
+                                    <img src="{{ meal.cover }}" id="galleryCover">
+                                {% endif %}
+                            {% endif %}
+                            {% if product is defined %}
+                            {% if product.cover %}
+                                <img src="{{ product.cover }}" id="galleryCover">
+                            {% endif %}
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        {% if discount is not defined %}
+                        <div class="form-group">
+                            <p><strong>Voulez-vous partager la photo ci-contre ?</strong></p>
+                            <input type="checkbox" class="icheck" id="photo-share">
+                        </div>
+                        {% endif %}
+                        <div class="form-group">
+                            <p><strong>Voulez-vous partager votre profil click-eat ?</strong></p>
+                            <input type="checkbox" class="icheck" id="link-share">
+                        </div>
+                        <div class="form-group">
+                            <p><strong>Description</strong></p>
+                            {% if product is defined %}
+                            <textarea class="form-control" rows="5" id="comment-share">{{ product.description }}</textarea>
+                            {% endif %}
+                            {% if meal is defined %}
+                                <textarea class="form-control" rows="5" id="comment-share">{{ meal.description }}</textarea>
+                            {% endif %}
+                            {% if discount is defined %}
+                                <textarea class="form-control" rows="5" id="comment-share">{{ discount.name }}</textarea>
+                            {% endif %}
+                        </div>
+                    </div>
+                    <br/>
+                    <div id="no-fb" style="color:red;"></div>
+                    <button id="share-fb" class="btn btn-primary ladda-button"
+                            style="margin-left:85%;
+                    ">Partager</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script>
+
+</script>

@@ -1,0 +1,30 @@
+{% for slot in slots %}
+<tr
+    class="clickable"
+    data-target="drawer" href="{{ path('board_meal_slot_edit', { context: context, contextPk: contextPk, slug: slot.slug }) }}"
+>
+    <td>
+        {{ slot.name }}
+    </td>
+    <td>
+            <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_meal_slot_categories', { context: context, contextPk: contextPk, slug: slot.slug }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set categoriesCount = slot.productCategories|length %}
+        {% if categoriesCount > 0 %}
+            <span class="badge badge-success">{{ categoriesCount }}</span>
+        {% else %}
+            <span class="badge">{{ categoriesCount }}</span>
+        {% endif %}
+    </td>
+    <td>
+            <a class="btn btn-sm btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_meal_slot_assign', { context: context, contextPk: contextPk, slug: slot.slug }) }}">Gérer</a>
+        &nbsp;&nbsp;
+        {% set mealCount = slot.meals|length %}
+        {% if mealCount > 0 %}
+            <span class="badge badge-success">{{ mealCount }}</span>
+        {% else %}
+            <span class="badge">{{ mealCount }}</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

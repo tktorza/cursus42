@@ -1,0 +1,16 @@
+Clab\ShopBundle\Entity\Discount:
+    properties:
+        name:
+            - NotBlank: ~
+
+Clab\ShopBundle\Entity\Coupon:
+    properties:
+        name:
+            - NotBlank: ~
+
+Clab\ShopBundle\Entity\Sale:
+    properties:
+        value:
+            - Range:
+                min: 0
+                max: 100

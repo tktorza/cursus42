@@ -1,0 +1,12 @@
+services:
+    app.media.gallery_listener:
+        class: Clab\MediaBundle\Listener\GalleryListener
+        arguments: [ @liip_imagine.cache.manager, %domain% ]
+        tags:
+            - { name: doctrine.event_listener, event: postPersist, priority: 1 }
+            - { name: doctrine.event_listener, event: postLoad }
+
+    app_media.image_manager:
+        class: Clab\MediaBundle\Service\ImageManager
+        arguments: [ @doctrine.orm.entity_manager, @service_container ]
+        scope: request

@@ -1,0 +1,101 @@
+api_store:
+    resource: "@ClabApiBundle/Resources/config/routing/foodtruck.yml"
+    prefix: /foodtrucks
+
+api_log:
+    resource: "@ClabApiBundle/Resources/config/routing/log.yml"
+
+api_discount:
+    resource: "@ClabApiBundle/Resources/config/routing/discount.yml"
+    prefix: /discounts
+
+api_coupon:
+    resource: "@ClabApiBundle/Resources/config/routing/coupon.yml"
+    prefix: /coupons
+
+api_catalog:
+    resource: "@ClabApiBundle/Resources/config/routing/option.yml"
+    prefix: /options
+
+api_category:
+    resource: "@ClabApiBundle/Resources/config/routing/category.yml"
+    prefix: /categories
+
+api_product:
+    resource: "@ClabApiBundle/Resources/config/routing/product.yml"
+    prefix: /products
+
+api_order:
+    resource: "@ClabApiBundle/Resources/config/routing/order.yml"
+
+api_cart:
+    resource: "@ClabApiBundle/Resources/config/routing/cart.yml"
+    prefix: /carts
+
+api_delivery:
+     resource: "@ClabApiBundle/Resources/config/routing/delivery.yml"
+     prefix: /delivery
+
+api_push:
+    resource: "@ClabApiBundle/Resources/config/routing/push.yml"
+
+api_meal:
+    resource: "@ClabApiBundle/Resources/config/routing/meal.yml"
+    prefix: /meals
+
+api_social:
+    resource: "@ClabApiBundle/Resources/config/routing/social.yml"
+
+api_review:
+    resource: "@ClabApiBundle/Resources/config/routing/review.yml"
+
+api_media:
+    resource: "@ClabApiBundle/Resources/config/routing/media.yml"
+
+api_pos_printer:
+    resource: "@ClabApiBundle/Resources/config/routing/posprinter.yml"
+
+api_user:
+    resource: "@ClabApiBundle/Resources/config/routing/user.yml"
+    prefix: /users
+
+api_event:
+    resource: "@ClabApiBundle/Resources/config/routing/event.yml"
+
+api_taxonomy:
+    resource: "@ClabApiBundle/Resources/config/routing/taxonomy.yml"
+
+api_restaurant:
+    resource: "@ClabApiBundle/Resources/config/routing/restaurant.yml"
+    prefix: /restaurants
+
+api_search:
+    resource: "@ClabApiBundle/Resources/config/routing/search.yml"
+    prefix: /search
+
+api_payment:
+    resource: "@ClabApiBundle/Resources/config/routing/payment.yml"
+    prefix: /payments
+
+api_friends:
+    resource: "@ClabApiBundle/Resources/config/routing/friend.yml"
+    prefix: /friends
+
+api_licences:
+    resource: "@ClabApiBundle/Resources/config/routing/licence.yml"
+    prefix: /licences
+
+api_user_send_validation2:
+    path:  /user/send-validation
+    defaults: { _controller: ClabApiBundle:RestUser:sendValidationCode }
+    methods: [POST]
+
+api_user_send_validate2:
+    path:  /user/validate
+    defaults: { _controller: ClabApiBundle:RestUser:validate }
+    methods: [POST]
+
+api_user_me:
+    path:  /me
+    defaults: { _controller: ClabApiBundle:RestUser:me }
+    methods: [GET]

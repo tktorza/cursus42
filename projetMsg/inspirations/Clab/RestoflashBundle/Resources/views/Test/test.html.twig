@@ -1,0 +1,14 @@
+{% import 'ClabRestoflashBundle:Macro:restoflash.html.twig' as restoflash %}
+
+<!doctype html>
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+    <form method="post" action="{{ url }}">
+        {{ restoflash.form(form) }}
+        <button type="submit">Go</button>
+    </form>
+</body>
+</html>

@@ -1,0 +1,83 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% if forcedPricing is defined and forcedPricing  %}
+        {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+            category: 'restaurant',
+            route: 'board_meal_library',
+            forcedPricing: true,
+            forcedPricingLabel: 'Créer une formule',
+        } %}
+    {% else %}
+        {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+            category: 'restaurant',
+            route: 'board_meal_library',
+            rightLink: path('board_meal_edit', { contextPk: contextPk, context: context }),
+            rightLinkLabel: 'Créer une formule',
+            rightLinkDrawer: true,
+        } %}
+    {% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="meals">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="{{ path('board_meal_library', { context: context, contextPk: contextPk }) }}">Mes formules</a></li>
+        <li><a href="{{ path('board_meal_slot_library', { context: context, contextPk: contextPk }) }}">Mes étapes</a></li>
+    </ul>
+    <br>
+    <section class="panel">
+        <div class="panel-body">
+            <table class="table table-hover table-stripped table-bordered" id="datatable" width="100%">
+                <thead>
+                    <th>Nom</th>
+                    <th>Prix</th>
+                    <th>Etapes</th>
+                    <th>Ordre</th>
+                </thead>
+                <tbody class="sortable" id="mealList" data-url="{{ path('board_meal_library_list', { contextPk:
+                    contextPk, context:
+                    context }) }}">
+                    {% include 'ClabBoardBundle:Meal:libraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script src="https://code.jquery.com/ui/1.10.1/jquery-ui.min.js"></script>
+<script type="text/javascript">
+{% if meal is defined and meal %}
+    $('#meal-{{ meal }}').trigger('click');
+{% endif %}
+</script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('.sortable').sortable({
+                handle: '.handle',
+                cursor: 'move',
+                helper: function(event, ui) {
+                    ui.children().each(function() {
+                        $(this).width($(this).width());
+                    });
+                    return ui;
+                },
+                update: function(event, ui) {
+                    var info = $(this).sortable('serialize');
+                    console.log(info);
+                    $.ajax({
+                        type: "POST",
+                        url: "{{ path('board_meal_reorder', { context: context, contextPk: contextPk }) }}",
+                        data: info,
+                        context: document.body,
+                        success: function(e){
+                            $('#mealList').html(e);
+                        }
+                    })
+                }
+            });
+        });
+    </script>
+{% endblock %}

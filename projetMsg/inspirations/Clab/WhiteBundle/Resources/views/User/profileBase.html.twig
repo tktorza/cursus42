@@ -1,0 +1,19 @@
+<div id="account-panel">
+    <div class="header">
+        <h5>Mon profil</h5>
+    </div>
+
+    <div class="content">
+        <label for="avatar-input" class="avatar-edit">
+            <img src="{{ app.user.cover | imagine_filter('square_40') }}"
+                 class="avatar img-responsive">
+        </label>
+        <h4 class="text-center">{{ app.user.firstName }} {{ app.user.lastName }}</h4>
+        <br>
+        <ul>
+            <li><a href="{{ path('clab_white_user_profile') }}" class="alt">Mon compte</a></li>
+            <li><a href="{{ path('clab_white_user_orders') }}" class="alt">Historique des commandes</a></li>
+            <li><a href="{{ path('clab_white_user_payments') }}" class="alt">Moyen de paiement</a></li>
+        </ul>
+    </div>
+</div>

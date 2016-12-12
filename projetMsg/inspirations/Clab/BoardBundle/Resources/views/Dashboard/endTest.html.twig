@@ -1,0 +1,33 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/features/icon-test.png') }}">
+                    <br><br>
+                    <h2>Votre période d’essai est maintenant terminée</h2>
+                    <p>
+                        Pour continuer de bénéficier de nos services, souscrivez à l’une de nos offres, à partir de 0€/mois
+                    </p>
+                    <br><br>
+                    <div class="row">
+                        <div class="col-md-4 col-md-offset-2">
+                            <a class="btn btn-default btn-lg btn-block" data-target="ajaxModal" href="{{ path('board_contact') }}">Contacter un commercial</a>
+                        </div>
+                        <div class="col-md-4">
+                            <form method="post" action="{{ path('board_onboarding_onboard', { contextPk: contextPk }) }}">
+                                <button type="submit" class="btn btn-success btn-lg btn-block">S'inscrire<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

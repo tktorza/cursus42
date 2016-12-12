@@ -1,0 +1,8 @@
+Clab\BoardBundle\Entity\POSPrinter:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        name:
+            expose: true
+        address:
+            expose: true

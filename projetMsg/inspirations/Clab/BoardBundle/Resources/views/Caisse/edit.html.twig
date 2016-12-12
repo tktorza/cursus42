@@ -1,0 +1,49 @@
+<div class="drawer-scroll">
+    {{ dump(session.tva) }}
+    <ul class="list-group">
+        <li class="list-group-item">Restaurant: {{ session.restaurant.name }}</li>
+        <li class="list-group-item">Date de début: {{ session.dateStart | date('d-m-Y G:i') }}</li>
+        <li class="list-group-item">Date de fin: {{ session.dateEnd | date('d-m-Y G:i') }}</li>
+        <li class="list-group-item">Id caisse: {{ session.device ? session.device : "" }}</li>
+        <li class="list-group-item">Montant reçu: {{ session.cashFlowEnd ? session.cashFlowEnd | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Différence: {{ session.cashFlowDiff ? session.cashFlowDiff | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Fond de caisse initial: {{ session.cashFlowStart ? session.cashFlowStart | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Especes: {{ session.cash ? session.cash | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Cb: {{ session.cb ? session.cb | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Chèques: {{ session.check ? session.check | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Amex: {{ session.amex ? session.amex | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Ticket resto: {{ session.restoTicket ? session.restoTicket | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Tva:
+            <ul class="list-group">
+                {% for tva in session.tva %}
+                    <li class="list-group-item">Id: {{ tva['id'] }} </li>
+                    <li class="list-group-item">{{ tva['name'] }} </li>
+                    <li class="list-group-item">Total: {{ tva['total'] }} &euro;</li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="list-group-item">Remboursements: <br>
+            <ul class="list-group">
+                {% for refund in session.refund %}
+                    <li class="list-group-item">
+                        {{ refund['type'] }} - {{ refund['amount'] | number_format(2,',','.') }} &euro;
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="list-group-item">Entrées sorties: <br>
+            <ul class="list-group">
+                {% for inOut in session.inOut %}
+                    <li class="list-group-item">
+                        {{ inOut['date'] }} - {{ inOut['inOut'] | number_format(2,',','.') }} &euro;
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+        <li class="list-group-item">Offre commerciale: {{ session.commercialGesture ? session.commercialGesture | number_format(2,',','.') : 0 }} &euro;</li>
+        <li class="list-group-item">Changement de produit: {{ session.productSwitch ? session.productSwitch | number_format(2, ',', '.') : 0 }} &euro;</li>
+        <li class="list-group-item">Erreur débit: {{ session.accidentalDebit ? session.accidentalDebit | number_format(2, ',', '.') : 0 }} &euro;</li>
+        <li class="list-group-item">Client problem: {{ session.clientProblem ? session.clientProblem | number_format(2, ',', '.') : 0 }} </li>
+        <li class="list-group-item">Commentaire: {{ session.commentary ? session.commentary : '-' }}</li>
+    </ul>
+</div>

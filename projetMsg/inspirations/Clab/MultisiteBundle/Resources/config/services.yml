@@ -1,0 +1,12 @@
+parameters:
+    clab_multisite.multisite_manager.class: Clab\MultisiteBundle\Service\MultisiteManager
+    clab_multisite.multiapp_manager.class: Clab\MultisiteBundle\Service\MultiAppManager
+
+services:
+    clab_multisite.multisite_manager:
+        class: %clab_multisite.multisite_manager.class%
+        arguments: [ @doctrine.orm.entity_manager, @service_container ]
+
+    clab_multisite.multiapp_manager:
+        class: %clab_multisite.multiapp_manager.class%
+        arguments: [ @doctrine.orm.entity_manager, @service_container ]

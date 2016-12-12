@@ -1,0 +1,147 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav no-padding{% endblock %}
+{% block body %}
+<div class="container-fluid" id="dashboard-header">
+    <div class="container">
+         <div class="row">
+            <div class="col-md-8">
+                <img src="{{ proxy.cover }}" id="galleryCover" class="img-responsive">
+                <h2>{{ proxy.name }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container padding-v-10">
+    <form method="POST" action="{{ path('board_client_edit_restaurant', { contextPk: contextPk, slug: restaurant.slug }) }}">
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="well">
+                    <h3><i class="fa fa-home icon-left"></i>Informations</h3>
+
+                    <div class="form-group">
+                        <div class=" control-group">
+                            <label class="control-label optional">Restaurant</label>
+                            <div class=" controls">
+                                <input type="text" class="form-control disabled not-removable" value="{{ restaurant.name }}" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.phone, { attr: { class: 'form-control' } }) }}
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.email, { attr: { class: 'form-control' } }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="well">
+                    <h3><i class="fa fa-map-marker icon-left"></i>Localisation</h3>
+
+                    <div class="form-group">
+                        {{ form_row(form.address.street, { attr: { class: 'form-control', placeholder: 'Rue' } }) }}
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_row(form.address.zip, { attr: { class: 'form-control', placeholder: 'Code postal' } }) }}
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_row(form.address.city, { attr: { class: 'form-control', placeholder: 'Ville' } }) }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="well">
+                    <h3><i class="fa fa-user icon-left"></i>Contact</h3>
+                    
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.managerFirstName, { attr: { class: 'form-control' } }) }}
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.managerName, { attr: { class: 'form-control' } }) }}
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.managerPhone, { attr: { class: 'form-control' } }) }}
+                        </div>
+
+                        <div class="col-md-6 form-group">
+                            {{ form_row(form.managerEmail, { attr: { class: 'form-control' } }) }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <div class="well">
+                    <h3><i class="fa fa-tasks icon-left"></i>Suivi</h3>
+
+                    <h5>Manager</h5>
+                    <ul>
+                    {% for manager in restaurant.managers %}
+                        <li>{{ manager.email }} ({{ manager.lastLogin|date('d/m/Y H:i') }})</li>
+                    {% else %}
+                        <li>Aucun manager</li>
+                    {% endfor %}
+                    </ul>
+
+                    <hr>
+
+                    <h5>Accès</h5>
+                    <ul>
+                        {% if restaurant.isClickeat %}
+                        <li>Clickeat - <a href="{{ url('board_restaurant_profile', { contextPk: restaurant.slug }) }}" target="_blank">Accèder</a></li>
+                        {% endif %}
+                        <li>myClickeat - <a href="{{ url('board_dashboard', { context: 'restaurant', contextPk: restaurant.slug }) }}" target="_blank">Accèder</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            {# @todo <div class="col-md-4">
+                <div class="well">
+                    <h3><i class="fa fa-clock-o icon-left"></i>Horaires</h3>
+
+                    {% set days = { 1: 'voc.datetime.days.monday', 2: 'voc.datetime.days.tuesday', 3: 'voc.datetime.days.wednesday', 4: 'voc.datetime.days.thursday', 5: 'voc.datetime.days.friday', 6: 'voc.datetime.days.saturday', 7: 'voc.datetime.days.sunday' } %}
+
+                    <dl class="dl-horizontal">
+                        {% for key, day in days %}
+                            <dt class="text-primary">{{ day|trans|capitalize }}</dt>
+                            <dd>
+                                {% for timesheet in restaurant.timesheetsOpening if timesheet.hasDay(key) %}
+                                    <small>{{ timesheet.start|date('H:i') }} - {{ timesheet.end|date('H:i') }}</small><br>
+                                {% else %}
+                                    <small>Fermé</small>
+                                {% endfor %}
+                            </dd>
+                        {% endfor %}
+                    </dl>
+                </div>
+            </div>#}
+        </div>
+
+        {{ form_rest(form) }}
+        <hr>
+        <button type="submit" class="btn btn-primary btn-lg btn-block">Enregistrer</button>
+    </form>
+</div>
+{% endblock %}

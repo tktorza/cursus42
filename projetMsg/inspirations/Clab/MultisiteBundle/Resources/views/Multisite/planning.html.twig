@@ -1,0 +1,107 @@
+{% extends 'ClabMultisiteBundle::base.html.twig' %}
+
+{% block title %}Localisez notre food truck - {% endblock %}
+{% block ogtitle %}Localisez notre food truck - {% endblock %}
+{% block metaDescription %}Trouvez tous nos emplacements à jour.{% endblock %}
+{% block ogdescription %}Trouvez tous nos emplacements à jour.{% endblock %}
+{% block metaKeywords %}emplacement, calendrier, itinéraire, localisation{% endblock %}
+
+{% block subnav %}
+    {% include 'ClabMultisiteBundle::subnav.html.twig' with { currentPage: 'planning' } %}
+{% endblock %}
+
+{% block body %}
+<section class="container padding-v-60" id="planning">
+    <div class="row">
+        <div class="col-md-6 well">
+            {% if foodtruck.currentEvent %}
+                <h2 class="thin">Actuellement</h2>
+                {% set event = foodtruck.currentEvent %}
+            {% elseif foodtruck.nextEvents[0] is defined %}
+                <h2 class="thin">Prochain évènement</h2>
+                {% set event = foodtruck.nextEvents[0] %}
+            {% else %}
+                <h2 class="thin">Le food truck n'a pas d'évènements prévus.</h2>
+            {% endif %}
+
+            {% if event is defined and event %}
+                <p class="lead">
+                    <span class="text-info">{{ event.start|localizeddate('full', 'none')|capitalize }}</span><br>
+                        {{ event.start|date('H:i') }} - {{ event.end|date('H:i') }}
+                </p>
+                <p>
+                    {% if event.private %}
+                        Évènement privé
+                    {% else %}
+                        <a href="https://maps.google.com/?q={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}" target="_blank"><i class="fa fa-map-marker icon-left"></i>{{ event.address.verbose }}</a>
+                    {% endif %}
+                </p>
+                <div class="map-canvas big" data-latitude="{{ event.address.latitude }}" data-longitude="{{ event.address.longitude }}"></div>
+            {% endif %}
+        </div>
+
+        <div class="col-md-5 col-md-offset-1">
+            {% if event is defined and event %}
+                {% set start = event.start %}
+                {% for timestamp, events in foodtruck.planning|slice(0, 5, true) %}
+                    {% set dayLabel = true %}
+                        {% for event in events if event.start != start %}
+                        <div class="media">
+                            <div class="media-body">
+                                <p class="media-heading lead">
+                                    {% if dayLabel %}
+                                    <span class="text-info">{{ event.start|localizeddate('full', 'none')|capitalize }}</span><br>
+                                    {% set dayLabel = false %}
+                                    {% endif %}
+                                    {{ event.start|date('H:i') }} - {{ event.end|date('H:i') }}
+                                </p>
+                                <p>
+                                    {% if event.private %}
+                                        Évènement privé
+                                    {% else %}
+                                        <a href="https://maps.google.com/?q={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}" target="_blank"><i class="fa fa-map-marker icon-left"></i>{{ event.address.verbose }}</a>
+                                    {% endif %}
+                                </p>
+                            </div>
+                            <div class="media-right">
+                                <a href="https://maps.google.com/?q={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}" target="_blank">
+                                    <img src="http://maps.googleapis.com/maps/api/staticmap?center={{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}&markers=color:red%7C{{ event.address.street ~ ' ' ~ event.address.zip ~ ' ' ~ event.address.city|url_encode }}&zoom=13&size=100x100&maptype=roadmap&sensor=false" alt="Map">
+                                </a>
+                            </div>
+                        </div>
+                        {% endfor %}
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+google.maps.event.addDomListener(window, 'load', initialize);
+
+function initialize() {
+    $('.map-canvas').each(function() {
+        map = new google.maps.Map($(this).get(0), {
+            zoom: 16,
+            center: new google.maps.LatLng($(this).data('latitude'), $(this).data('longitude')),
+            styles: mapStyle,
+            scrollwheel: true,
+            panControl: true,
+            mapTypeControl: false,
+            streetViewControl: true,
+            zoomControl: true,
+        });
+
+        var marker = new google.maps.Marker({
+            map: map,
+            position: new google.maps.LatLng($(this).data('latitude'), $(this).data('longitude')),
+            icon: '{{ asset('front/bundle/clickeat/img/map-marker.png') | imagine_filter('square_40') }}',
+        });
+    });
+}
+</script>
+{% include 'ClabClickeatBundle:Mixpanel:mixpanel.html.twig' with { mixpanelTrack: 'View planning', mixpanelTrackProperties: { 'Restaurant': restaurant.name } } %}
+{% endblock %}
+

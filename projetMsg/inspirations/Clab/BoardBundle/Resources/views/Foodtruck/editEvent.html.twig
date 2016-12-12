@@ -1,0 +1,204 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% import 'ClabLocationBundle:Macro:googleSearch.html.twig' as googleSearch %}
+{% form_theme form _self %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_restaurant_planning'
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="planning">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+
+            <form method="post" {{ form_enctype(form) }}>
+
+                {% if flow.getCurrentStepNumber() == 1 %}
+                    <h2>Définir l'adresse de l'emplacement</h2>
+                    <br>
+                    {{ googleSearch.form(form.address) }}
+
+                    {{ form_row(form.address.name, { attr: { class: 'form-control' } }) }}
+                {% elseif flow.getCurrentStepNumber() == 2 %}
+                    <h2>Certains lieux référencés sont proches de votre emplacement</h2>
+                    <br>
+                    <ul class="list list-group list-group-checkbox">
+                        {% for id, child in form.place %}
+                            {% if id != 'placeholder' %}
+                                {% set entity = form.place.vars.choices[id].data %}
+                            {% else %}
+                                {% set entity = null %}
+                            {% endif %}
+                            <li class="list-group-item clearfix">
+                                <label>
+                                    {% if entity %}
+                                        <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+                                    {% endif %}
+                                    <span class="name">
+                                        <strong>{{ child.vars.label|trans() }}</strong>
+                                        {# if entity and entity.address %}
+                                         : {{ entity.address.verbose }}
+                                        {% endif #}
+                                    </span>
+                                    <div class="radio pull-right">
+                                        {{ form_widget(child, {'attr': {'class': 'icheck' }}) }}
+                                    </div>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_errors(form.place) }}
+                {% elseif flow.getCurrentStepNumber() == 3 %}
+                    <h2>Participez-vous à l'un des évènements suivants ?</h2>
+                    <br>
+                    <ul class="list list-group list-group-checkbox">
+                        {% for id, child in form.event %}
+                            {% if id != 'placeholder' %}
+                                {% set entity = form.event.vars.choices[id].data %}
+                            {% else %}
+                                {% set entity = null %}
+                            {% endif %}
+                            <li class="list-group-item clearfix">
+                                <label>
+                                    {% if entity %}
+                                        <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+                                    {% endif %}
+                                    <span class="name">
+                                        <strong>{{ child.vars.label|trans() }}</strong>
+                                        {# if entity and entity.place and entity.place.address %}
+                                         : {{ entity.place.address.street }}
+                                        {% endif #}
+                                    </span>
+                                    <div class="radio pull-right">
+                                        {{ form_widget(child, {'attr': {'class': 'icheck' }}) }}
+                                    </div>
+                                </label>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    {{ form_errors(form.event) }}
+                {% elseif flow.getCurrentStepNumber() == 4 %}
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group inline-radio">
+                                <h4>Type d'évènement</h4>
+                                {{ form_row(form.type, { attr: { class: 'icheck event-type' } }) }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <br><br>
+                            <div class="form-group">
+                                {{ form_row(form.isPrivate, { attr: { class: 'icheck' } }) }}
+                            </div>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="form-group inline-checkboxes type-visibility" data-type="1" {% if timesheet.type == 2 %}style="display:none";{% endif %}>
+                        {{ form_row(form.days, { attr: { class: 'icheck' } }) }}
+                        <div class="clear"></div>
+                        <hr>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            {{ form_row(form.startDate, { attr: { class: 'form-control datetimepicker-start' } }) }}
+                            {{ form_row(form.endDate, { attr: { class: 'form-control datetimepicker-end' } }) }}
+                            <div class="type-visibility" data-type="1" {% if timesheet.type == 2 %}style="display:none";{% endif %}>
+                                <p><small>Vous pouvez limiter ce créneau sur une période, ou laisser ces champs vides.</small></p>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                {{ form_row(form.start, { attr: { class: 'form-control timepicker' } }) }}
+                                {{ form_row(form.end, { attr: { class: 'form-control timepicker' } }) }}
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+
+                {{ form_rest(form) }}
+
+                <hr>
+                {% if timesheet.id %}
+                    <div class="row">
+                        <div class="col-md-4">
+                            <a class="btn btn-danger confirmModal" data-route="{{ path('board_restaurant_planning_delete', { contextPk: contextPk, id: timesheet.id }) }}"><i class="fa fa-trash-o"></i></a>
+                        </div>
+
+                        <div class="col-md-8">
+                            {% include 'ClabBoardBundle:Base:formFlowButtons.html.twig' %}
+                        </div>
+                    </div>
+                {% else %}
+                    {% include 'ClabBoardBundle:Base:formFlowButtons.html.twig' %}
+                {% endif %}
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ googleSearch.script() }}
+<script type="text/javascript">
+$('.event-type').on('ifChecked', function (event) {
+    var value = $(this).find('input[type=radio]:checked').val();
+    if(value) {
+        $('.type-visibility').each(function() {
+            if($(this).data('type') == value) {
+                $(this).show();
+            } else {
+                $(this).hide();
+            }
+        });
+    }
+});
+
+$('.datetimepicker-start').datetimepicker({
+    lang: 'fr',
+    scrollInput: false,
+    format: 'd/m/Y',
+    timepicker: false,
+    onShow: function(datetime) {
+        if($('.datetimepicker-end').val()) {
+            var date = moment($('.datetimepicker-end').val(), 'DD/MM/YYYY');
+            var maxDate = date.format('YYYY/MM/DD');
+        } else {
+            var maxDate = false;
+        }
+        this.setOptions({
+            maxDate: maxDate
+        })
+    },
+    onSelectDate: function(datetime, $input) {
+        if('' == $('.datetimepicker-end').val()) {
+            $('.datetimepicker-end').val(datetime.dateFormat('d/m/Y'));
+        }
+    }
+});
+
+$('.datetimepicker-end').datetimepicker({
+    lang: 'fr',
+    scrollInput: false,
+    format: 'd/m/Y',
+    timepicker: false,
+    onShow: function(datetime) {
+        if($('.datetimepicker-start').val()) {
+            var date = moment($('.datetimepicker-start').val(), 'DD/MM/YYYY');
+            var minDate = date.format('YYYY/MM/DD');
+        } else {
+            var minDate = false;
+        }
+        this.setOptions({
+            minDate: minDate
+        })
+    },
+});
+</script>
+{% endblock %}

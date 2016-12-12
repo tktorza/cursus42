@@ -1,0 +1,54 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block nav %}{% endblock %}
+{% block bodyClass %}login{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="user">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well text-center">
+                <br>
+                <img src="{{ asset('front/bundle/board/img/logo-dark.png') }}" id="logo">
+                <br><br><br>
+
+                {% if foodtruckName is defined and foodtruckName %}
+                    <p class="lead">Nous avons déjà un foodtruck enregistré avec ce nom</p>
+                {% elseif address is defined and address %}
+                    <p class="lead">Nous avons déjà un restaurant enregistré à l'adresse : <br><small>{{ address.verbose }}</small></p>
+                {% endif %}
+                
+                {% if owner is defined and owner %}
+                <div class="list-group">
+                    <a href="{{ path('board_dashboard', { context: 'restaurant', contextPk: restaurant.slug }) }}" class="list-group-item">
+                        <h4 class="list-group-item-heading">{{ restaurant.name }}</h4>
+                        <p class="list-group-item-text">Se connecter avec le compte manager <br>{{ owner.email|email_hide(1, 1, 1, 1) }}</p>
+                    </a>
+                </div>
+
+                <br><br>
+
+                <a href="{{ path('board_onboard_join_contact', { slug: restaurant.slug, type: 'manager' }) }}">Ce n'est pas mon compte / Je n'ai pas de compte.</a>
+                {% else %}
+                <div class="list-group">
+                    <a href="{{ path('board_onboard_join_store', { slug: restaurant.slug }) }}" class="list-group-item">
+                        <h4 class="list-group-item-heading">{{ restaurant.name }}</h4>
+                        <p class="list-group-item-text">C'est mon restaurant</p>
+                    </a>
+                </div>
+                {% endif %}
+                <br><br>
+                <a href="{{ path('board_onboard_join_contact', { slug: restaurant.slug, type: 'restaurant' }) }}">Ceci n'est pas mon restaurant, pourtant l'adresse est bonne.</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $('form').on('submit', function(e) {
+        $(this).find('button[type="submit"]').addClass('disabled');
+    });
+</script>
+{% endblock %}

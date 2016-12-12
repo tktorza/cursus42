@@ -1,0 +1,196 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_website',
+    } %}
+{% endblock %}
+
+{% form_theme form _self %}
+
+{% block modalClass %}modal-large{% endblock %}
+
+{# block _board_appstore_website_coverPicture_widget %}
+
+{% endblock _board_appstore_website_coverPicture_widget #}
+
+{% block choice_widget_options -%}
+    
+    {# set entity = form.vars.choices[id].data #}
+    {% for group_label, choice in options %}
+        {%- if choice is iterable -%}
+            <optgroup label="{{ group_label|trans({}, translation_domain) }}">
+                {% set options = choice %}
+                {{- block('choice_widget_options') -}}
+            </optgroup>
+        {%- else -%}
+            <option data-image="{{ choice.data.webPath | imagine_filter('square_80') }}" value="{{ choice.value }}"{% if choice is selectedchoice(value) %} selected="selected"{% endif %}>{{ choice.label|trans({}, translation_domain) }}</option>
+        {%- endif -%}
+    {% endfor %}
+{%- endblock choice_widget_options %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding">
+    <form method="post" action="{{ path('board_appstore_website', { contextPk: contextPk }) }}">
+    <div class="row">
+        <div class="col-md-8 padding-v-20 padding-h-40 bg-white">
+
+            <label for="domain" class="control-label">Nom de domaine</label>
+            <input type="text" class="form-control input-lg" name="domain" value="{{ site.domain }}" disabled>
+            <p><a href="mailto:team@click-eat.fr?subject=Changement nom de domain Byclickeat {{ proxy.name }}">Demander un changement</a></p>
+
+            <hr>
+
+            <h2>Page d'accueil</h2>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="big-label">
+                        {{ form_row(form.logo, { attr: { class: 'icheck' } }) }}
+                    </div>
+                    <small>Affichez votre logo à côté du nom du restaurant</small>
+                    <br><br>
+
+                    <div class="form-group">
+                        {{ form_row(form.aboutTitle, { attr: { class: 'input-lg form-control' } }) }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_row(form.coverPicture, { attr: { class: 'coverPicture' } }) }}
+                        <br>
+                        <a class="btn btn-primary btn-block btn-sm ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'restaurant', entityId: proxy.id, noCover: 1 }) }}">Uploader une nouvelle photo</a>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2>Contenu</h2>
+            <br>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Catalogue</h3>
+                    <p>Affichez votre menu : produits, formules...</p>
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="big-label">
+                        {{ form_row(form.sectionMenu, { attr: { class: 'icheck' } }) }}
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Les avis</h3>
+                    <p>Affichez les avis laissés par vos clients pour faire venir les prochains !</p>
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="big-label">
+                        {{ form_row(form.sectionReview, { attr: { class: 'icheck' } }) }}
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Photos</h3>
+                    <p>Affichez les photos de votre restaurant, de vos produits...</p>
+                    <p><a href="{{ path('board_album_library', { context: context, contextPk: contextPk }) }}">Gérer ma bibliothèque de photos</a></p>
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="big-label">
+                        {{ form_row(form.sectionGallery, { attr: { class: 'icheck' } }) }}
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Social</h3>
+                    <p>Partagez en 1 clic vos dernières nouveautés, photos... </p>
+                    <p><a href="{{ path('board_social_dashboard', { contextPk: contextPk }) }}">Poster un message</a></p>
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="big-label">
+                        {{ form_row(form.sectionSocial, { attr: { class: 'icheck' } }) }}
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Contact</h3>
+                    <p>Permettez aux internautes de vous contacter par mail pour des réservations ou autre</p>
+                </div>
+
+                <div class="col-md-5 col-md-offset-1">
+                    <div class="big-label">
+                        {{ form_row(form.sectionContact, { attr: { class: 'icheck' } }) }}
+                    </div>
+                </div>
+            </div>
+        </div>            
+
+        <div class="col-md-4 padding-v-40 padding-h-40">
+            <a href="http://{{ site.domain }}" target="_blank" class="btn btn-primary btn-lg btn-block"><i class="fa fa-eye icon-left"></i>Voir le site web</a>
+
+            <br>
+
+            <div class="big-label">
+                {{ form_row(form.is_online, { attr: { class: 'icheck' } }) }}
+            </div>
+
+            <br>
+
+            <div class="big-label">
+                {{ form_row(form.orderButton, { attr: { class: 'icheck' } }) }}
+            </div>
+
+            {{ form_rest(form) }}
+        </div>
+    </div>
+
+    {% include 'ClabBoardBundle:Base:formBottom.html.twig' with { cancelRoute: path('board_appstore_website', { contextPk: contextPk }) } %}
+    </form>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style type="text/css">
+.select2-container .select2-choice {
+    height: 100px;
+    line-height: 1.42857143;
+}
+</style>
+{% endblock %}
+{% block javascripts %}
+<script type="text/javascript">
+function format(state) {
+    if (!state.id) return state.text;
+    return '<span><img src="' + $(state.element).data('image') + '" /><br></span>'
+}
+$('.coverPicture').select2({
+    formatResult: format,
+    formatSelection: format,
+    width: '100%',
+    allowClear: true,
+    escapeMarkup: function(m) { return m; }
+});
+</script>
+{% endblock %}

@@ -1,0 +1,23 @@
+board_sales_reporting:
+    path:  /sales
+    defaults: { _controller: ClabBoardBundle:Sales:reporting }
+
+board_sales_reporting_category:
+    path:  /sales/categories
+    defaults: { _controller: ClabBoardBundle:Sales:reportingCategory }
+
+board_sales_reporting_product:
+    path:  /sales/produits
+    defaults: { _controller: ClabBoardBundle:Sales:reportingProduct }
+
+board_sales_payments:
+    path:  /sales/paiements
+    defaults: { _controller: ClabBoardBundle:Sales:payments }
+
+board_sales_tax:
+    path:  /sales/tax
+    defaults: { _controller: ClabBoardBundle:Sales:tax }
+
+board_sales_caisse:
+    path:  /sales/caisse
+    defaults: { _controller: ClabBoardBundle:Sales:caisse }

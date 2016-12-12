@@ -1,0 +1,40 @@
+## Gallery ##
+board_gallery_get:
+    path:  /gallery/{entityType}/{entityId}/view/{type}
+    defaults: { _controller: ClabBoardBundle:Gallery:get, type: null }
+
+board_gallery_upload:
+    path:  /gallery/{entityType}/{entityId}/upload/{type}
+    defaults: { _controller: ClabBoardBundle:Gallery:upload, type: null }
+
+board_gallery_delete:
+    path:  /gallery/{entityType}/{entityId}/delete/{type}
+    defaults: { _controller: ClabBoardBundle:Gallery:delete, type: null }
+
+board_gallery_cover:
+    path:  /gallery/{entityType}/{entityId}/cover/{type}
+    defaults: { _controller: ClabBoardBundle:Gallery:cover, type: null }
+
+board_aviary_replace:
+    path: /media/aviary/replace/{entityType}/{entityId}/{type}/{image}
+    defaults: { _controller: ClabBoardBundle:Gallery:replace, image: null }
+
+#board_gallery_select:
+#    path:  /gallery/{entityType}/{entityId}/select/{field}
+#    defaults: { _controller: ClabBoardBundle:Gallery:select }
+
+board_album_library:
+    path:  /albums/library
+    defaults: { _controller: ClabBoardBundle:Gallery:albumLibrary }
+
+board_album_library_list:
+    path:  /albums/library-list
+    defaults: { _controller: ClabBoardBundle:Gallery:albumLibraryList }
+
+board_album_edit:
+    path:  /albums/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:Gallery:albumEdit, slug: null }
+
+board_album_delete:
+    path:  /albums/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:Gallery:albumDelete }

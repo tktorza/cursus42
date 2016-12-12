@@ -1,0 +1,52 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block navContent %}{% endblock %}
+{% block bodyClass %}singlenav{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="dashboard">
+    <section class="panel">
+        <div class="panel-body">
+            <input id="search" placeholder="Rechercher par nom..." class="form-control input-lg search">
+        </div>
+    </section>
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+    <section class="panel">
+        <div class="panel-body">
+            {{ render(controller('ClabBoardBundle:Dashboard:addNewRestaurant')) }}
+           <button class="btn btn-primary" data-toggle="modal" data-target="#addRestaurant">Créer un restaurant</button>
+        </div>
+    </section>
+    {% endif %}
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Restaurants</h4>
+            <ul class="list-group list">
+                {% for restaurant in restaurants %}
+                    <a href="{{ path('board_dashboard', { context: 'restaurant', contextPk: restaurant.slug }) }}" class="list-group-item"><span class="badge"><i class="fa fa-arrow-right"></i></span><span class="name">{{ restaurant.name }} - {{ restaurant.address.street }} {{ restaurant.address.city }}</span></a>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if clients|length > 0 %}
+        <div class="col-md-6" id="restaurantList">
+            <h4>Enseignes</h4>
+            <ul class="list-group">
+                {% for client in clients %}
+                    <a href="{{ path('board_dashboard', { context: 'client', contextPk: client.slug }) }}" class="list-group-item"><span class="badge"><i class="fa fa-arrow-right"></i></span><span class="name">{{ client.name }}</span></a>
+                {% endfor %}
+            </ul>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var restaurantList = new List('dashboard', {
+    valueNames: [ 'name' ]
+});
+</script>
+{% endblock %}

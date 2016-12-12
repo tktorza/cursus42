@@ -1,0 +1,31 @@
+board_validation_validate:
+    path:  /validation/validate/{slug}/{date}/{start}/{hash}
+    defaults: { _controller: ClabBoardBundle:Validation:validate, hash: null }
+
+board_validation_close:
+    path:  /validation/close/{slug}/{date}/{start}/{hash}
+    defaults: { _controller: ClabBoardBundle:Validation:close, hash: null }
+
+board_validation_done:
+    path:  /validation/done
+    defaults: { _controller: ClabBoardBundle:Validation:validationDone }
+
+board_validation_console:
+    path:  /{contextPk}/validation/console
+    defaults: { _controller: ClabBoardBundle:Validation:console }
+
+board_validation_cancel:
+    path:  /{contextPk}/validation/cancel/{date}/{start}
+    defaults: { _controller: ClabBoardBundle:Validation:cancelValidation }
+
+board_validation_publish:
+    path:  /{contextPk}/validation/publish/{date}/{start}
+    defaults: { _controller: ClabBoardBundle:Validation:publishValidation }
+
+board_validation_publish_custom:
+    path:  /{contextPk}/validation/publish-custom/{date}/{start}
+    defaults: { _controller: ClabBoardBundle:Validation:customPublish }
+
+board_validation_publish_custom:
+    path:  /{contextPk}/validation/publish-custom/{date}/{start}/{validate}
+    defaults: { _controller: ClabBoardBundle:Validation:customPublish, validate: false }

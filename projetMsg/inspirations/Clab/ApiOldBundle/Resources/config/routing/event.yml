@@ -1,0 +1,44 @@
+api_0_rest_place_list:
+    path:  /places
+    defaults: { _controller: ClabApiOldBundle:RestEvent:listPlace, _format: json }
+    methods: [GET]
+
+api_0_rest_place_get:
+    path:  /place/{id}
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getPlace, _format: json }
+    methods: [GET]
+
+api_0_rest_place_posts:
+    path:  /place/{id}/posts
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getPlacePosts, _format: json }
+    methods: [GET]
+
+api_0_rest_place_events:
+    path:  /place/{id}/events
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getPlaceEvents, _format: json }
+    methods: [GET]
+
+api_0_rest_place_foodtrucks:
+    path:  /place/{id}/foodtrucks
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getPlaceFoodtrucks, _format: json }
+    methods: [GET]
+
+api_0_rest_event_list:
+    path:  /events
+    defaults: { _controller: ClabApiOldBundle:RestEvent:listEvent, _format: json }
+    methods: [GET]
+
+api_0_rest_event_get:
+    path:  /event/{id}
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getEvent, _format: json }
+    methods: [GET]
+
+api_0_rest_event_posts:
+    path:  /event/{id}/posts
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getEventPosts, _format: json }
+    methods: [GET]
+
+api_0_rest_event_foodtrucks:
+    path:  /event/{id}/foodtrucks
+    defaults: { _controller: ClabApiOldBundle:RestEvent:getEventFoodtrucks, _format: json }
+    methods: [GET]

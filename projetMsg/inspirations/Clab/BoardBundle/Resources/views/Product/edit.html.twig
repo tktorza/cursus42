@@ -1,0 +1,412 @@
+<form method="post" action="{{ path('board_product_edit', { context: context, contextPk: contextPk, slug: product.slug }) }}" novalidation novalidate class="ajax-form watch" data-callback="#productList" data-changed="0">
+    <div class="drawer-scroll">
+        {% if context == 'client' %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-warning icon-left"></i>Les modifications s'appliqueront sur tous vos restaurants.</p>
+        </div>
+        {% elseif product.parent %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-lock icon-left"></i>Ce produit provient de votre enseigne, les options d'édition peuvent être limitées.</p>
+        </div>
+        {% endif %}
+
+        {% if form.name is defined %}
+        <div class="row">
+            <div class="col-md-3">
+                <div class="img-uploader">
+                    {% if product.id %}
+                        <img src="{{ product.cover }}" id="galleryCover">
+                        <a class="btn btn-primary btn-block btn-sm ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'product', entityId: product.id }) }}">Modifier</a>
+                    {% else %}
+                        <img src="{{ asset('files/blank.png') | imagine_filter('square_180') }}" id="galleryCover">
+                        <a class="btn btn-primary btn-block btn-sm saveForm" href="#">Modifier</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <div class="col-md-9">
+                <div class="form-group">
+                    {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+                </div>
+                <div class="form-group">
+                    <p><strong>Catégorie</strong></p>
+                    {{ form_row(form.category, { attr: { class: 'select-category' } }) }}
+                </div>
+                <div class="form-group">
+                    <div class="col-xs-2 no-padding">
+                        {{ form_row(form.mealOnly, { attr: { class: 'icheck inline' } }) }}
+                    </div>
+                    <div class="col-xs-10">
+                        {{ form_label(form.mealOnly,"Formule uniquement") }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="form-group">
+            {{ form_row(form.description, { attr: { class: 'form-control', rows: 4 } }) }}
+        </div>
+
+            {% if form.allergies is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.allergies, { attr: { class: 'form-control', rows: 4 } }) }}
+                </div>
+            {% endif %}
+            {% if form.condiments is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.condiments, { attr: { class: 'form-control', rows: 4 } }) }}
+                </div>
+            {% endif %}
+            {% if form.nutrition is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.nutrition, { attr: { class: 'form-control', rows: 4 } }) }}
+                </div>
+            {% endif %}
+            {% if form.regime is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.regime, { attr: { class: 'form-control'} }) }}
+                </div>
+            {% endif %}
+            {% if form.nbpieces is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.nbpieces, { attr: { class: 'form-control'} }) }}
+                </div>
+            {% endif %}
+            {% if form.calories is defined %}
+                <br>
+                <div class="form-group">
+                    {{ form_row(form.calories, { attr: { class: 'form-control'} }) }}
+                </div>
+            {% endif %}
+        {% endif %}
+        <div class="input-grid">
+            <div class="input-group input-lg">
+                <span class="col-xs-6">
+                    Type:
+                </span>
+                <span class="col-xs-3" style="text-align:right;">
+                    Prix:
+                </span>
+                <span class="col-xs-3" style="text-align:right;">
+                    TVA:
+                </span>
+            </div>
+            <div class="input-group input-lg">
+                <span class="input-group-addon">A emporter</span>
+                {{ form_widget(form.price, { attr: { class: 'form-control input-right input-select input-group-addon',style:"padding-bottom:0px;" } }) }}
+                <span class="input-group-addon">€</span>
+                {% if form.tax is defined %}
+                    <span class="input-group-addon">
+                        {{ form_widget(form.tax, { attr: { class: 'select2' } }) }}
+                    </span>
+                {% endif %}
+            </div>
+            {% if form.deliveryPrice is defined %}
+                <div class="input-group input-lg">
+                    <span class="input-group-addon">En livraison</span>
+                    {{ form_widget(form.deliveryPrice, { attr: { class: 'form-control input-right input-select input-group-addon',style:"padding-bottom:0px;" } }) }}
+                    <span class="input-group-addon">€</span>
+                    {% if form.taxDelivery is defined %}
+                        <span class="input-group-addon">
+                        {{ form_widget(form.taxDelivery, { attr: { class: 'select2' } }) }}
+                    </span>
+                    {% endif %}
+                </div>
+            {% endif %}
+            {% if form.priceOnSite is defined %}
+                <div class="input-group input-lg">
+                    <span class="input-group-addon">Sur place</span>
+                    {{ form_widget(form.priceOnSite, { attr: { class: 'form-control input-right input-select input-group-addon',style:"padding-bottom:0px;" } }) }}
+                    <span class="input-group-addon">€</span>
+                    {% if form.taxOnSite is defined %}
+                        <div class="input-group-addon">
+                            {{ form_widget(form.taxOnSite, { attr: { class: 'select2' } }) }}
+                        </div>
+                    {% endif %}
+                </div>
+            {% endif %}
+        </div>
+        {{ form_errors(form.price) }}
+        {% if form.deliveryPrice is defined %}
+            {{ form_errors(form.deliveryPrice) }}
+        {% endif %}
+        {% if form.priceOnSite is defined %}
+            {{ form_errors(form.priceOnSite) }}
+        {% endif %}
+        <br>
+        {% if form.restaurantMenus is defined %}
+            <div class="">
+                {{  form_row(form.restaurantMenus, { attr: { class: 'icheck inline' } })}}
+            </div>
+        {% endif %}
+
+        <hr>
+        <h3>Plats du jour</h3>
+        <div class="row">
+            <div class="col-md-6 form-group">
+                <div id="" class="big-label" style="background-color: white;border: 1px solid #eeeeee;border-radius:
+                6px 6px 6px
+                     6px;padding: 15px 15px;cursor: pointer;">
+                    {{ form_row(form.isPDJ, { attr: { class: 'icheck inline isPDJ' } }) }}
+                    <p id="isPDJ"><i class="fa fa-chevron-down"></i> Régler les dates</p>
+                </div>
+            </div>
+        </div>
+        <div class="row" id="row-date-pdj" style="display: none;">
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.startDate, { attr: { class: 'form-control input-inline datepicker' } }) }}
+                </div>
+                <br>
+            </div>
+
+            <div class="col-md-6 form-group">
+                <div class="big-label">
+                    {{ form_row(form.endDate, { attr: { class: 'form-control input-inline datepicker' } }) }}
+                </div>
+            </div>
+
+        </div>
+
+        <hr>
+        <div class="row">
+            {% if form.isOnline is defined %}
+            {% if(context == 'restaurant' and forcedIsOnline is defined and not forcedIsOnline) or context =='client'%}
+            <div class="col-md-6">
+                <div class="big-label">
+                    {{ form_row(form.isOnline, { attr: { class: 'icheck' } }) }}
+                </div>
+
+            </div>
+            {% endif %}
+            {% endif %}
+        </div>
+        <br/>
+        {% if hasCaisse == true %}
+        <hr/>
+
+        <div class="row">
+            <div class="col-md-6">
+                    <div class="big-label">
+                        {{ form_row(form.isOnlineCaisse, { attr: { class: 'icheck' } }) }}
+                    </div>
+            </div>
+            <div class="col-md-6">
+                {{ form_widget(form.taxOnSite, { attr: { class: 'select2' } }) }}
+                {{ form_errors(form.taxOnSite) }}
+            </div>
+        </div>
+        {% endif %}
+        <hr>
+
+        {% if form.defaultStock is defined %}
+        <br>
+            <div class="row">
+                <div class="col-md-6 form-group">
+                    <div id="" class="big-label" style="background-color: white;border: 1px solid #eeeeee;border-radius:
+                6px 6px 6px
+                     6px;padding: 15px 15px;cursor: pointer;">
+                        {{ form_row(form.editStock, {attr: {class: 'icheck inline stock_checkbox' ,'checked':'checked'} })}}
+                        <p id="stock_checkbox"><i class="fa fa-chevron-down"></i> Régler la disponibilité des stocks</p>
+                    </div>
+                </div>
+            </div>
+        <div class="row" id="editStock">
+            <div class="col-md-6 form-group">
+                <div  class="big-label">
+                    {{ form_row(form.unlimitedStock, { attr: { class: 'icheck input-inline' } }) }}
+                </div>
+            </div>
+            <div class="col-md-6 form-group">
+                {{ form_row(form.defaultStock, { attr: { class: 'form-control input-inline' } }) }}
+            </div>
+        </div>
+        {% endif %}
+
+        {% if form.options|length > 0 %}
+        <hr>
+        <h3>Options</h3>
+        <ul class="list-group sortable">
+        {% for optionForm in form.options %}
+            {% set option = optionForm.vars.data %}
+            <li class="list-group-item option">
+                <span class="handle pull-right"><i class="fa fa-reorder"></i></span>
+                {{ option.name }}<br>
+                <small class="text-muted">
+                {% for choice in option.choices %}
+                    {{ choice.value }}{% if choice.price > 0 %} (+{{ choice.price }}€){% endif %}{% if not loop.last %}, {% endif %}
+                {% endfor %}
+                </small>
+                {{ form_widget(optionForm.position, { attr: { class: 'option-position' } }) }}
+            </li>
+        {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if product.id and not product.parent %}
+        <br><br>
+        <a class="btn btn-sm btn-primary btn-block ladda-button btn-form-watch" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_product_options', { context: context, contextPk: contextPk, slug: product.slug }) }}">Ajouter/supprimer une option</a>
+        {% if context == 'client' %}
+            {% if associatedRestaurants is defined and associatedRestaurants|length > 0 %}
+                <br><br>
+                <b>Liste des Restaurants associés:</b>
+                <div id="choice-fields-list" class="input-list sortable">
+                    {% for associatedRestaurant in associatedRestaurants %}
+                        {% if loop.index==1 %}
+
+                            <br>
+                            <div class="row">
+                                <div class="col-md-8">
+                                    <b>Nom du restaurant</b>
+                                </div>
+                                <div class="col-md-4">
+                                    <b>Prix du produit</b>
+                                </div>
+                            </div>
+                    <div class="well" style="overflow-y: scroll;height: 250px;">
+                        {% endif %}
+                        <div class="row input-row choice-field">
+                            <div class="col-md-8">
+                                {{ associatedRestaurant.name }} - {{ associatedRestaurant.address.street }} {{ associatedRestaurant.address.city }}
+                            </div>
+                            <div class="col-md-3">
+                                <input class="form-control input-right price-input" type="text" name="price-{{ associatedRestaurant.slug }}" value="{% if associatedProductsData[associatedRestaurant.slug] is defined %}{{ associatedProductsData[associatedRestaurant.slug].price|number_format(2,'.',',') }}{% else %}{{ product.price|number_format(2,'.','.') }}{% endif %}">
+                            </div>
+                            <div class="col-md-1">
+                                €
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+                    <div class="big-label">
+                        <label>Synchroniser les prix des restaurants avec celui de votre enseigne
+                        <i id="sync-price-product" class="fa fa-refresh"
+                        style="color: #00a2c6;font-size: 25px;right: 30px;position: absolute;"></i>
+                        </label>
+                    </div>
+            {% else %}
+                <p>Il n'y a pas encore de produits proposés dans cette vente additionnelle au niveau de votre enseigne.</p>
+            {% endif %}
+        </br></br>
+        <a class="btn btn-sm btn-primary btn-block ladda-button btn-form-watch" data-style="expand-right" href="{{ path('board_product_assign_restaurant', { context: context, contextPk: contextPk, slug: product.slug }) }}" data-target="ajaxModal" >Ajouter/supprimer des restaurants associés</a>
+        {% endif %}
+        {% endif %}
+        {{ form_rest(form) }}
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: (product.id and not product.parent) ? path('board_product_delete', { context: context, contextPk: contextPk, slug: product.slug }) : null } %}
+</form>
+
+<script type="text/javascript">
+$('#isPDJ').click(function() {
+    $('#row-date-pdj').toggle('hide');
+});
+$('.isPDJ').on('ifChecked',function(){
+    $('#row-date-pdj').show();
+})
+$('.isPDJ').on('ifUnchecked',function(){
+    $('#row-date-pdj').hide();
+})
+
+$('.select-category').select2({
+    width: '100%',
+    createSearchChoice: function(term, data) {
+        if($(data).filter(function() { return this.text.localeCompare(term) === 0; }).length === 0) {
+            return {id: term, text: 'Créer la catégorie : ' + term};
+        }
+    },
+    multiple: false,
+    placeholder: 'Choisissez une catégorie',
+    allowClear: true,
+    formatNoMatches: 'Saisir un nom pour créer une catégorie',
+    data: [{% for category in categories %}{id: {{ category.id }}, text: '{{ category.name }}'}{% if not loop.last %},{% endif %}{% endfor %}]
+});
+
+$('.multipleCheck').on('ifChecked', function(event) {
+
+});
+
+$('.multipleCheck').on('change', function(event) {
+    if(this.value == 1) {
+        $($(this).data('target')).each(function() {
+            $(this).show();
+        });
+    } else {
+        $($(this).data('target')).each(function() {
+            $(this).hide();
+        });
+    }
+});
+
+$('#stock_checkbox').click(function(){
+    $('#editStock').toggle();
+})
+$('.stock_checkbox').on('ifChecked',function(){
+    $('#editStock').show();
+    $('#editStock').find('.checkbox').addClass('checked');
+    $('#editStock').find('input:checkbox').attr('checked',true);
+    $('#editStock').find('input[type="number"]').val('0');
+})
+$('.stock_checkbox').on('ifUnchecked',function(){
+    $('#editStock').hide();
+    $('#editStock').find('.checkbox').removeClass('checked');
+    $('#editStock').find('input:checkbox').attr('checked',false);
+    $('#editStock').find('input[type="number"]').val('0');
+
+})
+
+$('.sortable').sortable({
+    handle: '.handle',
+    items: '.option',
+    cursor: 'move',
+    helper: function(event, ui) {
+        ui.children().each(function() {
+            $(this).width($(this).width());
+        });
+        return ui;
+    },
+    update: function(event, ui) {
+        $('.option').each(function() {
+            $(this).find('.option-position').val($(this).index() + 1);
+        });
+    }
+});
+var originalPrices = [];
+var priceId = "#{{ form.price.vars.id }}";
+var sync = false;
+$('.price-input').each(function(){
+   if($(this).val()!= $(priceId).val()) {
+       $(this).css('color',"#333333");
+   }
+});
+
+$('#sync-price-product').click(function(){
+    if(!sync) {
+        for(var i=0;i<$('.price-input').length;i++){
+            originalPrices[i]=$('.price-input').eq(i).val();
+        }
+        console.log(originalPrices);
+        var price = $(priceId).val().replace(/,/g, '.');
+        $('.price-input').val(parseFloat(price).toFixed(2));
+        $(this).css('color',"#00a2c6");
+        sync=true;
+    }else {
+        for(var i=0;i<$('.price-input').length;i++){
+            $('.price-input').eq(i).val(originalPrices[i]);
+        }
+        $(this).css('color',"#333333");
+        sync=false;
+    }
+});
+$('.input-select').on('click', function () {
+   $(this).select();
+});
+</script>

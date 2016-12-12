@@ -1,0 +1,18 @@
+{% for choice in choices %}
+<tr
+    class="mix clickable"
+    data-target="drawer" href="{{ path('board_option_choice_edit', { context: context, contextPk: contextPk, id: choice.id }) }}"
+>
+    <td>
+        <img src="{{ choice.gallery.cover.webpath | imagine_filter('square_20') }}" class="img-circle margin-right">
+        {{ choice.value }}
+    </td>
+    <td>
+        {% if choice.isOnline %}
+            <span class="label label-success">Disponible</span>
+        {% else %}
+            <span class="label label-warning">Indisponible</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

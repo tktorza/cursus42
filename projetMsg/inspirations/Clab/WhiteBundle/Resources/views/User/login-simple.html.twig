@@ -1,0 +1,103 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+{% block title %}Login{% endblock %}
+{% block nav %}{% endblock %}
+{% block bodyClass %}login{% endblock %}
+
+{% block body %}
+    <div class="container-fluid padding-v-10" id="user">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+                <div class="well text-center">
+                    <br>
+                    <img src="{{ asset('images/logo.jpg') }}" id="logo">
+                    <br><br><br>
+                    <div class="row">
+                        <ul class="nav nav-tabs row">
+                            <li class="col-md-6 active"><a data-toggle="tab" href="#connect">Se connecter</a></li>
+                            <li class="col-md-6"><a data-toggle="tab" href="#register">S'incrire</a></li>
+                        </ul>
+                        <div class="tab-content row">
+                            <div id="connect" class="tab-pane fade in active col-md-10 col-md-offset-1">
+                                <form action="{{ path("fos_user_security_check") }}" method="post" class="text-left">
+
+                                    {% if error %}
+                                        <p class="text-error">{{ error.message|trans({}, 'FOSUserBundle') }}</p>
+                                    {% endif %}
+
+                                    <div class="form-group">
+                                        <label>Email</label>
+                                        <input type="text" id="username" name="_username" value="{{ last_username }}" required="required" placeholder="Email" class="form-control input-lg"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label>Mot de passe</label>
+                                        <input type="password" id="password" name="_password" placeholder="Mot de passe" class="form-control input-lg"/>
+                                    </div>
+                                    <div class="checkbox text-center">
+                                        <input type="checkbox" id="remember_me" name="_remember_me" value="on" class="icheck"/>
+                                        <label for="remember_me">Enregistrer mes identifiants</label>
+                                    </div>
+
+                                    {% if app.request.get('next') is defined %}
+                                        <input type="hidden" name="_target_path" value="{{ app.request.get('next') }}" />
+                                    {% endif %}
+
+                                    <input type="hidden" name="_csrf_token" value="{{ csrf_token }}" />
+
+                                    <br>
+                                    <button type="submit" id="_submit" class="btn btn-primary btn-block btn-lg" name="_submit">Se connecter<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                                    <br><br>
+                                    <p class="text-center"><small><a href="{{ path('fos_user_resetting_request') }}">Mot de passe perdu ?</a></small></p>
+                                </form>
+                            </div>
+                            <div id="register" class="tab-pane fade col-md-10 col-md-offset-1">
+                                <form action="{{ path('clab_white_user_register') }}" method="post" id="registerForm" {{ form_enctype(form) }}>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label for="{{ form.first_name.vars.id }}">Prénom</label>
+                                            {{ form_widget(form.first_name, { 'attr': {'class': 'form-control'} }) }}
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="{{ form.last_name.vars.id }}">Nom</label>
+                                            {{ form_widget(form.last_name, { 'attr': {'class': 'form-control'} }) }}
+                                        </div>
+                                   </div>
+
+                                    <div class="form-group">
+                                        <label for="{{ form.email.vars.id }}">Email</label>
+                                        {{ form_widget(form.email, { 'attr': {'class': 'form-control'} }) }}
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Mot de passe</label>
+                                        {{ form_widget(form.plainPassword, { 'attr': { 'class': 'form-control' } }) }}
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-md-6">
+                                            <label for="{{ form.is_male.vars.id }}">Sexe</label>
+                                            {{ form_widget(form.is_male, { 'attr': {'class': 'form-control select2'} }) }}
+                                        </div>
+                                    </div>
+                                    <label>
+                                        <input type="checkbox" class="icheck"> S'inscrire à la newsletter
+                                    </label>
+
+                                    <br>
+                                    <button type="submit" id="_submit" class="btn btn-primary btn-block btn-lg" name="_submit">S'incrire<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                                    {{ form_rest(form) }}
+                                    <br><br>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function(){
+                $('.select2').select2({
+                    minimumResultsForSearch: Infinity
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

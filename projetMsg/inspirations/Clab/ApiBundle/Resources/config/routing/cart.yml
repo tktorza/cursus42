@@ -1,0 +1,74 @@
+api_get_cart:
+    path:  /{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestCart:getCart, _format: json }
+    requirements:
+        id: \d+
+    methods: [GET]
+
+api_post_cart_meal:
+    path:  /meal/{mealId}
+    defaults: { _controller: ClabApiBundle:RestCart:postCartMeal, _format: json }
+    requirements:
+        id: \d+
+    methods: [POST]
+
+api_post_cart_product:
+    path:  /product/{productId}
+    defaults: { _controller: ClabApiBundle:RestCart:postCartProduct, _format: json }
+    requirements:
+        id: \d+
+    methods: [POST]
+
+api_post_cart_coupon:
+    path:  /coupon/{couponId}
+    defaults: { _controller: ClabApiBundle:RestCart:postCartCoupon, _format: json }
+    requirements:
+        id: \d+
+    methods: [POST]
+
+api_put_cart_product:
+    path: /{restaurantId}/{hash}/{add}
+    defaults: { _controller: ClabApiBundle:RestCart:putCartProduct, add: null, _format: json }
+    requirements:
+        id: \d+
+    methods: [PUT]
+
+api_delete_cart_coupon:
+    path:  /{cartId}/coupon
+    defaults: { _controller: ClabApiBundle:RestCart:deleteCartCoupon, _format: json }
+    methods: [DELETE]
+
+api_delete_cart_product:
+    path:  /product/{productId}
+    defaults: { _controller: ClabApiBundle:RestCart:deleteCartProduct, _format: json }
+    requirements:
+        id: \d+
+    methods: [DELETE]
+
+api_delete_cart_meal:
+    path:  /meal/{mealId}
+    defaults: { _controller: ClabApiBundle:RestCart:deleteCartMeal, _format: json }
+    requirements:
+        id: \d+
+    methods: [DELETE]
+
+api_delete_cart:
+    path:  /{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestCart:deleteCart, _format: json }
+    requirements:
+        id: \d+
+    methods: [DELETE]
+
+api_get_cart_time:
+    path:  /time/{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestCart:getTime, _format: json }
+    requirements:
+        id: \d+
+    methods: [GET]
+
+api_rest_discount_best:
+    path:  /{cartId}/discount
+    defaults: { _controller: ClabApiBundle:RestCart:bestDiscountForCart, _format: json }
+    requirements:
+        id: \d+
+    methods: [GET]

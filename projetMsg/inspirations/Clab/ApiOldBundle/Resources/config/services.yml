@@ -1,0 +1,21 @@
+services:
+    api.old.session_manager:
+        class: Clab\ApiOldBundle\Manager\SessionManager
+        arguments: [ @doctrine.orm.entity_manager, @request ]
+        scope: request
+
+    api.old.rest_manager:
+        class: Clab\ApiOldBundle\Manager\RestManager
+        arguments: [ @service_container, @doctrine.orm.entity_manager, @api.session_manager,@jms_serializer,@request,@form.factory ]
+        scope: request
+
+    api.old.push_manager:
+        class: Clab\ApiOldBundle\Manager\PushManager
+        arguments: [ @doctrine.orm.entity_manager,@service_container,@logger,%kernel.root_dir% ]
+
+    api.old.mixpanel:
+        class: Clab\ApiOldBundle\Manager\Mixpanel
+        arguments: [ @doctrine.orm.entity_manager, @router,%mixpanel_token_clickeat% ]
+
+    api_old_key_user_provider:
+        class: Clab\ApiOldBundle\Security\ApiKeyUserProvider

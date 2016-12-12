@@ -1,0 +1,88 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block bodyClass %}singlenav no-padding{% endblock %}
+{% block body %}
+<div class="container-fluid" id="dashboard-header">
+    <div class="container">
+         <div class="row">
+            <div class="col-md-8">
+                {% if chainstore.logoFile is defined and chainstore.logoFile %}
+                <img src="{{ vich_uploader_asset(chainstore, 'logoFile') }}" alt="logo"
+                     class="img-responsive"/>
+                {% else %}
+                <img src="{{ proxy.cover }}" id="galleryCover">
+                {% endif %}
+                <h2>{{ proxy.name }}</h2>
+            </div>
+             <div class="col-md-4">
+                     <a class="btn btn-default btn-lg btn-block" href="{{ path('manager_switch_restaurant', { slug: proxy.slug }) }}" target="_blank"><i class="fa fa-th icon-left"></i>Gestion des commandes</a>
+                     <br>
+             </div>
+        </div>
+    </div>
+</div>
+
+<div class="container padding-v-10" id="dashboard">
+    {% if reviews|length > 0 %}
+    <div class="row">
+        <h2>Les derniers avis</h2>
+        <section class="panel">
+            <div class="panel-body" id="couponTable">
+                <table class="table table-hover">
+                    <thead>
+                    <th>Titre</th>
+                    <th>Message</th>
+                    <th>Date</th>
+                    <th>Note globale</th>
+                    <th>Qualité des plats</th>
+                    <th>Propreté</th>
+                    <th>Service</th>
+                    <th>Prix</th>
+                    <th>Réponse</th>
+                    </thead>
+                    <tbody id="couponList" data-url="{{ path('board_coupon_library_list', { contextPk: contextPk }) }}"
+                           class="list">
+                    {% for review in reviews %}
+                        {% if loop.index < 6 %}
+                            <tr href="{{ path('board_review_library', {contextPk: contextPk}) }}"
+                                class="review" style="cursor: pointer;">
+                            <td class="name">{{ review.title }}</td>
+                            <td class="name">{{ review.body| truncate(100, true) }}</td>
+                            <td class="name">{{ review.created|date('d/m/Y') }}</td>
+                            <td class="name">{{ review.score }}/10</td>
+                            <td class="name">{{ review.cookScore }}/10</td>
+                            <td class="name">{{ review.hygieneScore }}/10</td>
+                            <td class="name">{{ review.serviceScore }}/10</td>
+                            <td class="name">{{ review.qualityScore }}/10</td>
+                            <td>
+                                {% if review.response is not null %}
+                                    <i class="fa fa-check"></i>
+                                {% else %}
+                                    <i class="fa fa-times"></i>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endif %}
+                    {% endfor %}
+
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function(){
+            $('table tr.review').click(function(){
+                window.location = $(this).attr('href');
+                return false;
+            });
+        });
+
+    </script>
+
+{% endblock %}

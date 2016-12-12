@@ -1,0 +1,50 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block nav %}{% endblock %}
+{% block bodyClass %}login{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="user">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well text-center">
+                <br>
+                <img src="{{ asset('front/bundle/board/img/logo-dark.png') }}" id="logo">
+                <br><br><br>
+
+                <form action="{{ path('board_onboard_join_contact', { slug: restaurant.slug, type: type }) }}" method="post" class="text-left">
+
+                    <div class="form-group">
+                        {{ form_row(form.duplicate, { attr: { class: 'icheck' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.phone, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.email, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.message, { attr: { class: 'form-control', rows: 6 } }) }}
+                    </div>
+
+                    {{ form_rest(form) }}
+
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" name="_submit">Continuer<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $('form').on('submit', function(e) {
+        $(this).find('button[type="submit"]').addClass('disabled');
+    });
+</script>
+{% endblock %}

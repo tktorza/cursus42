@@ -1,0 +1,63 @@
+api_rest_foodtruck_get:
+    path:  /{id}
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:get, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_list:
+    path:  /list
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:list, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_quick_list:
+    path:  /quicklist
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:quickList, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_seach:
+    path:  /search
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:search, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_seach_location:
+    path:  /search-location
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:searchByLocation, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_today_events:
+    path:  /{restaurantId}/events
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:getTodayEvents, _format: json }
+    methods: [GET]
+
+api_rest_foodtruck_validate:
+    path:  /{restaurantId}/events/validate
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:validate, _format: json }
+    methods: [POST]
+
+api_rest_foodtruck_publish:
+    path:  /{restaurantId}/events/publish
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:publish, _format: json }
+    methods: [POST]
+
+api_rest_foodtruck_cancel:
+    path:  /{restaurantId}/events/cancel
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:cancel, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_foodtruck_close:
+    path:  /{restaurantId}/events/close
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:close, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_foodtruck_edit:
+    path:  /{restaurantId}/events/edit
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:edit, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_foodtruck_delete:
+    path:  /{restaurant}/events/delete/{timesheet}
+    defaults: { _controller: ClabApiBundle:RestFoodtruck:delete, _format: json }
+    methods: [DELETE]
+
+
+
+

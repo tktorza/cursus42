@@ -1,0 +1,24 @@
+<div class="form-bottom">
+    <div class="flash-message">
+        {% for flashMessage in app.session.flashbag.get('formSuccess') %}
+          <div class="success"><i class="fa fa-check-circle icon-left"></i>{{ flashMessage }}</div>
+        {% endfor %}
+
+        {% for flashMessage in app.session.flashbag.get('formError') %}
+          <div class="error"><i class="fa fa-warning icon-left"></i>{{ flashMessage }}</div>
+        {% endfor %}
+    </div>
+    <div class="form-footer">
+        {% if deleteLink is defined and deleteLink %}
+        <a class="btn btn-default" href="{{ deleteLink }}"><i class="fa fa-trash-o"></i></a>
+        {% endif %}
+        <div class="pull-right">
+            {% if cancelRoute is defined %}
+                <a class="btn btn-default" href="{{ cancelRoute }}">Annuler</a>
+            {% endif %}
+            <button type="submit" class="btn btn-primary ladda-button" data-style="expand-right"><span class="ladda-label">Enregistrer</span></button>
+        </div>
+        <div class="clear">
+        </div>
+    </div>
+</div>

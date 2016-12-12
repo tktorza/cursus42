@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-navbar>
+    <button ion-button menuToggle>
+      <ion-icon name="menu"></ion-icon>
+    </button>
+    <ion-title>{{ pseudo }}</ion-title>
+  </ion-navbar>
+</ion-header>
+
+
+<ion-content padding>
+
+<ion-card *ngFor="let msg of messages">
+  <ion-card-content class="{{ msg.from }}">
+    {{ msg.msg }}
+  </ion-card-content>
+</ion-card>
+
+</ion-content>
+ <ion-footer>
+   <ion-item>
+    <ion-label floating>Message</ion-label>
+    <ion-input type="text" id="input" [(ngModel)]="msg"></ion-input>
+    
+  </ion-item>
+ <button ion-button icon-right (click)="send()">
+    <ion-icon class name="md-send"></ion-icon>
+    </button>
+</ion-footer>

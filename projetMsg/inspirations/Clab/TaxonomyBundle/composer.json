@@ -1,0 +1,35 @@
+{
+  "name" : "clicklab/taxonomybundle",
+  "description" : "Taxonomy Bundle",
+  "type" : "symfony-bundle",
+  "authors" : [{
+    "name" : "sacha",
+    "email" : "sacha@click-eat.fr"
+  }],
+  "keywords" : [
+    "taxonomy bundle"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "require" : {
+    "gedmo/doctrine-extensions":"2.4.*",
+    "symfony/symfony": "2.7.*",
+    "doctrine/orm": "^2.4.8",
+    "doctrine/doctrine-bundle": "~1.4"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "Clab\\TaxonomyBundle" : ""
+    }
+  },
+  "target-dir" : "Clab/TaxonomyBundle",
+  "repositories" : [{
+     "type": "vcs", "url": "https://github.com/click-lab/taxonomy-bundle"
+  }],
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "master"
+    }
+  }
+}

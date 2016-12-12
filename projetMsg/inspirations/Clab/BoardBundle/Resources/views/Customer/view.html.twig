@@ -1,0 +1,105 @@
+<div class="drawer-scroll">
+<div class="padding-h-20 padding-v-20">
+    <div class="well">
+        <div class="row">
+            <div class="col-sm-4">
+                <img src='{{ user.cover | imagine_filter('square_120') }}' class='img-thumbnail'>
+            </div>
+            <div class="col-sm-5">
+                <h3>{{ user.fullName }}</h3>
+                <p>
+                    Inscrit(e) le <strong>{{ user.created|date('d/m/Y') }}</strong><br>
+                    {{ sources|join(', ') }}
+                </p>
+                <p>
+                    {% if user.homeAddress %}
+                        <small> Domicile : {{ user.homeAddress.zip }}</small>
+                    {% endif %}
+                    {% if user.homeAddress and user.jobAddress %} / {% endif %}
+                    {% if user.jobAddress %}
+                        <small>Bureau : {{ user.jobAddress.zip }}</small>
+                    {% endif %}
+                </p>
+            </div>
+            <div class="col-sm-3">
+                <span class="label label-warning">Non abonné</span>
+            </div>
+        </div>
+        <a class="btn btn-primary btn-sm toggle-form" href="#"><i class="fa fa-envelope icon-left"></i>Envoyer un message</a>
+        <div id="form" class="hide">
+            <br>
+            <form action="{{ path('board_customer_view', { contextPk: contextPk, id: user.id }) }}" method="post" {{ form_enctype(form) }}>
+                {{ form_row(form.message, { attr: { class: 'form-control', rows: 6 } }) }}
+                {{ form_rest(form) }}
+                <br>
+                <button type="submit" class="btn btn-success">Envoyer</button>
+            </form>
+        </div>
+        <br>
+        <div class="form-message"></div>
+        <hr>
+        <h4>Commandes <span class="badge badge-primary">{{ user.orders|length }}</span></h4>
+        <table class="table table-stripped">
+            <thead>
+                <th>Date</th>
+                <th>Source</th>
+                <th>Type</th>
+                <th>Heure</th>
+                <th>Prix</th>
+            </thead>
+            <tbody>
+                {% for order in user.orders %}
+                <tr>
+                    <td>{{ order.time|date('d/m/Y') }}</td>
+                    <td>
+                        {% if order.multisite %}
+                            Marque blanche
+                        {% else %}
+                            Clickeat
+                        {% endif %},
+                        {% if order.facebookPage %}
+                            Facebook
+                        {% else %}
+                            {{ order.source }}
+                        {% endif %}
+                    </td>
+                    <td>{% if order.orderType %}{{ order.orderType.name }}{% endif %}</td>
+                    <td>{{ order.time|date('H:i') }}</td>
+                    <td>{{ order.price }}€</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+</div>
+
+<script type="text/javascript">
+$('a.toggle-form').on('click', function(e) {
+    e.preventDefault();
+    $('#form').removeClass('hide');
+});
+
+$('#form').on('submit', function(e) {
+    e.preventDefault();
+    form = $(this);
+    form.find('button').addClass('disabled');
+
+    $.ajax({
+        type: "POST",
+        url: form.attr('action'),
+        data: form.serialize(),
+        success: function(data) {
+            $('.form-message').html('<br><p class="text-success">Message envoyé !</p>');
+            form.addClass('hide');
+            form.find('input').val('');
+            form.find('button').removeClass('disabled');
+        },
+        error: function(data) {
+            $('.form-message').html('<br><p class="text-danger">Erreur lors de l\'envoi</p>');
+            form.addClass('hide');
+            form.find('button').removeClass('disabled');
+        }
+    });
+});
+</script>

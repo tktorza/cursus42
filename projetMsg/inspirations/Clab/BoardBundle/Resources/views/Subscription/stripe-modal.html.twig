@@ -1,0 +1,70 @@
+<div id="stripeModal" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content" style="width: 500px;">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Ajouter une carte</h4>
+            </div>
+            <div class="modal-body">
+                <div class="panel panel-default credit-card-box">
+                    <div class="panel-body">
+                        {{ form_start(form, {'attr': {'id': 'payment-form'}}) }}
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="cardNumber">Numéro de la carte</label>
+                                        <div class="input-group">
+                                            {{ form_widget(form.card, { 'attr': {'class': 'form-control',
+                                                'data-stripe':'number'} }) }}
+                                            <span class="input-group-addon log"><i class="fa fa-credit-card"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-7 col-md-7">
+                                    <div class="form-inline">
+                                    <div class="form-group">
+                                        <label for="cardExpiry">Date d'expiration</label>
+                                        {{  form_widget(form.month, { 'attr': {'class': 'form-control','data-stripe':'exp-month'} })  }}
+                                        {{  form_widget(form.year, { 'attr': {'class': 'form-control',
+                                            'data-stripe':'exp-year'} })  }}
+
+                                    </div>
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-md-5 pull-right">
+                                    <div class="form-group">
+                                        <label for="cardCVC">Code de sécurité</label>
+                                        {{  form_widget(form.cvc, { 'attr': {'class': 'form-control','data-stripe':'cvc'}})  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="form-group">
+                                        <label for="couponCode">Nom (facultatif)</label>
+                                        {{  form_widget(form.name, { 'attr': {'class': 'form-control',
+                                            'data-stripe':'name'} })  }}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <button class="btn btn-success btn-lg btn-block" type="submit">Ajouter ma
+                                                                                                   carte</button>
+                                </div>
+
+                            </div>
+                        {{ form_rest(form) }}
+                        {{ form_end(form) }}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

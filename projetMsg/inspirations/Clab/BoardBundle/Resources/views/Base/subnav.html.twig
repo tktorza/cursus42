@@ -1,0 +1,179 @@
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation" id="subNav">
+    <div class="container">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#subNav-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="collapse navbar-collapse" id="subNav-collapse">
+            <ul class="nav navbar-nav">
+                {% if category == 'restaurant' %}
+                    {% if forcedAdd is defined and forcedAdd%}
+                        <li {% if route == 'board_catalog' %}class="active"{% endif %}>
+                            <a href="{{ path('board_catalog', { context: context, contextPk: contextPk }) }}">Gestion rapide</a>
+                        </li>
+                        {% else %}
+                    <li {% if route == 'board_category_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_category_library', { context: context, contextPk: contextPk }) }}">Catégories</a>
+                    </li>
+                    <li {% if route == 'board_product_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_product_library', { context: context, contextPk: contextPk }) }}">Produits</a>
+                    </li>
+                    <li {% if route == 'board_meal_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_meal_library', { context: context, contextPk: contextPk }) }}">Formules</a>
+                    </li>
+                    {% if context!='client' %}
+                    <li {% if route == 'board_catalog' %}class="active"{% endif %}>
+                        <a href="{{ path('board_catalog', { context: context, contextPk: contextPk }) }}">Gestion rapide</a>
+                    </li>
+                    {% endif %}
+                    <li {% if route == 'board_catalog_import' %}class="active"{% endif %}>
+                        <a href="{{ path('board_catalog_import', { contextPk: contextPk }) }}">Import catalogue</a>
+                    </li>
+                        {% endif %}
+                {% endif %}
+                {% if category == 'store' %}
+                    <li {% if route == 'board_restaurant_profile' %}class="active"{% endif %}>
+                        <a href="{{ path('board_restaurant_profile', { contextPk: contextPk }) }}">Infos</a>
+                    </li>
+                    <li {% if route == 'board_restaurant_planning' %}class="active"{% endif %}>
+                        <a href="{{ path('board_restaurant_planning', { contextPk: contextPk }) }}">{% if proxy.isMobile %}Itinéraire{% else %}Horaires{% endif %}</a>
+                    </li>
+                    <li {% if route == 'board_user_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_user_library', { context: context, contextPk: contextPk }) }}">Employés</a>
+                    </li>
+                    <li {% if route == 'board_album_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_album_library', { context: context, contextPk: contextPk }) }}">Photos</a>
+                    </li>
+                    {% if proxy is defined and not proxy.isMobile %}
+                    <li {% if route == 'board_delivery' %}class="active"{% endif %}>
+                        <a href="{{ path('board_delivery', { context:context, contextPk: contextPk }) }}">Livraison</a>
+                    </li>
+                    {% endif %}
+                    {% if is_granted('ROLE_COMMERCIAL') %}
+                    <li {% if route == 'board_restaurant_settings_orders' %}class="active"{% endif %}>
+                        <a href="{{ path('board_restaurant_settings_orders', { contextPk: contextPk }) }}">Admin</a>
+                    </li>
+                    {% endif %}
+                    <li {% if route == 'board_preview' %}class="active"{% endif %}>
+                        <a href="{{ path('board_preview', { contextPk: contextPk }) }}">Aperçu</a>
+                    </li>
+                {% endif %}
+                {% if category == 'sales' %}
+                    <li {% if route == 'board_sales_reporting' %}class="active"{% endif %}>
+                        <a href="{{ path('board_sales_reporting', { contextPk: contextPk }) }}">Reporting</a>
+                    </li>
+                    <li {% if route == 'board_sales_payments' %}class="active"{% endif %}>
+                        <a href="{{ path('board_sales_payments', { contextPk: contextPk }) }}">Moyens de paiement</a>
+                    </li>
+                    <li {% if route == 'board_sales_tax' %}class="active"{% endif %}>
+                        <a href="{{ path('board_sales_tax', { contextPk: contextPk }) }}">TVA</a>
+                    </li>
+                    <li {% if route == 'board_accounting' %}class="active"{% endif %}>
+                        <a href="{{ path('board_accounting',{context: context, contextPk:contextPk}) }}">Comptes comptable</a>
+                    </li>
+                    {% if proxy is defined and proxy.hasCaisse %}
+                        <li {% if route == 'board_caisse_session_library' %}class="active"{% endif %}>
+                            <a href="{{ path('board_caisse_session_library', { contextPk: contextPk, context: context }) }}">Gestion caisse</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% if category == 'appstore' %}
+                    {% if proxy is defined and proxy.isMobile %}
+                    <li {% if route == 'board_appstore_widget' %}class="active"{% endif %}>
+                        <a href="{{ path('board_appstore_widget', { contextPk: contextPk }) }}">Widgets</a>
+                    </li>
+                    {% endif %}
+                    {#<li {% if route == 'board_appstore_app' %}class="active"{% endif %}>
+                        <a href="{{ path('board_appstore_app', { contextPk: contextPk }) }}">App</a>
+                    </li>#}
+                    {#
+                    <li {% if route == 'board_tools_loyalty' %}class="active"{% endif %}>
+                        <a href="{{ path('board_tools_loyalty', { contextPk: contextPk }) }}">Fidélité</a>
+                    </li>
+                    #}
+                {% endif %}
+                {% if category == 'settings' %}
+                    {% if restaurant is defined %}
+                        {% if restaurant.status < 3000 %}
+                    <li {% if route == 'board_settings_legal' %}class="active"{% endif %}>
+                        <a href="{{ path('board_settings', { contextPk: contextPk, type: 'legal' }) }}">Société</a>
+                    </li>
+                            {% endif %}
+                        {% endif %}
+                    <li {% if route == 'board_settings_mails' %}class="active"{% endif %}>
+                        <a href="{{ path('board_settings', { contextPk: contextPk, type: 'mails' }) }}">Mails</a>
+                    </li>
+                    <li {% if route == 'board_settings_social' %}class="active"{% endif %}>
+                        <a href="{{ path('board_settings', { contextPk: contextPk, type: 'social' }) }}">Intégration</a>
+                    </li>
+                {% endif %}
+                {% if category == 'client' %}
+                    <li {% if route == 'board_user_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_user_library', { context: context, contextPk: contextPk }) }}">Utilisateurs</a>
+                    </li>
+                    <li {% if route == 'board_client_reporting' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_reporting', { contextPk: contextPk }) }}">Reporting</a>
+                    </li>
+                    <li {% if route == 'board_client_settings' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_settings', { contextPk: contextPk }) }}">Droits</a>
+                    </li>
+                    <li {% if route == 'board_client_settings_social' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_settings_social', { contextPk: contextPk }) }}">Intégration</a>
+                    </li>
+                    <li {% if route == 'board_client_loyalty_config' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_loyalty_config', { contextPk: contextPk }) }}">Fidélité</a>
+                    </li>
+                    <li {% if route == 'board_client_settings_suggestions' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_settings_suggestions', { contextPk: contextPk }) }}">Ventes add</a>
+                    </li>
+                    {% if proxy is defined and proxy.hasCaisse %}
+                        <li {% if route == 'board_caisse_session_library' %}class="active"{% endif %}>
+                            <a href="{{ path('board_caisse_session_library', { contextPk: contextPk, context: context }) }}">Gestion caisse</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                {% if category == 'admin' %}
+                    <li {% if route == 'board_admin_library_restaurant' %}class="active"{% endif %}>
+                        <a href="{{ path('board_admin_library_restaurant',{contextPk: contextPk}) }}">Gestion des
+                                                                                                      restaurants</a>
+                    </li>
+                    <li {% if route == 'board_admin_library_manager' %}class="active"{% endif %}>
+                        <a href="{{ path('board_admin_library_manager',{contextPk:contextPk}) }}">Gestion du gérant de
+                                                                                      l'enseigne</a>
+                    </li>
+                    <li {% if route == 'board_restaurant_import' %}class="active"{% endif %}>
+                        <a href="{{ path('board_restaurant_import',{contextPk:contextPk}) }}">Import restaurants</a>
+                    </li>
+                    <li {% if route == 'board_client_company' %}class="active"{% endif %}>
+                        <a href="{{ path('board_client_company',{contextPk:contextPk}) }}">Gestion des sociétés</a>
+                    </li>
+                    <li {% if route == 'board_accounting' %}class="active"{% endif %}>
+                        <a href="{{ path('board_accounting',{context: context, contextPk:contextPk}) }}">Comptes comptable</a>
+                    </li>
+                {% endif %}
+                {% if category == 'apps' %}
+                    <li {% if route == 'board_apps_library' %}class="active"{% endif %}>
+                        <a href="{{ path('board_apps_library', {contextPk: contextPk })
+                        }}">Toutes les apps</a>
+                    </li>
+                    <li {% if route == 'board_apps_library_restaurant' %}class="active"{% endif %}>
+                        <a href="{{ path('board_apps_library_restaurant', { contextPk: contextPk }) }}">Mes apps</a>
+                    </li>
+                {% endif %}
+            </ul>
+            {% if forcedPricing is defined and forcedPricing and forcedPricingLabel is defined %}
+            <span class="navbar-right margin-left"><a href="#forcedPricingModal" data-toggle="modal" class="btn btn-primary">{{ forcedPricingLabel }}</a></span>
+            {% endif %}
+            {% if rightLink is defined and rightLink and rightLinkLabel is defined %}
+            <span class="navbar-right margin-left"><a href="{{ rightLink }}" class="btn {% if rightLinkClass is defined %}{{ rightLinkClass }}{% else %}btn-primary{% endif %} {% if rightLinkLadda is defined and rightLinkLadda %}ladda-button{% endif %}" {% if rightLinkLadda is defined and rightLinkLadda %}data-style="expand-right"{% endif %} {% if rightLinkAjaxModal is defined and rightLinkAjaxModal %}data-target="ajaxModal"{% endif %} {% if rightLinkDrawer is defined and rightLinkDrawer %}data-target="drawer"{% endif %}>{{ rightLinkLabel }}</a></span>
+            {% endif %}
+            {% if rightLink2 is defined and rightLink2 and rightLink2Label is defined %}
+            <span class="navbar-right"><a href="{{ rightLink2 }}" class="btn {% if rightLink2Class is defined %}{{ rightLink2Class }}{% else %}btn-primary{% endif %} {% if rightLink2Ladda is defined and rightLink2Ladda %}ladda-button{% endif %}" {% if rightLink2Ladda is defined and rightLink2Ladda %}data-style="expand-right"{% endif %} {% if rightLink2ajaxModal is defined and rightLink2ajaxModal %}data-target="ajaxModal"{% endif %} {% if rightLink2Drawer is defined and rightLink2Drawer %}data-target="drawer"{% endif %}>{{ rightLink2Label }}</a></span>
+            {% endif %}
+        </div>
+    </div>
+</div>

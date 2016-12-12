@@ -1,0 +1,33 @@
+Clab\SocialBundle\Entity\SocialPost:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+        type:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getType
+        title:
+            expose: true
+        message:
+            expose: true
+        created:
+            expose: true
+        cover:
+            expose: true
+            read_only: true
+            since_version: 3.0
+        apiCover:
+            expose: true
+            until_version: 2.9
+            accessor:
+                getter: getApiCover
+                setter: setApiCover
+        target:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getTarget

@@ -1,0 +1,39 @@
+board_admin_library_restaurant:
+    path:  /admin/library
+    defaults: { _controller: ClabBoardBundle:Admin:restaurantAdmin }
+
+board_admin_disallow_restaurant:
+    path:  /admin/close-order/{slug}
+    defaults: { _controller: ClabBoardBundle:Admin:disallowOrder }
+
+board_admin_allow_restaurant:
+    path:  /admin/open-order/{slug}
+    defaults: { _controller: ClabBoardBundle:Admin:allowOrder }
+
+board_admin_close_restaurant:
+    path:  /admin/close-store/{slug}
+    defaults: { _controller: ClabBoardBundle:Admin:closeRestaurant }
+
+board_admin_open_restaurant:
+    path:  /admin/open-store/{slug}
+    defaults: { _controller: ClabBoardBundle:Admin:openRestaurant}
+
+board_admin_synchro_restaurant:
+    path:  /admin/synchro/{slug}
+    defaults: { _controller: ClabBoardBundle:Admin:synchroRestaurant }
+
+board_admin_library_manager:
+    path:  /admin/manager/library
+    defaults: { _controller: ClabBoardBundle:Admin:manager }
+
+board_admin_add_manager:
+    path:  /admin/manager/add
+    defaults: { _controller: ClabBoardBundle:Admin:addManager }
+
+board_admin_edit_manager:
+    path:  /admin/manager/edit/{email}
+    defaults: { _controller: ClabBoardBundle:Admin:editManager }
+
+board_admin_remove_manager:
+    path:  /admin/manager/remove/{id}
+    defaults: { _controller: ClabBoardBundle:Admin:removeManager }

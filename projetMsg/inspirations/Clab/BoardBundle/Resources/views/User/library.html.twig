@@ -1,0 +1,196 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: context == 'restaurant' ? 'store' : 'client',
+        route: 'board_user_library',
+        rightLink: path('board_user_add', { context: context, contextPk: contextPk }),
+        rightLinkLabel: 'Ajouter un utilisateur myclickeat',
+        rightLinkAjaxModal: true,
+        rightLink2: path('board_user_pincode_add', { context: context, contextPk: contextPk }),
+        rightLink2Label: 'Ajouter un utilisateur caisse',
+        rightLink2ajaxModal: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="users">
+    <h3>Utilisateurs</h3>
+    <section class="panel">
+        <div class="panel-body" id="userTable">
+            <table class="table table-hover table-stripped table-bordered datatable" width="100%">
+                <thead>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                </thead>
+                <thead>
+                    <th>Nom</th>
+                    <th>Email</th>
+                    <th>Rôle(s)</th>
+                </thead>
+                <tbody id="userList" data-url="{{ path('board_user_library_list', { contextPk: contextPk, context: context }) }}" class="list">
+                    {% include 'ClabBoardBundle:User:libraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+
+    {% if context == 'restaurant' %}
+    <h3>Accès pin caisse</h3>
+    <section class="panel">
+        <div class="panel-body" id="staffTable">
+            <table class="table table-hover table-bordered table-stripped datatable" width="100%">
+                <thead>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                </thead>
+                <thead>
+                    <th>Nom</th>
+                    <th>Code</th>
+                    <th>Accès myclickeat</th>
+                    <th>Accès logs</th>
+                </thead>
+                <tbody id="staffList" data-url="{{ path('board_pincode_library_list', { contextPk: contextPk }) }}"
+                       class="list">
+                    {% include 'ClabBoardBundle:User:pin_list.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+    {% endif %}
+    {% if context == 'client' %}
+        <div class="well">
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(form.restaurants,{attr:{'class':'form-control select2'}}) }}
+            </div>
+        </div>
+        {% for key,user in restaurantUsers %}
+            <div class="restaurantUsers" id="{{ key }}" {% if not loop.first %}hidden{% endif %}>
+                <h3>Utilisateurs du restaurant {{ user.restaurant.name }}</h3>
+                <section class="panel">
+                    <div class="panel-body" id="userTable">
+                        <table class="table table-hover table-bordered table-stripped datatable" width="100%">
+                            <thead>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            </thead>
+                            <thead>
+                            <th>Nom</th>
+                            <th>Email</th>
+                            <th>Rôle(s)</th>
+                            </thead>
+                            <tbody id="userList" data-url="{{ path('board_user_library_list', { contextPk: contextPk, context: context }) }}" class="list">
+
+                    {% if user %}
+                        {% for u in user.users %}
+                                    <tr
+                                            id="user-{{ u.id }}"
+                                            class="clickable"
+                                            data-target="ajaxModal" href="{{ path('board_user_edit', { context: context,
+                                        contextPk: contextPk, id: u.id }) }}"
+                                            >
+                                        <td>{{ u.fullName }}</td>
+                                        <td>{{ u.email }}</td>
+                                        <td>
+                                            {% if u.isManager %}<span class="label label-danger">Gérant</span>{% endif %}
+                                            {% if u.isManager2 %}<span class="label label-success">Manageur</span>{% endif %}
+                                            {% if u.isSeller %}<span class="label label-info">Vendeur</span>{% endif %}
+                                            {% if u.isDeliveryman %}<span class="label label-warning">Livreur</span>{% endif %}
+                                        </td>
+                                    </tr>
+                        {% endfor %}
+                    {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+                <h3>Accès pin caisse du restauraut {{ key }}</h3>
+                <section class="panel">
+                    <div class="panel-body" id="staffTable">
+                        <table class="table table-hover table-bordered table-stripped datatable" width="100%">
+                            <thead>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                            </thead>
+                            <thead>
+                            <th>Nom</th>
+                            <th>Code</th>
+                            <th>Accès myclickeat</th>
+                            <th>Accès logs</th>
+                            </thead>
+                            <tbody id="staffList" data-url="{{ path('board_pincode_library_list', { contextPk:
+                                user.restaurant.slug }) }}"
+                                   class="list">
+                            {% for pincode in user.pincodes %}
+                                <tr
+                                        id="staff-{{ pincode.id }}"
+                                        class="clickable"
+                                        data-target="drawer" href="{{ path('board_pincode_edit', { contextPk: user
+                                    .restaurant.slug, id: pincode.id }) }}"
+                                        >
+                                    <td>
+                                        {{ pincode.name }}
+                                    </td>
+                                    <td>  {{ pincode.code }}</td>
+                                    <td>{% if pincode.hasRightOnBo == 1 %} <i class="fa fa-check"></i> {% else
+                                        %}<i class="fa fa-times"></i>{% endif %}</td>
+                                    <td>{% if pincode.hasRightOnLogs == 1 %} <i class="fa fa-check"></i>{%
+                                        else %}<i class="fa fa-times"></i>{% endif %}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+        {% endfor %}
+
+
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+function mix()
+{
+    $('#userList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+
+    $('#staffList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#userList').mixItUp('destroy');
+    $('#staffList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+
+{% if context =='client' %}
+    var idForm ='#{{ form.restaurants.vars.id }}';
+
+    $(idForm).change(function(){
+        $('.restaurantUsers').hide();
+        $('#'+$(this).find(':selected').val()).show();
+    });
+{% endif %}
+</script>
+{% endblock %}

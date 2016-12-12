@@ -1,0 +1,69 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'social',
+        route: 'board_coupon_library',
+        rightLink: path('board_coupon_edit', { contextPk: contextPk }),
+        rightLinkLabel: 'Créer un coupon',
+        rightLinkDrawer: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="coupons">
+    <section class="panel">
+        <div class="panel-body" id="couponTable">
+            <table class="table table-hover table-bordered table-stripped" id="datatable" width="100%">
+                <thead>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                </thead>
+                <thead>
+                    <th>Nom</th>
+                    <th>Réduction</th>
+                    <th>Date de début de validité</th>
+                    <th>Date de fin de validité</th>
+                    <th>Quantité</th>
+                    <th>Statut</th>
+                </thead>
+                <tbody id="couponList" data-url="{{ path('board_coupon_library_list', { contextPk: contextPk }) }}"
+                       class="list">
+                    {% include 'ClabBoardBundle:Coupon:libraryList.html.twig' %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+
+<script type="text/javascript">
+
+function mix()
+{
+    $('#couponList').mixItUp({
+        layout: {
+            display: 'table-row',
+        }
+    });
+}
+
+function ajaxFormCallback()
+{
+    $('#couponList').mixItUp('destroy');
+    mix();
+}
+
+mix();
+
+{% if coupon is defined and coupon %}
+    $('#coupon-{{ coupon }}').trigger('click');
+{% endif %}
+</script>
+{% endblock %}

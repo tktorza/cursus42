@@ -1,0 +1,33 @@
+Clab\MediaBundle\Entity\Image:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        created:
+            expose: true
+            groups: [app,pro]
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+            groups: [app,pro]
+        name:
+            expose: true
+            read_only: true
+            groups: [app,pro]
+        mobilePath:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getWebPath
+            groups: [app,pro]
+        webPath:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getWebPath
+            groups: [app,search,public,pro]

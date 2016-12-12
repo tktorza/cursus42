@@ -1,0 +1,61 @@
+api_0_store:
+    resource: "@ClabApiOldBundle/Resources/config/routing/store.yml"
+
+api_0_log:
+    resource: "@ClabApiOldBundle/Resources/config/routing/log.yml"
+    prefix: /logs
+api_0_discount:
+    resource: "@ClabApiOldBundle/Resources/config/routing/discount.yml"
+
+api_0_coupon:
+    resource: "@ClabApiOldBundle/Resources/config/routing/coupon.yml"
+
+
+api_0_catalog:
+    resource: "@ClabApiOldBundle/Resources/config/routing/catalog.yml"
+    prefix: /restaurant
+
+api_0_order:
+    resource: "@ClabApiOldBundle/Resources/config/routing/order.yml"
+
+api_0_cart:
+    resource: "@ClabApiOldBundle/Resources/config/routing/cart.yml"
+
+api_0_push:
+    resource: "@ClabApiOldBundle/Resources/config/routing/push.yml"
+
+api_0_meal:
+    resource: "@ClabApiOldBundle/Resources/config/routing/meal.yml"
+
+api_0_social:
+    resource: "@ClabApiOldBundle/Resources/config/routing/social.yml"
+
+api_0_review:
+    resource: "@ClabApiOldBundle/Resources/config/routing/review.yml"
+
+api_0_media:
+    resource: "@ClabApiOldBundle/Resources/config/routing/media.yml"
+
+api_0_pos_printer:
+    resource: "@ClabApiOldBundle/Resources/config/routing/posprinter.yml"
+
+api_0_user:
+    resource: "@ClabApiOldBundle/Resources/config/routing/user.yml"
+
+api_0_event:
+    resource: "@ClabApiOldBundle/Resources/config/routing/event.yml"
+
+api_0_taxonomy:
+    resource: "@ClabApiOldBundle/Resources/config/routing/taxonomy.yml"
+api_0_restaurant:
+    resource: "@ClabApiOldBundle/Resources/config/routing/restaurant.yml"
+
+api_0_user_send_validation2:
+    path:  /user/send-validation
+    defaults: { _controller: ClabApiOldBundle:RestUser:sendValidationCode }
+    methods: [POST]
+
+api_0_user_send_validate2:
+    path:  /user/validate
+    defaults: { _controller: ClabApiOldBundle:RestUser:validate }
+    methods: [POST]

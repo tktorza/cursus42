@@ -1,0 +1,185 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'social',
+        route: 'board_social_dashboard',
+    } %}
+{% endblock %}
+
+{% form_theme form _self %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="social">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well">
+            <form method="post" {{ form_enctype(form) }}>
+
+                {% if flow.getCurrentStepNumber() == 1 %}
+                    <h3>Choisir un produit parmi votre catalogue</h3>
+                    <div id="products">
+                        <input type="text" class="search form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+                        {{ form_widget(form.product) }}
+                    </div>
+                    {{ form_errors(form.product) }}
+                {% elseif flow.getCurrentStepNumber() == 2 %}
+                    <h3>Choisir une formule parmi votre catalogue</h3>
+                    <div id="meals">
+                        <input type="text" class="search form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+                        {{ form_widget(form.meal) }}
+                    </div>
+                    {{ form_errors(form.meal) }}
+                {% elseif flow.getCurrentStepNumber() == 3 %}
+                    <h3>Choisir une offre</h3>
+                    <div id="discounts">
+                        <input type="text" class="search form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+                        {{ form_widget(form.discount) }}
+                    </div>
+                    {{ form_errors(form.discount) }}
+                {% elseif flow.getCurrentStepNumber() == 4 %}
+                    <h3>Choisir une offre</h3>
+                    <div id="events">
+                        <input type="text" class="search form-control input-lg square" placeholder="Rechercher..." style="border-bottom: none;">
+                        {{ form_widget(form.event) }}
+                    </div>
+                    {{ form_errors(form.discount) }}
+                {% elseif flow.getCurrentStepNumber() == 5 %}
+                    <div class="form-group">
+                        {{ form_row(form.title, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.message, { attr: { class: 'form-control', rows: 6 } }) }}
+                    </div>
+
+                    <hr>
+
+                    <div class="form-group text-center">
+                        <div class="btn btn-success btn-file">
+                            {{ form_widget(form.image) }}
+                            <i class="fa fa-upload icon-left"></i>Uploader une image
+                        </div>
+                        {{ form_errors(form.image) }}
+                        <p><small>Ou laissez l'image par défaut</small></p>
+                    </div>
+
+                    {% if form.to_facebook is defined %}
+                    <hr>
+
+                    <div class="row">
+                        <div class="col-md-4 text-center">
+                            <span class="fa-stack fa-lg facebook">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-facebook fa-stack-1x fa-inverse"></i>
+                            </span>
+                            {{ form_row(form.to_facebook, { attr: { class: 'icheck' } }) }}
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <span class="fa-stack fa-lg twitter">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+                            </span>
+                            {{ form_row(form.to_twitter, { attr: { class: 'icheck' } }) }}
+                        </div>
+                        {% if form.add_link is defined %}
+                        <div class="col-md-4 text-center">
+                            <span class="fa-stack fa-lg">
+                                <i class="fa fa-circle fa-stack-2x"></i>
+                                <i class="fa fa-link fa-stack-1x fa-inverse"></i>
+                            </span>
+                            {{ form_row(form.add_link, { attr: { class: 'icheck' } }) }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% endif %}
+                {% endif %}
+
+                {{ form_rest(form) }}
+
+                <br><br>
+                {% include 'ClabBoardBundle:Base:formFlowButtons.html.twig' with { saveButton: 'Partager !' } %}
+            </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+var productList = new List('products', {
+    valueNames: [ 'name' ]
+});
+
+var mealList = new List('meals', {
+    valueNames: [ 'name' ]
+});
+
+var discountList = new List('discounts', {
+    valueNames: [ 'name' ]
+});
+</script>
+{% endblock %}
+
+{% block _board_social_post_product_product_widget %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    <ul class="list list-group list-group-checkbox">
+    {% for id, child in form %}
+        {% set entity = form.vars.choices[id].data %}
+        <li class="list-group-item clearfix">
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+            <span class="name">{{ child.vars.label|trans({}, translation_domain) }}</span>
+            <div class="checkbox pull-right">
+                {{ form_widget(child, {'attr': {'class': 'icheck ' ~ attr.widget_class|default('')}}) }}
+            </div>
+        </label>
+        </li>
+    {% endfor %}
+    </ul>
+{% endspaceless %}
+{% endblock _board_social_post_product_product_widget %}
+
+{% block _board_social_post_meal_meal_widget %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    <ul class="list list-group list-group-checkbox">
+    {% for id, child in form %}
+        {% set entity = form.vars.choices[id].data %}
+        <li class="list-group-item clearfix">
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <img src="{{ entity.gallery.cover.webPath | imagine_filter('square_60') }}">
+            <span class="name">{{ child.vars.label|trans({}, translation_domain) }}</span>
+            <div class="checkbox pull-right">
+                {{ form_widget(child, {'attr': {'class': 'icheck ' ~ attr.widget_class|default('')}}) }}
+            </div>
+        </label>
+        </li>
+    {% endfor %}
+    </ul>
+{% endspaceless %}
+{% endblock _board_social_post_meal_meal_widget %}
+
+{% block _board_social_post_discount_discount_widget %}
+{% spaceless %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class|default(''))}) %}
+    {% set label_attr = label_attr|merge({'class': (label_attr.class ~ ' ' ~ (multiple ? 'checkbox' : 'radio'))}) %}
+    <ul class="list list-group list-group-checkbox">
+    {% for id, child in form %}
+        {% set entity = form.vars.choices[id].data %}
+        <li class="list-group-item clearfix">
+        <label{% for attrname, attrvalue in label_attr %} {{ attrname }}="{{ attrvalue }}"{% endfor %}>
+            <span class="name"><strong>{{ child.vars.label|trans({}, translation_domain) }}</strong></span>
+            <div class="checkbox pull-right">
+                {{ form_widget(child, {'attr': {'class': 'icheck ' ~ attr.widget_class|default('')}}) }}
+            </div>
+        </label>
+        </li>
+    {% endfor %}
+    </ul>
+{% endspaceless %}
+{% endblock _board_social_post_discount_discount_widget %}

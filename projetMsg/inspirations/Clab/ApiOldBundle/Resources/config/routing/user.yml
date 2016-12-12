@@ -1,0 +1,109 @@
+api_0_rest_user_authenticate:
+    path:  /user/authenticate
+    defaults: { _controller: ClabApiOldBundle:RestUser:login, _format: json }
+    methods: [POST]
+
+api_0_rest_users_list:
+    path:  /user/lists
+    defaults: { _controller: ClabApiOldBundle:RestUser:getusers, _format: json }
+    methods: [GET]
+
+api_0_rest_user_list:
+    path:  /user/list/{email}
+    defaults: { _controller: ClabApiOldBundle:RestUser:getuser, _format: json }
+    methods: [GET]
+
+api_0_rest_user_logout:
+    path:  /user/logout
+    defaults: { _controller: ClabApiOldBundle:RestUser:logout, _format: json }
+    methods: [POST]
+
+api_0_rest_user_validate_token:
+    path:  /user/validate-token
+    defaults: { _controller: ClabApiOldBundle:RestUser:validateToken, _format: json }
+    methods: [POST]
+
+api_0_rest_user_register:
+    path:  /user/register
+    defaults: { _controller: ClabApiOldBundle:RestUser:register, _format: json }
+    methods: [POST]
+
+api_0_rest_user_facebook_connect:
+    path:  /user/facebook-connect
+    defaults: { _controller: ClabApiOldBundle:RestUser:facebookConnect, _format: json }
+    methods: [POST]
+
+api_0_rest_user_restaurants:
+    path:  /user/restaurants
+    defaults: { _controller: ClabApiOldBundle:RestUser:restaurants, _format: json }
+    methods: [GET]
+
+api_0_rest_user_edit:
+    path:  /user/profile/{id}
+    defaults: { _controller: ClabApiOldBundle:RestUser:edit, _format: json }
+    methods: [PUT,PATCH]
+
+api_0_rest_user_edit_cover:
+    path:  /user/profile/cover
+    defaults: { _controller: ClabApiOldBundle:RestUser:editCover, _format: json }
+    methods: [POST]
+
+api_0_rest_user_reset_password:
+    path:  /user/reset
+    defaults: { _controller: ClabApiOldBundle:RestUser:resetPassword, _format: json }
+    methods: [POST]
+
+api_0_rest_user_pincode_login:
+    path:  /user/pin/{restaurant}/login
+    defaults: { _controller: ClabApiOldBundle:RestUser:loginPinCode, _format: json }
+    methods: [POST]
+
+api_0_rest_user_friendlist_add:
+    path:  /user/friendlist/add
+    defaults: { _controller: ClabApiOldBundle:RestUser:addUserToFriendList, _format: json }
+    methods: [POST]
+
+api_0_rest_user_friendlist_remove:
+    path:  /user/friendlist/remove
+    defaults: { _controller: ClabApiOldBundle:RestUser:removeUserToFriendList, _format: json }
+    methods: [POST]
+
+api_0_rest_user_friendlist_add_from_fb:
+    path:  /user/friendlist/add/facebook
+    defaults: { _controller: ClabApiOldBundle:RestUser:addUserToFriendListFromFB, _format: json }
+    methods: [POST]
+
+api_0_rest_user_friendlist_add_from_emails:
+    path:  /user/friendlist/add/emails
+    defaults: { _controller: ClabApiOldBundle:RestUser:addUserToFriendListFromEmail, _format: json }
+    methods: [POST]
+
+api_0_rest_user_friendlist_add_from_phone:
+    path:  /user/friendlist/add/phone
+    defaults: { _controller: ClabApiOldBundle:RestUser:addUserToFriendListFromPhone, _format: json }
+    methods: [POST]
+
+api_0_rest_user_find_images:
+    path:  /user/images/public/{id}
+    defaults: { _controller: ClabApiOldBundle:RestUser:findAllImageFromUser, _format: json }
+    methods: [POST]
+
+api_0_rest_user_post_image:
+    path:  /user/image/post/{entityId}/{userId}
+    defaults: { _controller: ClabApiOldBundle:RestUser:uploadImageInRestaurant, _format: json }
+    methods: [POST]
+
+api_0_rest_user_validate:
+    path:  /user/validate
+    defaults: { _controller: ClabApiOldBundle:RestUser:validateLogin, _format: json }
+    methods: [POST]
+
+api_0_rest_user_add_database:
+    path:  /user-database/add
+    defaults: { _controller: ClabApiOldBundle:RestUser:addUserToUserDatabase, _format: json }
+    methods: [POST]
+
+api_0_rest_user_edit_database:
+    path:  /user-database/edit
+    defaults: { _controller: ClabApiOldBundle:RestUser:editUserToUserDatabase, _format: json }
+    methods: [POST]

@@ -1,0 +1,371 @@
+{% extends 'ClabManagerBundle:Dashboard2:layout.html.twig' %}
+
+{% block page %}
+<div data-role="page" data-dialog="true" class="dashboard-page">
+    <div data-role="header" data-theme="b"
+         class="{% if order.state != 4 and order.state != 5 %}
+                    {% if order.onlinePayment %}
+                        header-online-payment
+                    {% else %}
+                        {% if order.company is defined and order.company is not null %}
+                            header-company-payment
+                        {% else %}
+                            header-direct-payment
+                        {% endif %}
+                    {% endif %}
+                {% else %}
+                    {% if order.state == 5 %}
+                        header-canceled
+                    {% else %}
+                        header-order
+                    {% endif %}
+                {% endif %}">
+        <h1>le {{ order.time|date('d/m') }} à {{ order.time|date('G:i') }} | {{ order.profile.fullName }} </h1>
+        <a href="#popupMenu" data-rel="popup" data-transition="slideup" data-icon="gear" class="ui-btn-right" data-theme="a"></a>
+        <div data-role="popup" id="popupMenu" data-theme="b">
+            <ul data-role="listview" data-inset="true" style="min-width:210px;">
+                {% if order.profile.phone and order.state < 4 %}
+                <li><a href="tel:{{ order.profile.phone }}">Appeler</a></li>
+                {% endif %}
+                <li><a href="#" onClick="window.print();">Imprimer</a></li>
+            </ul>
+        </div>
+    </div><!-- /header -->
+    <div role="main" class="ui-content">
+
+        {% if order.state == 5 %}
+            <h3>Commande annulée</h3>
+        {% endif %}
+        {% if order.orderType.id == 3 %}
+            <h4>Commande en livraison</h4>
+        {% elseif order.orderType.id == 1 %}
+            <h4>Commande à emporter</h4>
+        {% else %}
+            <h4>Commande </h4>
+        {% endif %}
+        {% if order.onlinePayment == false %}
+            {% if order.company is defined and order.company is not null %}
+                <h5>Commande facturée au compte société de: <b>{{ order.company.name }}</b></h5>
+            {% else %}
+                <h5>Paiement sur place</h5>
+            {% endif %}
+        {% else %}
+            <h5>Payé sur internet</h5>
+        {% endif %}
+
+        <br>
+        <table class="table table-striped">
+            <thead>
+            <th>#</th>
+            <th>Nom</th>
+            <th>Quantité</th>
+            <th style="width: 100px;">Prix unit.</th>
+            <th>Prix tot.</th>
+            </thead>
+
+            <tbody>
+            {% for element in order.cart.elements %}
+            <tr>
+            {% if element.product != null and element.parent is null %}
+                <td>#{{ loop.index }}</td>
+                <td>
+                {{ element.product.name }}
+
+                {% if element.choices|length > 0 %}
+                <br>
+                <small>{% for choice in element.choices %}{% if not loop.first %}, {% endif %}<strong>{{ choice.option.name}} : </strong>{{ choice.value }}{% endfor %}</small>
+                {% endif %}
+                </td>
+                <td>{{ element.quantity }}</td>
+                <td>{{ element.price }}€</td>
+                <td>{{ element.price * element.quantity }}€</td>
+            </tr>
+            {% elseif element.meal != null %}
+                <td>#{{ loop.index }}</td>
+                <td>{{ element.meal.name }}{% if element.choices|length > 0 %} <i class="icon-info-sign"></i>{% endif %}</td>
+                <td>{{ element.quantity }}</td>
+                <td>{{ element.price }}€</td>
+                <td>{{ element.price * element.quantity }}€</td>
+            </tr>
+            {% for children in element.childrens %}
+            <tr>
+
+                <td> - </td>
+                <td>
+                {{ children.product.name }}
+                {% if children.choices|length > 0 %}
+                <br>
+                <small>{% for choice in children.choices %}{% if not loop.first %}, {% endif %}<strong>{{ choice.option.name}} : </strong> {{ choice.value }}{% endfor %}</small>
+                {% endif %}
+                </td>
+                <td>{{ children.quantity * element.quantity }}</td>
+                <td>{{ children.price }}€</td>
+                <td>{{ children.price * children.quantity * element.quantity }}€</td>
+            </tr>
+            {% endfor %}
+            {% endif %}
+            {% endfor %}
+
+            {% if order.cart.deliveryCart is not null and order.cart.deliveryCart.extra and order.cart.deliveryCart.extra > 0 %}
+                <tr>
+                    <td colspan="4">Supplément livraison</td>
+                    <td><span class="pull-rigth">{{ order.cart.deliveryCart.extra }}€</span></td>
+                </tr>
+            {% endif %}
+
+            <tr>
+                <td></td><td></td><td></td>
+                <td><small>Total HT</small></td>
+                <td><small><span id="order-price">{{ (order.price - (order.tva55 +  order.tva7 +order.tva10 +order.tva20 ))|number_format(2, '.', ',') }}</span>€</small></td>
+            </tr>
+            {% if order.tva55 > 0 %}
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td><small>TVA 5.5%</small></td>
+                    <td><small><span id="order-price">{{ order.tva55|number_format(2, '.', ',') }}</span>€</small></td>
+                </tr>
+            {% endif %}
+            {% if order.tva7 > 0 %}
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td><small>TVA 7%</small></td>
+                    <td><small><span id="order-price">{{ order.tva7|number_format(2, '.', ',') }}</span>€</small></td>
+                </tr>
+            {% endif %}
+            {% if order.tva10 > 0 %}
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td><small>TVA 10%</small></td>
+                    <td><small><span id="order-price">{{ order.tva10|number_format(2, '.', ',') }}</span>€</small></td>
+                </tr>
+            {% endif %}
+            {% if order.tva20 > 0 %}
+                <tr>
+                    <td></td><td></td><td></td>
+                    <td><small>TVA 20%</small></td>
+                    <td><small><span id="order-price">{{ order.tva20|number_format(2, '.', ',') }}</span>€</small></td>
+                </tr>
+            {% endif %}
+            <tr>
+                <td></td><td></td><td></td>
+                <td><strong>Total TTC</strong></td>
+                <td><strong><span id="order-price">{{ order.price|number_format(2, '.', ',') }}</span>€</strong></td>
+            </tr>
+            </tbody>
+        </table>
+
+        {% if order.cart.discount %}
+            <p><i class="icon-tag"></i>&nbsp;&nbsp;Offre: {{ order.cart.discount.name }} : {{ order.cart.discount.description }}</p>
+        {% endif %}
+
+        {% if order.cart.coupon %}
+            <p><i class="icon-tag"></i>&nbsp;&nbsp;Coupon: {{ order.cart.coupon.name }} - {{ order.cart.coupon.verbose }}</p>
+        {% endif %}
+
+
+        <p><strong>Commentaire client: </strong>  {% if order.comment is not null %}{{ order.comment }}{% else %}Non renseigné{% endif %}</p>
+        {% if order.delivery and order.orderType.id == 3 %}
+            <p><strong>Adresse de livraison : </strong>{{ order.delivery.address }}</p>
+            <p><strong>Compléments : </strong></br>{{ order.delivery.address.fullStringDescription() | nl2br }}</p>
+        {% endif %}
+
+
+        {% if order.state != 4 and order.state != 5 %}
+            <form action="{{ path('manager_order_update') }}" method="post" data-ajax="false">
+                <input type="hidden" name="order" value="{{ order.id }}"/>
+                <button type="submit" data-role="button" data-theme="b" data-transition="pop">Cloturer</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+    <div data-role="page" data-dialog="true" class="print-page">
+        <center>
+            {% if order.cart.restaurant.printImageName is not null %}
+                <img src="{{ vich_uploader_asset(order.cart.restaurant, 'printImageFile')| imagine_filter('square_60') }}" class="logo-restaurant">
+            {% endif %}
+            <h4>{{ order.cart.restaurant.name }}</h4> <br/></center>
+        <p style="font-size: 10px;"> {{ order.cart.restaurant.address }}</p>
+        <p style="font-size: 10px;"> Commande - {{ order.source }}</p>
+        <p style="font-size: 10px;"> {{ order.time|date("d/m/Y \\- g:i")}} (retrait) </p>
+        <p style="font-size: 10px;">{{ order.profile.firstName }} {{ order.profile.lastName }}</p>
+
+        <div role="main" class="ui-content" style="font-size: 10px;margin-left:-5%">
+            {% if order.state == 5 %}
+                <h3>Commande annulée</h3>
+            {% endif %}
+            <table class="table table-striped">
+                <thead>
+                <th>Nom</th>
+                <th>Qté</th>
+                <th>PU</th>
+                <th>PT</th>
+                </thead>
+
+                <tbody>
+                {% for element in order.cart.elements %}
+                <tr>
+                {% if element.product != null and element.parent is null %}
+
+                    <td>
+                    {{ element.product.name }}
+
+                    {% if element.choices|length > 0 %}
+                    <br>
+                    <small>{% for choice in element.choices %}{% if not loop.first %}, {% endif %}<strong>{{ choice.option.name}} : </strong>{{choice.value }}{% endfor %}</small>
+                    {% endif %}
+                    </td>
+                    <td>{{ element.quantity }}</td>
+                    <td>{{ element.price }}€</td>
+                    <td>{{ element.price * element.quantity }}€</td>
+                </tr>
+                {% elseif element.meal != null %}
+                    <td>#{{ loop.index }}</td>
+                    <td>{{ element.meal.name }}{% if element.choices|length > 0 %} <i class="icon-info-sign"></i>{% endif %}</td>
+                    <td>{{ element.quantity }}</td>
+                    <td>{{ element.price }}€</td>
+                    <td>{{ element.price * element.quantity }}€</td>
+                </tr>
+                {% for children in element.childrens %}
+                <tr>
+
+                    <td> - </td>
+                    <td>
+                    {{ children.product.name }}
+                    {% if children.choices|length > 0 %}
+                    <br>
+                    <small>{% for choice in children.choices %}{% if not loop.first %}, {% endif %}<strong>{{ choice.option.name}} : </strong>{{ choice.value }}{% endfor %}</small>
+                    {% endif %}
+                    </td>
+                    <td>{{ children.quantity * element.quantity }}</td>
+                    <td>{{ children.price }}€</td>
+                    <td>{{ children.price * children.quantity * element.quantity }}€</td>
+                </tr>
+                {% endfor %}
+                {% endif %}
+                {% endfor %}
+
+                {% if order.cart.deliveryCart is not null and order.cart.deliveryCart.extra and order.cart.deliveryCart.extra > 0 %}
+                    <tr>
+                        <td colspan="4">Supplément livraison</td>
+                        <td><span class="pull-rigth">{{ order.cart.deliveryCart.extra }}€</span></td>
+                    </tr>
+                {% endif %}
+
+                <tr style="margin-right:20%">
+                    <td></td><td></td>
+                    <td><small>Total HT</small></td>
+                    <td><small><span id="order-price">{{ (order.price - (order.tva55 +  order.tva7 +order.tva10 +order.tva20 ))|number_format(2, '.', ',') }}</span>€</small></td>
+                </tr>
+                {% if order.tva55 > 0 %}
+                    <tr style="margin-right:20%">
+                        <td></td><td></td>
+                        <td><small>TVA 5.5%</small></td>
+                        <td><small><span id="order-price">{{ order.tva55|number_format(2, '.', ',') }}</span>€</small></td>
+                    </tr>
+                {% endif %}
+                {% if order.tva7 > 0 %}
+                    <tr style="margin-right:20%">
+                        <td></td><td></td>
+                        <td><small>TVA 7%</small></td>
+                        <td><small><span id="order-price">{{ order.tva7|number_format(2, '.', ',') }}</span>€</small></td>
+                    </tr>
+                {% endif %}
+                {% if order.tva10 > 0 %}
+                    <tr style="margin-right:20%">
+                        <td></td><td></td>
+                        <td><small>TVA 10%</small></td>
+                        <td><small><span id="order-price">{{ order.tva10|number_format(2, '.', ',') }}</span>€</small></td>
+                    </tr>
+                {% endif %}
+                {% if order.tva20 > 0 %}
+                    <tr style="margin-right:20%">
+                        <td></td><td></td>
+                        <td><small>TVA 20%</small></td>
+                        <td><small><span id="order-price">{{ order.tva20|number_format(2, '.', ',') }}</span>€</small></td>
+                    </tr>
+                {% endif %}
+                <tr style="margin-right:20%">
+                    <td></td><td></td>
+                    <td><strong>Total TTC</strong></td>
+                    <td><strong><span id="order-price">{{ order.price|number_format(2, '.', ',') }}</span>€</strong></td>
+                </tr>
+                </tbody>
+            </table>
+
+            {% if order.cart.discount %}
+                <p><i class="icon-tag"></i>Le client bénéficie de l'offre: {{ order.cart.discount.name }}</p>
+            {% endif %}
+
+            {% if order.cart.coupon %}
+                <p><i class="icon-tag"></i>&nbsp;&nbsp;Coupon: {{ order.cart.coupon.name }} - {{ order.cart.coupon.verbose }}</p>
+            {% endif %}
+
+            {% if order.comment != null %}
+                <p><strong>Commentaire client: </strong>{{ order.comment }}</p>
+            {% endif %}
+
+            {% if order.delivery and order.delivery.code and order.state < 4 %}
+                <hr>
+                <div style="font-size: 140%">
+                    <p><strong>Commande en livraison</strong></p>
+                </div>
+                <p><strong>Code livreur : </strong>{{ order.delivery.code }}</p>
+                <p><strong>Adresse : </strong>{{ order.delivery.address.verbose }}</p>
+                <p><strong>Commentaire : </strong>{{ order.delivery.comment }}</p>
+                <p><strong>Téléphone : </strong>{{ order.profile.phone }}</p>
+                <hr>
+            {% endif %}
+        </div>
+        <p style="font-size: 10px;">Prix avant Remise :  {{ order.cart.basePrice }}   € </p>
+        <p style="font-size: 10px;"> Remise :  {{ order.cart.discountAmount }}   € </p>
+
+        TOTAL : {{ order.price }} €
+        <br>
+        <h6>PAIEMENTS</h6>
+        {% if order.onlinePayment == true %}
+            <p style="font-size: 10px;"> Paiement en ligne : {{ order.price }} €</p>
+            <p style="font-size: 10px;"> Restant à payer : 0 € </p>
+        {% else %}
+            <p>Paiement en ligne : 0 €</p>
+            <p>Restant à payer : {{ order.price }} €</p>
+        {% endif %}
+        <br />
+        <br />
+        {% if order.cart.restaurant.footerPrint is not null %}
+            <p style="font-size: 10px;">   {{  order.cart.restaurant.footerPrint|raw }}</p>
+        {% else %}
+            <p style="font-size: 10px;">    Powered by click-eat.fr</p>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block js_top %}
+    {{ parent() }}
+
+    <script>
+        (function() {
+
+            var afterPrint = function() {
+                setTimeout(function(){
+                    window.close();
+                },3000);
+            };
+
+            if (window.matchMedia) {
+                var mediaQueryList = window.matchMedia('print');
+                mediaQueryList.addListener(function(mql) {
+                    if (mql.matches) {
+                    } else {
+                        afterPrint();
+                    }
+                });
+            }
+
+            window.onafterprint = afterPrint;
+
+        }());
+        {% if order.cart.restaurant.autoPrint %}
+            window.onload=function(){self.print();};
+        {% endif %}
+    </script>
+
+{% endblock %}

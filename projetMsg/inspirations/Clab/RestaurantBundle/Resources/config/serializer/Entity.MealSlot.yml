@@ -1,0 +1,41 @@
+Clab\RestaurantBundle\Entity\MealSlot:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        created:
+            expose: true
+            groups: [app,pro]
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+            groups: [app,pro]
+        name:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        products:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        slug:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        position:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        choices:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getChoices
+            groups: [app,search,public,pro]
+        position:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getPosition
+            groups: [app,search,public,pro]

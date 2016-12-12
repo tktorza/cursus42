@@ -1,0 +1,18 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block nav %}{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="user">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well text-center">
+                {% for flashMessage in app.session.flashbag.get('success') %}
+                    <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>{{ flashMessage }}</div>
+                {% endfor %}
+                <p>Vous pouvez fermer cet onglet ou <a href="{{ path('clab_board_login') }}">vous connecter</a>.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

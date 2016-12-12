@@ -1,0 +1,20 @@
+Clab\LocationBundle\Entity\Place:
+    properties:
+        name:
+            - NotBlank: ~
+
+Clab\LocationBundle\Entity\Event:
+    properties:
+        name:
+            - NotBlank: ~
+
+Clab\LocationBundle\Entity\EventSchedule:
+    properties:
+        startTime:
+            - NotBlank: ~
+        endTime:
+            - NotBlank: ~
+        startDate:
+            - NotBlank: ~
+        endDate:
+            - NotBlank: ~

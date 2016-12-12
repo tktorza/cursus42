@@ -1,0 +1,567 @@
+{% extends 'ClabWhiteBundle::base.html.twig' %}
+{% block metaDescription %}Déjeunez chez {{ restaurant.name }} à {{ restaurant.address.city }}. Trouvez menu, plats du jour, avis et commande en ligne avec retrait prioritaire.{% endblock %}
+{% block metaKeywords %}{{ restaurant.name }}, repas à emporter,idées restaurant, repas à emporter, vente à emporter, Paris, Clab, commande en ligne, menu, avis{% endblock %}
+{% block title %}Restaurant {{ restaurant.name }}, {{ restaurant.address.city }}{% endblock %}
+{% block head %}
+    {{ parent() }}
+    {% if is_mobile() %}
+        <link rel="stylesheet" href="{{ asset('vendors/Swiper/dist/css/swiper.min.css') }}">
+    {% endif %}
+{% endblock %}
+{% block nav %}
+    {{ parent() }}
+    {% include 'ClabWhiteBundle:Navs:nav1.html.twig' with {categories:categories, restaurant:restaurant, user:app.user} %}
+{% endblock %}
+{% block body %}
+<section class="container home col-md-9 col-xs-12 background-white {% if is_mobile() %}padding-top-container {% endif %}" {% if is_mobile() %}id="mobile_container" {% endif %}>
+    <section class="products col-md-9" id="small-typenav-anchor" {% if is_mobile() %}id="mobile_containers" {% endif %}>
+        <ul class="row" id="types-nav-anchor">
+
+            {% for category in categories %}
+            {% set myVal = 0 %}
+                {% for product in products if product.category == category and product.isOnline == true and not product.mealOnly %}
+                    {% include 'ClabWhiteBundle:Order:productModal.html.twig' with {id: myVal, product: product, options: options, orderType: cart.orderType} %}
+                    {% include 'ClabWhiteBundle:Order:modalProduct.html.twig' with {id: myVal, orderType: cart.orderType} %}
+                    {% set myVal = myVal + 1 %}
+                {% endfor %}
+            {% endfor %}
+            {% for meal in meals %}
+                {% include 'ClabWhiteBundle:Order:modalMeal.html.twig' with {orderType: cart.orderType} %}
+            {% endfor %}
+        </ul>
+        <div class="list-holder" id="meals" style="display: none;">
+            <span class="col-xs-12 text-center" style="margin-top:25%;"><i class="fa  fa-spinner fa-spin fa-2x"></i></span>
+        </div>
+    </section>
+
+    {% if is_mobile() %}
+        {% include "ClabWhiteBundle:Order:cartModal.html.twig" with {cart: cart} %}
+    {% else %}
+        <div class="col-xs-3 cart">
+            <div class="cart-wrapper no-interaction" id="cart-anchor">
+                {{ include('ClabWhiteBundle:Cart:cart.html.twig') }}
+            </div>
+        </div>
+    {% endif %}
+ </section>
+{% endblock %}
+{% block footerClass %}relative{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('vendors/Swiper/dist/js/swiper.jquery.min.js') }}" type="application/javascript"></script>
+    <script>
+        setTimeout(function(){
+            $.get('{{ path('clab_white_cart_display', {slug: restaurant.slug}) }}', function(data){
+                $('.cart-wrapper').html(data);
+            }).fail(function(){
+                sweetAlert('Oops', 'Une erreur est survenue.', 'error');
+            });
+        },1000);
+
+
+        function bodyScroll(){
+            $('body').addClass('.modal-open');
+        }
+
+        $('.meals-link').click(function(e){
+            categoryMeals.hide();
+            $('#meals').show();
+            var
+                mealSlug = $(this).attr('data-meal'),
+                url = "{{ path('clab_white_meal',{slug: 'PLACEHOLDER'}) }}"
+            ;
+            $.get(url.replace('PLACEHOLDER', mealSlug), function(response) {
+                $('#meals').html('<div class="list-holder meal-menu">'+response+'</div>');
+
+                setAjaxForms();
+                setCartActionsListeners();
+                setContentActionsListeners('.list-holder .meal-menu');
+            })
+            .fail(function(){
+                $('#meals').hide();
+                categoryMeals.show();
+                sweetAlert('Oops...', 'Une erreur est survenue.', 'error');
+            })
+        });
+
+        $('.other-info a').click(function(){
+            $('.other-info').removeClass('active');
+            $(this).parent().addClass('active');
+            $('.other-info:not(.active)').find('.collapse').collapse('hide');
+            $(this).find('i').toggleClass('fa-rotate-90');
+        })
+    </script>
+    <script>
+
+            $.get("{{ path('clab_white_cart_display',{slug: restaurant.slug}) }}", function(response) {
+                $('.cart-wrapper').html(response);
+            });
+
+            var mySwiper = null;
+            {% if is_mobile() %}
+            mySwiper = new Swiper('.swiper-container', {
+                width: 320,
+                height: 55,
+                slidesPerView: 5,
+                slideToClickedSlide: true,
+                freeMode: true
+            });
+            {% endif %}
+    </script>
+
+    <script type="text/javascript">
+        {% if not is_mobile() %}
+            $('.cart-link').addClass('disabled').parents('li').css('cursor', 'default');
+        {% endif %}
+
+        //filter categories and sub-categories
+        var categoryGroupFilters = $('a.category-group-filter');
+        var categoryFilters = $('li.category-filter');
+        var categoryFavorite = $('.category-favorite');
+        var categoryMeals = $('.meals');
+        var products = $('.product');
+        var productItems = products.find('.item');
+
+        filterGroupCategory($(categoryGroupFilters[0]).data('target-group-category'));
+
+        categoryGroupFilters.on('click', function(e) {
+            e.preventDefault();
+
+            if (!$(this).hasClass('meal-filter')) {
+                $('#meals').hide().html('<span class="col-xs-12 text-center" style="margin-top:25%;"><i class="fa  fa-spinner fa-spin fa-2x"></i></span>');
+                $('.second-block ').slideDown();
+                $('.container.home').css({'padding-top':120});
+                $('.cart').css({'margin-top':145});
+            }
+
+            var categoryGroup = $(this).data('target-group-category');
+            categoryFilters.each(function() {
+                if($(this).hasClass('actived')) {
+                    $(this).removeClass('actived');
+                }
+            });
+
+            if (categoryGroup == 'Favoris') {
+                filterFavorites();
+            } else {
+                filterGroupCategory(categoryGroup);
+            }
+
+            if(categoryGroup == 'Plateaux assortis') {
+                products.removeClass('col-md-6');
+
+                {% if not is_mobile() %}
+                    products.addClass('product-big');
+                {% endif %}
+
+                products.addClass('col-md-12');
+                productItems.each(function(i) {
+                    if(i%2 == 0) {
+                        $(this).css('flex-direction', 'row-reverse');
+                    }
+               });
+            } else {
+                if(products.hasClass('product-big')) {
+                    products.removeClass('col-md-12');
+                    products.removeClass('product-big');
+
+                    products.addClass('col-md-6');
+                }
+            }
+
+            categoryGroupFilters.each(function() {
+                if($(this).hasClass('actived')) {
+                    $(this).removeClass('actived');
+                    $(this).css("cssText", 'color: white!important');;
+                }
+            });
+
+            $('body').animate({scrollTop:0});
+
+            $('a.category-group-filter[data-target-group-category="'+categoryGroup+'"]').addClass('actived');
+            $('a.category-group-filter[data-target-group-category="'+categoryGroup+'"]').css("cssText", 'color: #E60039!important');
+
+        });
+
+        categoryFilters.on('click', function(e) {
+            e.preventDefault();
+            var category = $(this).data('target-category');
+            filterCategory(category);
+            categoryFilters.each(function() {
+                if($(this).hasClass('actived')) {
+                    $(this).removeClass('actived');
+                }
+            });
+
+            $('body').animate({scrollTop:0});
+            $('li.category-filter[data-target-category="'+category+'"]').addClass('actived');
+        });
+
+        function filterFavorites() {
+            categoryFilters.each(function() {
+                $(this).hide();
+                categoryFavorite.show();
+            });
+
+            $('.item').each(function() {
+                var item = $(this);
+                var parent = item.parent();
+
+                if(item.data('favorite') == true ) {
+                    parent.show();
+                } else {
+                    parent.hide();
+                }
+            });
+        }
+
+        $('.meal-filter').click(function() {
+            categoryFilters.hide();
+            categoryMeals.show();
+            $('#meals').hide().html('<span class="col-xs-12 text-center" style="margin-top:25%;"><i class="fa  fa-spinner fa-spin fa-2x"></i></span>');
+            $('.container.home').animate({'padding-top':145},800);
+            $('.cart').animate({'margin-top':75},800);
+            $('.second-block ').hide();
+        });
+
+        function filterGroupCategory(categoryGroup) {
+            var activeCategories = [];
+
+            categoryFavorite.hide();
+
+            categoryFilters.each(function() {
+                var categoryFilter = $(this);
+
+                if (categoryFilter.data('category-group') == categoryGroup) {
+                    categoryFilter.show();
+                    activeCategories.push(categoryFilter);
+                } else {
+                    categoryFilter.hide();
+                }
+            });
+
+            var heightOfNav =  $('.nav-3').height();
+
+            $('.second-block').css('marginTop', $('.first-block').height() - 1);
+
+            var activeCategory = activeCategories[0];
+
+            $(activeCategory).addClass('actived');
+            filterCategory($(activeCategory).data('target-category'));
+
+            if(mySwiper) {
+                mySwiper.slideTo(0, 400);
+                mySwiper.update();
+            }
+        }
+
+        function filterCategory(category)
+        {
+            $('.item').each(function() {
+                var item = $(this);
+                var parent = item.parent();
+                if((category == 'home' && item.hasClass('category')) || item.data('category') == category) {
+                    parent.show();
+                } else {
+                    parent.hide();
+                }
+            });
+        }
+
+        //display infos on meal
+        $('.meal-info').click(function () {
+            var modalId = '#meal-modal'+$(this).attr('idmeal');
+            $(modalId).modal('toggle');
+        });
+
+        $('.product-info').click(function () {
+            var modalId = '#product-modal'+$(this).attr('idprod');
+            $(modalId).modal('toggle');
+        });
+
+        // -------------FAVORITES
+        $('a#update-product-favorite').click(function (e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var currentGroupCategory = $('.category-group-filter.actived').data('target-group-category');;
+
+            var slug = $(this).data('slug');
+            var add = $(this).data('add');
+
+            var url = "{{ path('clab_cart_update_favorite_product',{add: 'ADD', slug: 'SLUG'}) }}"
+                    .replace('SLUG', slug)
+                    .replace('ADD', add);
+
+            $.ajax({
+                type : 'POST',
+                url  : url
+            }).done(function (response) {
+            });
+
+            if(add == true) {
+                $(this).addClass('actived');
+                $(this).data('add', 0);
+                $(this).parent().parent().parent().data('favorite', 1)
+            } else if(add == false) {
+                $(this).removeClass('actived');
+                $(this).data('add', 1);
+                $(this).parent().parent().parent().data('favorite', 0)
+                if(currentGroupCategory == 'Favoris') {
+                    filterFavorites();
+                }
+            }
+
+        });
+        //--------------CART
+        //add product to cart
+        $('a#add-product-cart').click(function(e) {
+            e.stopPropagation();
+            e.preventDefault();
+
+            var slug = $(this).data('slug');
+            var url = '{{ path('clab_white_cart_add', { slug: 'SLUG' }) }}';
+
+            url = url.replace('SLUG', slug);
+
+            $.ajax({
+                type : 'POST',
+                url  : url
+            }).done(function (response) {
+                var styles = $('#cart').attr('style');
+                $('.cart').html(response);
+                $('#cart').attr('style', styles);
+
+                countCartProduct();
+            });
+        });
+
+        //update cart quantity
+
+        function updateQuantity() {
+            var
+                slug = $(this).data('slug'),
+                add  = $(this).data('add'),
+                hash = $(this).data('hash')
+            ;
+            var url = '{{ path('clab_white_cart_update_quantity', { slug: 'SLUG', hash: 'HASH', add: 'ADD' }) }}';
+
+            url = url.replace('SLUG',slug);
+            url = url.replace('ADD',add);
+            url = url.replace('HASH',hash);
+
+            $.post(url).done( function (response) {
+                var styles = $('#cart').attr('style');
+                $('.cart').html(response);
+                $('#cart').attr('style', styles);
+                $('button#update-cart').click(updateQuantity);
+
+                countCartProduct();
+            });
+        }
+
+        $('body').on('click', 'button#update-cart', updateQuantity);
+
+        $('.option_group :checkbox').change(function () {
+            var count_checked = $(this).closest('.option_group').find(':checkbox:checked').length;
+
+            if ($(this).attr('max') && count_checked >= $(this).attr('max')) {
+                $(this).closest('.option_group').find(':checkbox:not(:checked)').attr('disabled', true);
+                $(this).closest('.option_group').find(':checkbox:not(:checked)').parent().next('.option_order_label').css('color',
+                        '#dadada');
+            } else {
+                $(this).closest('.option_group').find(':checkbox').removeAttr('disabled');
+                $(this).closest('.option_group').find(':checkbox:not(:checked)').parent().next('.option_order_label').css('color',
+                        '#333333');
+            }
+
+            if (count_checked < $(this).attr('min')) {
+                $(this).closest('.option_group').parent().find('.errors_option').html('nombre de choix incorrect').slideDown('slow');
+                $(this).closest('.option_group').parent().find('h4').css('color', "#c8584b");
+            } else {
+                $(this).closest('.option_group').parent().find('.errors_option').slideUp('slow').html('');
+                $(this).closest('.option_group').parent().find('h4').css('color', "#333333");
+            }
+        });
+
+        $('.submit_option').click(function (e) {
+            var $check_box_groups = $(this).parent().parent().find('.option_group');
+            $check_box_groups.each(function () {
+
+                if ($(this).find('input:required').length > 0) {
+                    if ($(this).find(':radio:checked').length != 1) {
+                        e.preventDefault();
+                        $(this).parent().find('.errors_option').html('obligatoire').slideDown('slow');
+                        $(this).parent().find('h4').css('color', "#c8584b");
+                    } else {
+                        $(this).parent().find('.errors_option').slideUp('slow').html('');
+                        $(this).parent().find('h4').css('color', "#333333");
+                    }
+                } else {
+                    var count_checked = $(this).find(':checkbox:checked').length;
+                    var min_checked = $(this).find(':checkbox').eq(0).attr('min');
+                    if (min_checked > 0 && count_checked < min_checked) {
+                        e.preventDefault();
+                        $(this).parent().find('.errors_option').html('nombre de choix incorrect').slideDown('slow');
+                        $(this).parent().find('h4').css('color', "#c8584b");
+                    } else {
+                        $(this).parent().find('.errors_option').slideUp('slow').html('');
+                        $(this).parent().find('h4').css('color', "#333333");
+                    }
+                }
+            });
+        });
+
+        $('.modal').on('hidden.bs.modal', function () {
+            $('body').css('padding-right','0px');
+            $(this).find('.errors_option').slideUp('slow').html('');
+            $(this).find('h4').css('color', "#333333");
+
+            $(this).find(':radio:checked').prop('checked',
+                    false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+
+            $(this).find(':checkbox:checked').prop('checked',
+                    false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+        });
+
+        $('.add-list').click(function()
+        {
+            $('.modal').modal('hide');
+        });
+
+        $('[class^="add-sale-options-"]').hide();
+
+        $('.submit_add_sale').click(function(e){
+            var slug = $(this).parent().parent().find('input[hasOption="true"]:checked').attr("slug");
+            var $check_box_groups = $(this).parent().parent().find('.add-sale-options-'+slug+' .option_group');
+            var isValid=true;
+
+            $check_box_groups.each(function () {
+                if ($(this).find('input:required').length > 0) {
+                    if ($(this).find(':radio:checked').length != 1) {
+                        e.preventDefault();
+                        isValid=false;
+                        $(this).parent().find('.errors_option').html('obligatoire').slideDown('slow');
+                        $(this).parent().find('h4').css('color', "#c8584b");
+                    } else {
+                        $(this).parent().find('.errors_option').slideUp('slow').html('');
+                        $(this).parent().find('h4').css('color', "#333333");
+                    }
+                } else {
+                    var count_checked = $(this).find(':checkbox:checked').length;
+                    var min_checked = $(this).find(':checkbox').eq(0).attr('min');
+                    if (min_checked > 0 && count_checked < min_checked) {
+                        e.preventDefault();
+                        isValid=false;
+                        $(this).parent().find('.errors_option').html('nombre de choix incorrect').slideDown('slow');
+                        $(this).parent().find('h4').css('color', "#c8584b");
+                    } else {
+                        $(this).parent().find('.errors_option').slideUp('slow').html('');
+                        $(this).parent().find('h4').css('color', "#333333");
+                    }
+                }
+            });
+            if(isValid){
+                $('[class^="add-sale-options-"]').hide();
+                $('[id^="modalAddSale-"]').modal('hide');
+            }
+        });
+
+        $('input[hasOption="true"]').click(function(){
+            var $self = $(this);
+            var slug = $(this).attr("slug"),
+                    addSaleSlug = $(this).attr("addSaleSlug");
+            if(this.checked){
+                $('[class^="add-sale-options-"]').hide();
+
+                $('[class^="add-sale-options-"]').find('.errors_option').slideUp('slow').html('');
+                $('[class^="add-sale-options-"]').find('h4').css('color', "#333333");
+
+                $('[class^="add-sale-options-"]').find(':radio:checked').prop('checked',
+                        false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+
+                $('[class^="add-sale-options-"]').find(':checkbox:checked').prop('checked',
+                        false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+
+                $('[class^="add-sale-options-"]').find(':checkbox').removeAttr('disabled').parent().next('.option_order_label').css('color','#333333');
+
+
+                $('.options-form-container .loader').show();
+                $("#add_sale_option").html("");
+
+                $('.add-sale-options-'+slug).fadeIn("slow");
+
+                var newAction = '{{ path("clab_cart_add_sale_with_option",{"slug": "ADDSALESLUG" ,"slugProd": 'PLACEHOLDER'}) }}';
+                newAction = newAction.replace("ADDSALESLUG", addSaleSlug);
+                newAction = newAction.replace("PLACEHOLDER", slug);
+
+            } else {
+                var newAction = '{{ path("clab_cart_add_sale",{"slug": "ADDSALESLUG" }) }}';
+                newAction = newAction.replace("ADDSALESLUG", addSaleSlug);
+                $('[class^="add-sale-options-"]').hide();
+            }
+
+            $(this).closest(".formAddSale").attr('action',newAction);
+        });
+
+        $('input:radio[hasOption="false"]').click(function(){
+            $('[class^="add-sale-options-"]').hide();
+            var addSaleSlug = $(this).attr("addSaleSlug"),
+                    newAction = '{{ path("clab_cart_add_sale",{"slug": "ADDSALESLUG" }) }}';
+            newAction = newAction.replace("ADDSALESLUG", addSaleSlug);
+            $(this).closest(".formAddSale").attr('action',newAction);
+        });
+
+        $('[id^="modalAddSale-"]').on('hidden.bs.modal', function () {
+            $('[class^="add-sale-options-"]').hide();
+
+            $(this).find('.errors_option').slideUp('slow').html('');
+            $(this).find('h4').css('color', "#333333");
+
+            $(this).find(':radio:checked').prop('checked',
+                    false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+
+            $(this).find(':checkbox:checked').prop('checked',
+                    false).parent().removeClass('jcf-checked').addClass('jcf-unchecked').parent().removeClass();
+
+            $(this).find(':checkbox').removeAttr('disabled').parent().next('.option_order_label').css('color','#333333');
+
+        });
+
+        $('.addSaleChoices :checkbox').change(function () {
+            var count_checked = $(this).closest('.addSaleChoices').find(':checkbox:checked').length;
+            if ($(this).attr('max') && count_checked >= $(this).attr('max')) {
+                $(this).closest('.addSaleChoices').find(':checkbox:not(:checked)').attr('disabled', true);
+                $(this).closest('.addSaleChoices').find(':checkbox:not(:checked)').parent().next('.option_order_label').css('color',
+                        '#dadada');
+            } else {
+                $(this).closest('.addSaleChoices').find(':checkbox').removeAttr('disabled');
+                $(this).closest('.addSaleChoices').find(':checkbox:not(:checked)').parent().next('.option_order_label').css('color',
+                        '#333333');
+            }
+
+            if (count_checked < $(this).attr('min')) {
+                $(this).closest('.addSaleChoices').parent().find('.errors_option').html('nombre de choix incorrect').slideDown('slow');
+                $(this).closest('.addSaleChoices').parent().find('h4').css('color', "#c8584b");
+            } else {
+                $(this).closest('.addSaleChoices').parent().find('.errors_option').slideUp('slow').html('');
+                $(this).closest('.addSaleChoices').parent().find('h4').css('color', "#333333");
+            }
+        });
+
+        $('a.modal-product-option').click(function(){
+            $(this).parents('.productmodal').modal('hide');
+        });
+
+        $('.product-header').each(function () {
+            var element = $(this);
+            var background = element.data('background');
+
+            element.css({'background-image': 'url('+background+')'});
+            ;
+        });
+
+
+    </script>
+
+{% endblock %}

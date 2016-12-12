@@ -1,0 +1,28 @@
+<div id="splash" {% if site.coverPicture %}style="background-image: url('{{ site.coverPicture.webPath }}');"{% else %}class="no-picture"{% endif %} itemscope itemtype="http://schema.org/Restaurant">
+    <section class="container padding-v-60" id="header">
+        <h1 class="thin">
+            <a href="{{ path('multisite_get') }}">
+                {% if site.logo %}
+                <img src="{{ restaurant.coverSmall }}" id="logo" class="pull-left" alt="{{ restaurant.name }}">
+                {% endif %}
+                <span itemprop="name">{{ restaurant.name }}</span>
+            </a>
+        </h1>
+        <span class="hide" itemprop="url">{{ url('multisite_get') }}</span>
+        <hr class="small">
+        <h3>{{ restaurant.tags|join(', ') }}</h3>
+        {% if not restaurant.isMobile %}
+        <adress itemprop="address" itemscope itemtype="http://schema.org/PostalAddress"><span itemprop="streetAddress">{{ restaurant.address.street }} </span><span itemprop="postalCode">{{ restaurant.address.zip }} </span><span itemprop="addressLocality">{{ restaurant.address.city }}</span></adress>
+        <br>
+        {% endif %}
+        {% if site.sectionReview and restaurant.reviewData.count > 0 %}
+        {% include 'ClabMultisiteBundle:Multisite:partials/rating.html.twig' with { score: restaurant.reviewData.average } %} ({{ restaurant.reviewData.count }} avis)
+        <div itemscope itemtype="http://schema.org/AggregateRating" itemprop="aggregateRating">
+            <meta itemprop="ratingCount" content="{{ restaurant.reviewData.count }}">
+            <meta itemprop="ratingValue" content="{{ restaurant.reviewData.average }}">
+            <meta itemprop="bestRating" content="5">
+        </div>
+        {% endif %}
+    </section>
+    <div class="bottom-shadow"></div>
+</div>

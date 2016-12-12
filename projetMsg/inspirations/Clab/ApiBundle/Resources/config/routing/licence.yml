@@ -1,0 +1,23 @@
+#
+api_rest_licences_create:
+    path: /{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestLicence:postLicence, _format: json }
+    methods: [POST]
+
+#
+api_rest_licences_apply:
+    path: /{restaurantId}/apply
+    defaults: { _controller: ClabApiBundle:RestLicence:postLicenceApply, _format: json }
+    methods: [POST]
+
+#
+api_rest_licences_reset:
+    path: /{restaurantId}/{licenceNumber}/{serial}
+    defaults: { _controller: ClabApiBundle:RestLicence:deleteLicence, _format: json }
+    methods: [DELETE]
+
+#
+api_rest_licences_ping:
+    path: /{restaurantId}/{licenceNumber}/{serial}
+    defaults: { _controller: ClabApiBundle:RestLicence:getLicence, _format: json }
+    methods: [GET]

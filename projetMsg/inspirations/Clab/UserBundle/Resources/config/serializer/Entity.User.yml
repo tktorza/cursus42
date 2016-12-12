@@ -1,0 +1,64 @@
+Clab\UserBundle\Entity\User:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro]
+        mail:
+            expose: true
+            read_only: true
+            accessor:
+                getter: __toString
+            groups: [app,search,public,pro,white,follow]
+        first_name:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getFirstName
+            groups: [app,search,public,pro,white,follow]
+        phone:
+            expose: true
+            read_only: false
+            accessor:
+                getter: getPhone
+            groups: [app,search,public,pro,white,follow]
+        birthday:
+            expose: true
+            read_only: false
+            groups: [app,search,public,pro,white]
+        is_male:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getIsMale
+            groups: [app,search,public,pro,white]
+        zipcode:
+            expose: true
+            read_only: true
+            groups: [app,search,public,pro,white]
+        homeAddress:
+            expose: true
+            read_only: false
+            groups: [app,search,public,pro]
+        jobAddress:
+            expose: true
+            read_only: false
+            groups: [app,search,public,pro]
+        last_name:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getLastName
+            groups: [app,search,public,pro,white,follow]
+        cover:
+            expose: true
+            read_only: true
+            accessor:
+                getter: getCover
+            groups: [app,search,public,pro]
+        loyalties:
+            expose: true
+            read_only: true
+            groups: [app,pro,public,white]

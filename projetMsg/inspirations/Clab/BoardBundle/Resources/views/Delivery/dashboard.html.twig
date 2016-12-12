@@ -1,0 +1,195 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_delivery',
+        rightLink: path('board_delivery_schedule_edit', { context:context, contextPk: contextPk }),
+        rightLinkLabel: 'Créer une tournée',
+        rightLinkLadda: true,
+        rightLinkAjaxModal: false,
+        rightLink2: path('board_delivery_deliveryman_add', { context:context, contextPk: contextPk }),
+        rightLink2Label: 'Ajouter un livreur',
+        rightLink2ajaxModal: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="delivery">
+    <ul class="nav nav-pills">
+        <li class="active"><a href="{{ path('board_delivery', { context:context, contextPk: contextPk }) }}">Horaires</a></li>
+        <li><a href="{{ path('board_delivery_zones', { context:context, contextPk: contextPk }) }}">Mes zones</a></li>
+    </ul>
+    <br>
+
+    <div class="row">
+        <div class="col-md-9">
+            <section class="panel">
+                <div class="panel-body">
+                    <div id="calendar"></div>
+                </div>
+            </section>
+        </div>
+
+        <div class="col-md-3">
+            {% if proxy.isOpenDelivery %}
+                <div class="well">
+                    <p><i class="fa fa-circle icon-success icon-left"></i>Livraison activée</p>
+                    <form method="post" action="{{ path('board_delivery_toggle', { context:context, contextPk: contextPk }) }}">
+                        <button type="submit" class="btn btn-block btn-xs btn-default">Désactiver</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="well">
+                    <p><i class="fa fa-circle icon-danger icon-left"></i>Livraison désactivée</p>
+                    <form method="post" action="{{ path('board_delivery_toggle', { context:context, contextPk: contextPk }) }}">
+                        <button type="submit" class="btn btn-block btn-xs btn-success">Activer</button>
+                    </form>
+                </div>
+            {% endif %}
+
+            <h4>Livreurs</h4>
+            {% if deliveryMen|length == 0 %}
+            <div class="well">
+                <p>Aucun livreur, créez en un</p>
+<div>
+            {% else %}
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="active"><a data-target="#available" data-toggle="tab">Disponibles</a></li>
+                <li><a data-target="#unavailable" data-toggle="tab">Indisponibles</a></li>
+            </ul>
+
+            <div class="tab-content">
+                <div class="tab-pane active well" id="available">
+                    {% for deliveryman in deliveryMen %}
+                        {% if deliveryman.isOnline %}
+                        <div class="row">
+                            <div class="col-md-8">
+                                {{ deliveryman.name }} - {{ deliveryman.phone }} <br>
+                                code: {{ deliveryman.code }}
+                            </div>
+                            <div class="col-md-4">
+                                <a class="activate btn btn-success" href="{{ path('board_delivery_deliveryman_changestate',{id:deliveryman.id,contextPk:contextPk,context:context}) }}" data-toggle="tooltip" title="Désactiver" style="width:40px;"><i class="fa fa-check" aria-hidden="true"></i></a>
+                            </div>
+                        </div>
+                        <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="tab-pane well" id="unavailable">
+                    {% for deliveryman in deliveryMen %}
+                        {% if not deliveryman.isOnline %}
+                            <div class="row">
+                                <div class="col-md-8">
+                                    {{ deliveryman.name }} - {{ deliveryman.phone }}
+                                </div>
+                                <div class="col-md-4">
+                                    <a class="deactivate btn btn-danger" href="{{ path('board_delivery_deliveryman_changestate',{id:deliveryman.id,contextPk:contextPk,context:context}) }}" data-toggle="tooltip" title="Activer" style="width:40px;"><i class="fa fa-times" aria-hidden="true"></i></a>
+                                </div>
+                            </div>
+                            <br>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+
+            <hr/>
+            <h4>Zones</h4>
+            <div class="well">
+                {% if deliveryAreas|length == 0 %}
+                    <p>Aucune zone de livraison, créez en une</p>
+
+                {% else %}
+                {% for deliveryArea in deliveryAreas %}
+                        <h4>{{ deliveryArea.zone }}</h4>
+                        <p>Délais : {{ deliveryArea.slotLength }} minutes </p>
+                        <p> Minimum : {% if deliveryArea.minPanier %}{{ deliveryArea.minPanier }} €{% else %}NR{% endif %} / Frais :
+                          {% if deliveryArea.price %}  {{ deliveryArea.price }} € {% else %}NR{% endif %}</p>
+              <hr/>
+           {% endfor %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+</div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+moment.locale('fr');
+$(document).ready(function() {
+  var calendar = $('#calendar').fullCalendar({
+    lang: 'fr',
+    events: [
+        {% for day, dayPlanning in planning %}
+        {% set looplast = loop.last %}
+        {% set id = loop.index %}
+        {% for deliveryDay in dayPlanning %}
+        {
+            id: '{{ id }}-{{ loop.index }}',
+            title: '{% for deliveryArea in deliveryDay.deliverySchedule.areas %}{{ deliveryArea.zone }} {% if not loop.last %}/{% endif %} {% endfor %}',
+            color: '#{{ deliveryDay.deliverySchedule.color }}',
+            start: '{{ deliveryDay.getTimestampStart(day)|date('Y-m-d\\TH:i:sP') }}',
+            end: '{{ deliveryDay.getTimestampEnd(day)|date('Y-m-d\\TH:i:sP') }}',
+            timestamp: '{{ day }}',
+            deliveryDayId: '{{ deliveryDay.id }}',
+            deliveryScheduleId: '{{ deliveryDay.deliverySchedule.id }}',
+            type: '1'
+        }{% if not looplast or not loop.last %},{% endif %}
+        {% endfor %}
+        {% endfor %}
+    ],
+    header: {
+      left: 'prev,next today',
+      center: 'title',
+      right: 'month,agendaWeek,agendaDay'
+    },
+    editable: false,
+    defaultView: 'agendaWeek',
+    slotDuration: '01:00:00',
+    slotEventOverlap: true,
+    allDayDefault: false,
+    allDaySlot: false,
+    allDayText: false,
+    eventAfterRender: function (event, element) {
+        element.find('.fc-event-title').html(event.title);
+    },
+    eventClick: function(calEvent, jsEvent, view) {
+        if(calEvent.type == 1) {
+            var target = '/board/{{ context }}/{{ proxy.slug }}/delivery/calendar-edit/' + calEvent.timestamp + '/' + calEvent.deliveryDayId;
+            $("#ajaxModal .modal-content").load(target, function() {
+                $("#ajaxModal").modal("show");
+            });
+        } else if(calEvent.type == 2) {
+            window.location = '/board/{{ context }}/{{ proxy.slug }}/delivery/day-create/' + calEvent.timestamp + '/' + calEvent.deliveryDayId;
+        } else if(calEvent.type == 3) {
+            window.location = '/board/{{ context }}/{{ proxy.slug }}/delivery/schedule-edit-event/' + calEvent.deliveryScheduleId;
+        }
+    }
+  });
+    $('[data-toggle="tooltip"]').tooltip();
+    $('a.activate').hover(
+    function(){
+        $(this).html('<i class="fa fa-times" aria-hidden="true"></i>');
+        $(this).removeClass('btn-success').addClass('btn-danger');
+    },
+    function(){
+        $(this).html('<i class="fa fa-check" aria-hidden="true"></i>');
+        $(this).removeClass('btn-danger').addClass('btn-success');
+    });
+    $('a.deactivate').hover(
+    function(){
+        $(this).html('<i class="fa fa-check" aria-hidden="true"></i>');
+        $(this).removeClass('btn-danger').addClass('btn-success');
+    },
+    function(){
+        $(this).html('<i class="fa fa-times" aria-hidden="true"></i>');
+        $(this).removeClass('btn-success').addClass('btn-danger');
+    });
+});
+</script>
+{% endblock %}

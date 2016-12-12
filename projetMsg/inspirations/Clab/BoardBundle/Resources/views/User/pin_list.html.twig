@@ -1,0 +1,16 @@
+{% for pincode in pincodes %}
+<tr
+    id="staff-{{ pincode.id }}"
+    class="mix clickable"
+    data-target="drawer" href="{{ path('board_pincode_edit', { contextPk: contextPk, id: pincode.id }) }}"
+>
+    <td>
+      {{ pincode.name }}
+    </td>
+    <td>  {{ pincode.code }}</td>
+    <td>{% if pincode.hasRightOnBo == 1 %} <i class="fa fa-check"></i> {% else
+        %}<i class="fa fa-times"></i>{% endif %}</td>
+    <td>{% if pincode.hasRightOnLogs == 1 %} <i class="fa fa-check"></i>{%
+        else %}<i class="fa fa-times"></i>{% endif %}</td>
+  </tr>
+{% endfor %}

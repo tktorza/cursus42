@@ -1,0 +1,147 @@
+<section class="card" *ngIf="!loading">
+    <div class="card-block">
+       <div id="toolbar">
+           <div class="keep-open btn-group pull-right" title="Columns">
+               <button type="button" class="btn btn-default dropdown-toggle btn-small-transparent" data-toggle="dropdown" aria-expanded="false">
+                   <i class="font-icon font-icon font-icon-list-square"></i>
+                   <span class="caret"></span>
+               </button>
+                <ul class="dropdown-menu" role="menu">
+                    <li>
+                        <div class="checkbox-bird" data-column="0">
+                            <input class="data-filter" type="checkbox" id="check-bird-1" checked/>
+                            <label for="check-bird-1">Id</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird" data-column="1">
+                            <input class="data-filter" type="checkbox" id="check-bird-2" checked/>
+                            <label for="check-bird-2">Restaurant</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird purple" data-column="2">
+                            <input class="data-filter" type="checkbox" id="check-bird-3" checked/>
+                            <label for="check-bird-3">Reçue le</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird purple" data-column="3">
+                            <input class="data-filter" type="checkbox" id="check-bird-4" checked/>
+                            <label for="check-bird-4">Pour le</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird orange" data-column="4">
+                            <input class="data-filter" type="checkbox" id="check-bird-5" checked/>
+                            <label for="check-bird-5">Type</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird orange" data-column="5">
+                            <input class="data-filter" type="checkbox" id="check-bird-6" checked/>
+                            <label for="check-bird-6">Paiement</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird orange" data-column="6">
+                            <input class="data-filter" type="checkbox" id="check-bird-7" checked/>
+                            <label for="check-bird-7">Montant</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird green" data-column="7">
+                            <input class="data-filter" type="checkbox" id="check-bird-8" checked/>
+                            <label for="check-bird-8">Statut</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird green" data-column="8">
+                            <input class="data-filter" type="checkbox" id="check-bird-9" checked/>
+                            <label for="check-bird-9">Statut de préparation</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird red" data-column="9">
+                            <input class="data-filter" type="checkbox" id="check-bird-10" checked/>
+                            <label for="check-bird-10">Client</label>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="checkbox-bird red" data-column="10">
+                            <input class="data-filter" type="checkbox" id="check-bird-11" checked/>
+                            <label for="check-bird-11">Panier</label>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <table class="table table-hover table-stripped table-bordered" id="datatable" width="100%">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Restaurant</th>
+                    <th>Reçue le</th>
+                    <th>Pour le</th>
+                    <th>Type</th>
+                    <th>Paiement</th>
+                    <th>Montant</th>
+                    <th>Statut</th>
+                    <th>Statut de préparation</th>
+                    <th>Client</th>
+                    <th>Panier</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let order of orders;let i = index;">
+                    <td class="order-id state-{{order.state}} preparation-state-{{order.preparationState}}">{{order.id}}</td>
+                    <td>Matsuri</td>
+                    <td>{{order.getCreated()}}</td>
+                    <td>{{order.getTime()}}</td>
+                    <td>{{order.orderType.name}}</td>
+                    <td>{{order.paymentOnline ? "En ligne" : "Sur place"}}</td>
+                    <td>{{order.price}}</td>
+                    <td>{{order.getState()}}</td>
+                    <td>
+                        {{order.preparationState}}
+                        <select class="form-control">
+                            <option *ngFor="let opt of preparationStates" [value]="opt.key" selected="order.preparationState == opt.key ? true : false">{{opt.value}}</option>
+                        </select>
+                    </td>
+                    <td>{{order.profile.email}}</td>
+                    <td><cart [cart]="order.cart"></cart></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<alert [types]="{
+      class:'alert alert-google-plus alert-close alert-dismissible fade in',
+      icon:'font-icon font-icon-google-plus',
+      underText:'Message de dessus',
+      message:'message du dessous',
+      choice:['Enter?', 'delete']
+    }"></alert>
+<sweet-alert 
+    [type]="
+    {
+    type: 'input',
+    inputPlaceholder: 'Write something',        
+    title: 'An input!',
+    errorMessage: 'Olalala',
+    message: 'Hello world',
+    buttonClass: 'swal-btn-basic' 
+    }" 
+    [config]="{
+    text: 'Write something interesting:',
+    showCancelButton: true,
+    closeOnConfirm: false,
+    animation: 'slide-from-top'
+    }"></sweet-alert>
+    <tables
+    [table]="initTable"
+    [lines]="lines"
+    ></tables>
+    <forms [inputs]="inputs" [form]="form"></forms>
+<loader #loader></loader>

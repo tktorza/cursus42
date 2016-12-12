@@ -1,0 +1,14 @@
+{% extends 'ClabManagerBundle:Dashboard2:layout.html.twig' %}
+
+{% block page %}
+<div data-role="page" style="padding: 20px;">
+    <form>
+        <input data-type="search" id="filterControlgroup-input">
+    </form>
+    <div data-role="controlgroup" data-filter="true" data-input="#filterControlgroup-input">
+        {% for restaurant in restaurants %}
+            <a data-ajax="false" href="{{ path('manager_switch_restaurant', { slug: restaurant.slug }) }}" class="ui-btn ui-shadow ui-corner-all">{{ restaurant.name }} {% if currentOrders[restaurant.id] is defined and currentOrders[restaurant.id] is not null %}| <span style="color: #0aaaaa;"><b>{{ currentOrders[restaurant.id] }}</b> commandes en cours</span> {% endif %}</a>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

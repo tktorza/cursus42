@@ -1,0 +1,317 @@
+{% extends 'ClabWhiteBundle::base.html.twig' %}
+{% block head %}
+    {{ parent() }}
+    <link href="{{ asset('vendors/select2/dist/css/select2.min.css') }}" rel="stylesheet">
+{% endblock %}
+{% block nav %}
+    {{ parent() }}
+    {% include 'ClabWhiteBundle:Navs:nav2.html.twig' with { user:app.user} %}
+{% endblock %}
+{% block body %}
+    <section class="container profile col-md-8 offset-1 padding-top-container-profile" id="mobile_container_profile">
+        <div class="field col-md-8  col-md-offset-2 text-center">
+            <h3>Vos informations personnelles</h3>
+            {{ form_start(form, {'attr': {'class': 'complete-form'}}) }}
+            {{ form_errors(form) }}
+                <div class="group">
+                    {{ form_widget(form.email, {'attr': {'class': "form-control"} }) }}
+                    {{ form_errors(form.email) }}
+                </div>
+
+            <div class="group background-white col-xs-12 no-padding">
+                <div class="col-xs-12 margin-v-10">
+                    {{ form_widget(form.isMale, {'attr': {'class': "form-control select2"} }) }}
+                </div>
+                {{ form_errors(form.isMale) }}
+            </div>
+
+                <div class="group">
+                    {{ form_widget(form.first_name, {'attr': {'class': "form-control"} }) }}
+                    {{ form_errors(form.first_name) }}
+                </div>
+
+                <div class="group">
+                    {{ form_widget(form.last_name, {'attr': {'class': "form-control"} }) }}
+                    {{ form_errors(form.last_name) }}
+                </div>
+
+                <div class="group">
+                    {{ form_widget(form.phone, {'attr': {'class': "form-control"} }) }}
+                    {{ form_errors(form.phone) }}
+                </div>
+            <div class="group background-white col-xs-12 color-grey-4 no-padding">
+                <div class="col-xs-12 expire-text margin-v-10">Date d'anniversaire</div>
+
+                <div id="cardExpiry" class="col-xs-12 no-padding margin-top-10" style="margin: 0px;">
+                    {{ form_widget(form.birthday.day, {'attr': {'class': 'form-control select2'}}) }}
+                    {{ form_widget(form.birthday.month, {'attr': {'class': 'form-control select2'}}) }}
+                    {{ form_widget(form.birthday.year, {'attr': {'class': 'form-control select2','value':'1998'}}) }}
+                </div>
+                {{ form_errors(form.birthday) }}
+            </div>
+            <button type="submit" class="btn btn-red btn-lg">Enregistrer</button>
+            {{ form_rest(form) }}
+            {{ form_end(form) }}
+        </div>
+        <div class="field col-md-8  col-md-offset-2 text-center">
+            <h3>Votre mot de passe</h3>
+            <a href="{{ path('fos_user_resetting_request') }}"class="btn btn-red">Réinitialiser votre mot de passe</a>
+        </div>
+        <div class="field col-md-8  col-md-offset-2 text-center">
+
+            <ul id="cards" class="list-group row">
+            <h3>Vos cartes enregistrées</h3>
+                {% if is_mobile() %}
+                    <div class="cards">
+                        {% if cards is defined and cards is not null and cards|length >0 %}
+                            {% for card in cards %}
+                                <div id="{{ card.id }}" class="row row-card margin-v-2-5">
+                                    <div class="card smaller-font">
+                                        <div class="col-md-4 info-card">
+                                            <div>Type</div>
+                                            <div>{{ card.brand }}</div>
+                                        </div>
+                                        <div class="col-md-4 info-card">
+                                            <div>Se terminant par:</div>
+                                            <div>{{ card.last4 }}</div>
+                                        </div>
+                                        <div class="col-md-4 info-card">
+                                            <div>Expirant en :</div>
+                                            <div>{{ card.exp_month }} / {{ card.exp_year }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button class="btn-flat  col-md-10 col-md-offset-1 padding-v-10 remove-card" style="margin-top: 8px!important" data-id="{{ card.id }}">Supprimer</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            Aucune carte.
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="cards">
+                        {% if cards is defined and cards is not null and cards|length >0 %}
+                            {% for card in cards %}
+                                <div id="{{ card.id }}" class="row row-card margin-v-2-5">
+                                    <div class="card padding-v-25">
+                                        <div class="col-md-4 info-card">
+                                            <div>Type</div>
+                                            <div>{{ card.brand }}</div>
+                                        </div>
+                                        <div class="col-md-4 info-card">
+                                            <div>Se terminant par:</div>
+                                            <div>{{ card.last4 }}</div>
+                                        </div>
+                                        <div class="col-md-4 info-card">
+                                            <div>Expirant en :</div>
+                                            <div>{{ card.exp_month }} / {{ card.exp_year }}</div>
+                                        </div>
+                                    </div>
+                                    <div class="row margin-v-15">
+                                        <button class="btn-flat  col-md-10 col-md-offset-1 padding-v-15 remove-card" data-id="{{ card.id }}">Supprimer</button>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            Aucune carte.
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <button id ="cardFormToggle" class="btn btn-red btn-lg">Ajouter une nouvelle carte</button>
+            <div id="cardForm" class="well col-lg-12" style="border: none;" hidden>
+                {{ render(controller('ClabWhiteBundle:Order:createCard',{user: app.user})) }}
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+{% block footerClass %}relative background-black-matsuri{% endblock %}
+{% block upperFooterClass %}background-black-matsuri{% endblock %}
+{% block javascripts %}
+{{ parent() }}
+    <script type="text/javascript" src="https://js.stripe.com/v1/"></script>
+    <script type="text/javascript" src="{{ asset('vendors/jquery-creditcardvalidator/jquery.creditCardValidator.js')
+    }}"></script>
+    <script>
+        $('.remove-card').click(function(){
+            var url = "{{ path('clab_white_card_remove',{user:app.user.id, card:'PLACEHOLDER'}) }}"
+            url = url.replace('PLACEHOLDER',$(this).data('id'));
+            var id= "#"+$(this).data('id');
+            $.ajax({
+                type        : 'GET',
+                url         : url,
+                beforeSend: function(){
+                    $(id).slideUp('slow');
+                },
+                success     : function(data) {
+
+                    $(id).remove();
+                },
+                error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    $(id).slideDown('slow');
+                    alert('Error : ' + errorThrown);
+                }
+            });
+        });
+        $("#cardFormToggle").click(function(){
+            if (!$('#cardForm').is(":visible")) {
+                $(this).html('Fermer');
+                $("#cardForm").slideDown();
+                $('.select2').select2({
+                    minimumResultsForSearch: Infinity
+                });
+            } else {
+                $(this).html('Saisir une nouvelle carte');
+                $("#cardForm").slideUp();
+            }
+        });
+        var isAmex = false;
+        $(function () {
+
+            $('#clab_stripe_cardformtype_card').validateCreditCard(function (result) {
+                isAmex = false;
+                if (result.card_type == null) {
+                    $('.log').html('<i class="fa fa-credit-card"></i>');
+                } else if (result.card_type.name == 'mastercard') {
+                    $('.log').html('<i class="fa fa-cc-mastercard"></i>');
+                } else if (result.card_type.name == 'visa') {
+                    $('.log').html('<i class="fa fa-cc-visa"></i>');
+                } else if (result.card_type.name == 'amex') {
+                    sweetAlert('Oops...','Nous n\'acceptons pas d\'American express.','error')
+                    $('.log').html('<i class="fa fa-cc-amex"></i>');
+                    isAmex=true;
+                } else if (result.card_type.name == 'visa_electron') {
+                    $('.log').html('<i class="fa fa-cc-visa"></i>');
+                } else if (result.card_type.name == 'maestro') {
+                    $('.log').html('<i class="fa fa-cc-visa"></i>');
+                }
+            });
+        });
+        Stripe.setPublishableKey('{{ publishableKey }}');
+
+        var errorMessages = {
+            incorrect_number: "Le numéro de carte est incorrect.",
+            invalid_number: "Le numéro de carte est invalide.",
+            invalid_expiry_month: "La date d'expiration est incorrecte.",
+            invalid_expiry_year: "L'année d'expiration est invalide.",
+            invalid_cvc: "Le code de sécurité de la carte est invalide.",
+            expired_card: "La carte est expirée.",
+            incorrect_cvc: "Le code de sécurité de la carte est incorrect.",
+            incorrect_zip: "Le code postal de la carte est incorrect.",
+            card_declined: "La carte a été refusée.",
+            missing: "Erreur.",
+            processing_error: "Une erreur est survenue lors du traitement de votre carte.",
+            rate_limit:  "Une erreur est survenue lors du traitement de votre carte. Veuillez nous en faire part si le probleme persiste"
+        };
+
+        var stripeResponseHandler = function (status, response) {
+            var $form = $('#payment-form');
+            if (response.error || isAmex) {
+                sweetAlert('Oops...', '' + errorMessages[ response.error.code ], 'error');
+                $form.find('button').prop('disabled', false);
+            } else {
+                // token contains id, last4, and card type
+                var token = response.id;
+                // Insert the token into the form so it gets submitted to the server
+                $form.append($('<input type="hidden" name="stripeToken" />').val(token));
+                // and re-submit
+                var values = {};
+                $.each( $form.serializeArray(), function(i, field) {
+                    values[field.name] = field.value;
+                });
+                $form.find('.fa-spin').show();
+                $.ajax({
+                    type        : $form.attr( 'method' ),
+                    url         : $form.attr( 'action' ),
+                    data        : values,
+                    success     : function(data) {
+                        $form.find('.fa-spin').hide();
+                        var countries = ['AT','US', 'BE', 'BG', 'HR', 'CY', 'CZ', 'DK', 'EE', 'FI', 'FR', 'DE', 'GB', 'EL', 'HU', 'IE', 'IT', 'LV', 'LT', 'LU', 'MT', 'NL', 'NO', 'PL', 'PT', 'RO', 'SK', 'SI', 'ES', 'SE', 'CH'];
+                        $form.find('button').prop('disabled', false);
+                        $('.cards').html('');
+                        for(var i = 0;i<data.data.length;i++){
+                            if(countries.indexOf(data.data[i].country)>=0) {
+                                $('.cards').append(
+                                        '<div id="'+data.data[i].id+'"class="row row-card margin-v-2-5">'+
+                                            '<div class="card padding-v-25">'+
+                                                '<div class="col-md-4 info-card">'+
+                                                    '<div>Type</div>'+
+                                                    '<div>'+data.data[i].brand+'</div>'+
+                                                '</div>'+
+                                                '<div class="col-md-4 info-card">'+
+                                                    '<div>Se terminant par:</div>'+
+                                                    '<div>'+data.data[i].last4+'</div>'+
+                                                '</div>'+
+                                                '<div class="col-md-4 info-card">'+
+                                                    '<div>Expirant en :</div>'+
+                                                    '<div>'+data.data[i].exp_month+' / '+data.data[i].exp_year+'</div>'+
+                                                '</div>'+
+                                            '</div>'+
+                                            '<div class="row margin-v-15">'+
+                                                '<button class="btn-flat  col-md-10 col-md-offset-1 padding-v-15 remove-card" data-id="'+data.data[i].id+'">Supprimer</button>'+
+                                            '</div>'+
+                                        '</div>')
+                                ;
+                            }
+                        }
+                        $("#card-token").val(data.data[0].id);
+                        jcf.replaceAll();
+                        $('.remove-card').click(function(){
+
+
+                            var ul = "{{ path('clab_white_card_remove',{user:app.user.id, card:'PLACEHOLDER'}) }}";
+                            ul = ul.replace('PLACEHOLDER',$(this).data('id'));
+                            var id= "#"+$(this).data('id');
+                            $.ajax({
+                                type        : 'GET',
+                                url         : ul,
+                                beforeSend: function(){
+                                    $(id).slideUp('slow');
+                                },
+                                success     : function(data) {
+                                    $(id).remove();
+                                },
+                                error: function(XMLHttpRequest, textStatus, errorThrown)
+                                {
+                                    $(id).slideDown('slow');
+                                    alert('Error : ' + errorThrown);
+                                }
+                            });
+                        });
+                        $('input[name="cards"]').click(function(){
+                            $("#card-token").val($(this).val());
+                        });
+                        $(".card-select").click(function(){
+                            $(this).parent().find('span.jcf-radio').click();
+                        });
+                        $("#cardFormToggle").html('Saisir une nouvelle carte');
+                        $("#cardForm").slideUp();
+                    },
+                    error: function(XMLHttpRequest, textStatus, errorThrown)
+                    {
+                        $form.find('.fa-spin').hide();
+                        $form.find('button').prop('disabled', false);
+                        alert('Error : ' + errorThrown);
+                    }
+                });
+            }
+        };
+        $('#payment-form').submit(function (e) {
+            console.log('test')
+            var $form = $(this);
+            // Disable the submit button to prevent repeated clicks
+            $form.find('button').prop('disabled', true);
+            Stripe.card.createToken($form, stripeResponseHandler);
+            // Prevent the form from submitting with the default action
+            return false;
+        });
+
+        $(document).ready(function(){
+            $('.select2').select2({
+                minimumResultsForSearch: Infinity
+            });
+        });
+    </script>
+{% endblock %}

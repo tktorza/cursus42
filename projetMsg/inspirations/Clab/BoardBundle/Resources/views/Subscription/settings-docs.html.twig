@@ -1,0 +1,41 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'settings',
+        route: 'board_settings_docs',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding" id="planning">
+    <form method="post" action="{{ path('board_settings', { contextPk: contextPk, type: type }) }}" {{ form_enctype(form) }}>
+    <div class="row">
+        <div class="col-md-8 padding-v-40 padding-h-40 bg-white">
+
+            <h3><i class="fa fa-file-text-o icon-left"></i>Votre carte</h3>
+            <br>
+
+            <div class="row">
+                <div class="col-md-6">
+                    {{ form_row(form.menuFile) }}
+                </div>
+
+                {% if proxy.menuFileName and proxy.menuFile %}
+                <div class="col-md-6">
+                    <img src="{{ asset('front/bundle/board/img/fileformat/' ~ proxy.menuFile.extension ~ '.png') | imagine_filter('square_80') }}">
+                    <p><small>Fichier uploadé</small></p>
+                </div>
+                {% endif %}
+            </div>
+
+            {{ form_rest(form) }}
+        </div>
+
+        <div class="col-md-4 padding-v-40 padding-h-40">
+        </div>
+    </div>
+    {% include 'ClabBoardBundle:Base:formBottom.html.twig' %}
+    </form>
+</div>
+{% endblock %}

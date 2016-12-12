@@ -1,0 +1,42 @@
+{
+  "name" : "clicklab/restaurantbundle",
+  "description" : "Restaurant Bundle",
+  "type" : "symfony-bundle",
+  "authors" : [{
+    "name" : "sacha",
+    "email" : "sacha@click-eat.fr"
+  }],
+  "keywords" : [
+    "restaurant bundle"
+  ],
+  "license" : [
+    "MIT"
+  ],
+  "require" : {
+    "gedmo/doctrine-extensions":"2.4.*",
+    "vich/uploader-bundle": "^1.0",
+    "clicklab/mediabundle":"^1.0",
+    "clicklab/locationbundle":"^1.0",
+    "clicklab/reviewbundle":"^1.0",
+    "clicklab/socialbundle":"^1.0",
+    "clicklab/taxonomybundle":"^1.0",
+    "clicklab/userbundle":"^1.0",
+    "symfony/symfony":"2.7.*",
+    "doctrine/orm":"^2.4.8",
+    "doctrine/doctrine-bundle":"~1.4"
+  },
+  "autoload" : {
+    "psr-0" : {
+      "Clab\\RestaurantBundle" : ""
+    }
+  },
+  "target-dir" : "Clab/RestaurantBundle",
+  "repositories" : [{
+     "type": "vcs", "url": "https://github.com/click-lab/restaurant-bundle"
+  }],
+  "extra" : {
+    "branch-alias" : {
+      "dev-master" : "master"
+    }
+  }
+}

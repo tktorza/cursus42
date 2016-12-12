@@ -1,0 +1,16 @@
+<div id="mainNav-collapse" class="collapse">
+    <h3 class="hidden-xs">Call center bonjour!</h3>
+    <div class="btn-group btn-breadcrumb">
+        <a href="{{ path('clab_call_center_homepage') }}" class="btn btn-default {% if step is defined and step == 'client' %}active{% endif
+        %}"><div>1.<span> Informations client</span></div></a>
+        <a href="{% if step is defined and step != 'client' %}{{ path('clab_call_center_order_type') }}{% else %}#{% endif %}" class="btn btn-default {% if step is defined and step == 'ordertype' %}active{% endif
+        %}"><div>2.<span> Choix du restaurant</span></div></a>
+        <a href="{% if step is defined and step != 'client' and step != 'ordertype' %}{{ path('clab_call_center_order') }}{% else %}#{% endif %}" class="btn btn-default {% if step is defined and step == 'order' %}active{% endif
+        %}"><div>3.<span> Commande en ligne</span></div></a>
+        <a href="{% if step is defined and step != 'client' and step != 'ordertype' and step != 'order'%}{{ path('clab_call_center_recap') }}{% else %}#{% endif %}" class="btn btn-default {% if step is defined and step == 'payment' %}active{% endif
+        %}"><div>4.<span> Paiement</span></div></a>
+        <a href="#" class="btn btn-default {% if step is
+        defined and step == 'final' %}active{% endif %}"><div>5.<span> Récapitulatif</span></div></a>
+    </div>
+</div>
+

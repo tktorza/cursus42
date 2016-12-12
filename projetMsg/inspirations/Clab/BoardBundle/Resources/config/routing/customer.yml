@@ -1,0 +1,8 @@
+## Customers ##
+board_customer_list:
+    path:  /customers/list
+    defaults: { _controller: ClabBoardBundle:Customer:list }
+
+board_customer_view:
+    path:  /customers/view/{id}
+    defaults: { _controller: ClabBoardBundle:Customer:view }

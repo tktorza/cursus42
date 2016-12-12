@@ -1,0 +1,52 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+    category: 'client',
+    route: 'board_client_loyalty_config',
+    } %}
+{% endblock %}
+{% block body %}
+    <div class="container-fluid" id="dashboard-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    <h2>Configuration de la fidélité</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container padding-v-10">
+        {{ form_start(form) }}
+            <div class="col-sm-4 padding-v-10">
+                {{ form_row(form.minValue,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-4 padding-v-10">
+                {{ form_row(form.maxValue,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-4 padding-v-10">
+                {{ form_row(form.percentageOfOrder,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-6 padding-v-10">
+                {{ form_row(form.validityPeriod,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-6 padding-v-10">
+                {{ form_row(form.firstValidityPeriod,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-12 padding-v-10">
+                {{ form_row(form.refreshPeriod,{attr:{class:'form-control col-sm-6'}}) }}
+            </div>
+            <div class="col-sm-6 padding-v-10">
+                {{ form_row(form.minimumOrder,{attr:{class:'form-control'}}) }}
+            </div>
+            <div class="col-sm-6 padding-v-10">
+                {{ form_row(form.roundRatio,{attr:{class:'form-control'}}) }}
+            </div>
+
+            {{ form_rest(form) }}
+            <div class="col-sm-6 col-sm-offset-3 padding-v-20">
+                <button type="submit" class="btn btn-primary btn-lg btn-block">Enregistrer</button>
+            </div>
+        {{ form_end(form) }}
+    </div>
+{% endblock %}

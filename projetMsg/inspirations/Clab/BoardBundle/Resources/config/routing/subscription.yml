@@ -1,0 +1,67 @@
+board_subscription_dashboard:
+    path:  /{contextPk}/subscription
+    defaults: { _controller: ClabBoardBundle:Subscription:dashboard }
+
+board_subscription_invoice:
+    path:  /{contextPk}/subscription/invoice/{invoice}
+    defaults: { _controller: ClabBoardBundle:Subscription:invoice }
+
+board_subscription_terms:
+    path:  /{contextPk}/subscription/terms
+    defaults: { _controller: ClabBoardBundle:Subscription:terms }
+
+board_subscription_terms_send:
+    path:  /{contextPk}/subscription/terms/send
+    defaults: { _controller: ClabBoardBundle:Subscription:sendTerms }
+
+board_subscription_activate:
+    path:  /{contextPk}/subscription/activate
+    defaults: { _controller: ClabBoardBundle:Subscription:activate }
+
+board_subscription_store:
+    path:  /{contextPk}/subscription/store
+    defaults: { _controller: ClabBoardBundle:Subscription:store }
+
+board_settings:
+    path:  /{contextPk}/settings/{type}
+    defaults: { _controller: ClabBoardBundle:Subscription:settings }
+
+board_settings_order_mail:
+    path:  /{contextPk}/settings-ordermail/{backUrl}
+    defaults: { _controller: ClabBoardBundle:Subscription:settingsOrdermail }
+
+board_order_statement_get:
+    path:  /{contextPk}/order-statement/{id}
+    defaults: { _controller: ClabBoardBundle:Subscription:orderStatement }
+
+board_subscription_invoice_get:
+    path:  /{contextPk}/subscription-invoice/{id}
+    defaults: { _controller: ClabBoardBundle:Subscription:subscriptionInvoice }
+
+board_subscription_invoice_payment:
+    path:  /{contextPk}/subscription-invoice-payment/{id}
+    defaults: { _controller: ClabBoardBundle:Subscription:subscriptionInvoicePayment }
+
+board_subscription_register_card:
+    path:  /{contextPk}/register_card/{id}
+    defaults: { _controller: ClabBoardBundle:Subscription:subscriptionInvoice }
+
+board_subscription_delete_card:
+    path: /{contextPk}/delete-card/{card}
+    defaults: { _controller: ClabBoardBundle:Subscription:deleteCreditCard }
+
+board_subscription_client_list:
+    path: client/{contextPk}/subscription/list
+    defaults: { _controller: ClabBoardBundle:Subscription:subscriptionList }
+
+board_onboard_customer_pay:
+    pattern:   /{contextPk}/onboard/customer/new/{slug}
+    defaults:  { _controller: ClabBoardBundle:Subscription:paySubscription, slug: false }
+
+board_onboard_customer_pay_existing:
+    pattern:   /{contextPk}/onboard/customer/existing/{idPlan}/{idCard}
+    defaults:  { _controller: ClabBoardBundle:Subscription:payWithExistingCard }
+
+board_onboard_chainstore_pay:
+    pattern:   /{contextPk}/onboard/customer/new/client/{slug}
+    defaults:  { _controller: ClabBoardBundle:Subscription:paySubscription, slug: false }

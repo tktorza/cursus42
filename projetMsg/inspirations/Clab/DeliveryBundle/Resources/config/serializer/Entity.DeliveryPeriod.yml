@@ -1,0 +1,32 @@
+Clab\DeliveryBundle\Entity\DeliveryPeriod:
+    exclusion_policy: ALL
+    access_type: public_method
+    properties:
+        id:
+            expose: true
+            read_only: true
+        created:
+            expose: true
+        is_online:
+            expose: true
+            accessor:
+                getter: isOnline
+                setter: setIsOnline
+        start:
+            expose: true
+            read_only: true
+        end:
+            expose: true
+            read_only: true
+        distance:
+            expose: true
+            read_only: true
+        maxPrice:
+            expose: true
+            read_only: true
+        slotLength:
+            expose: true
+            read_only: true
+        name:
+            expose: true
+            read_only: true

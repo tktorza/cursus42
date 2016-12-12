@@ -1,0 +1,122 @@
+<div class="row">
+{% if products|length >0 %}
+        <div class="col-md-4">
+            <h4 class="text-center">Produits</h4>
+            <input type="text" class="search" placeholder="Rechercher..." style="border-bottom: none;" value="">
+            <b class="row"><div class="col-md-4 col-md-offset-1">En ligne</div><div class="col-md-6">Nom</div></b>
+            <ul class="fa-ul list-group row" style="height: 200px;height: 200px;overflow-y:scroll;overflow-x:hidden;margin-left:0px;border-radius:4px;border:1px solid #ddd;">
+            {% for product in products %}
+                <li class="list-group-item row" filter="{{ product.name }}">
+                    <a href="#" class="btn col-md-2 col-md-offset-1 {% if product.isOnline %}online{% endif %} status" reference="{{ product.slug }}" type="product" style="{% if product.isOnline %}background-color:#449d44;border-color:#449d44{% else %}background-color:#e74c3c;border-color:#e74c3c;{% endif %}">
+                        <i class="fa {% if product.isOnline %}fa-check{% else %}fa-times{% endif %}" style="color: #fff;font-size: 15px;"></i>
+                    </a>
+                    <div class="col-md-6 col-md-offset-2">{{ product.name }}</div>
+                </li>
+            {% endfor %}
+            </ul>
+        </div>
+{% endif %}
+{% if meals|length >0 %}
+    <div class="col-md-4">
+        <h4 class="text-center">Formules</h4>
+        <input type="text" class="search" placeholder="Rechercher..." style="border-bottom: none;" value="">
+        <b class="row"><div class="col-md-4 col-md-offset-1">En ligne</div><div class="col-md-6">Nom</div></b>
+        <ul class="fa-ul list-group row" style="height: 200px;overflow-y:scroll;overflow-x:hidden;margin-left:0px;border-radius:4px;border:1px solid #ddd;">
+        {% for meal in meals %}
+            <li class="list-group-item row" filter="{{ meal.name }}">
+                <a href="#" class="btn col-md-2 col-md-offset-1 {% if meal.isOnline %}online{% endif %} status" reference="{{ meal.slug }}" type="meal" style="{% if meal.isOnline %}background-color:#449d44;border-color:#449d44{% else %}background-color:#e74c3c;border-color:#e74c3c;{% endif %}">
+                    <i class="fa {% if meal.isOnline %}fa-check{% else %}fa-times{% endif %}" style="color: #fff;font-size: 15px;"></i>
+                </a>
+                <div class="col-md-6 col-md-offset-2">{{ meal.name }}</div>
+            </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+{% if options|length >0 %}
+    <div class="col-md-4" >
+        <h4 class="text-center">Options</h4>
+        <input type="text" class="search" placeholder="Rechercher..." style="border-bottom: none;" value="">
+        <b class="row"><div class="col-md-4 col-md-offset-1">En ligne</div><div class="col-md-6">Nom</div></b>
+        <ul class="fa-ul list-group row" style="height: 200px;overflow-y:scroll;overflow-x:hidden;margin-left:0px;border-radius:4px;border:1px solid #ddd;">
+        {% for option in options %}
+                <li class="list-group-item row" filter="{{ option.value }}">
+                    <a href="#" class="btn col-md-2 col-md-offset-1 {% if option.isOnline %}online{% endif %} status" reference="{{ option.id }}" type="option" style="{% if option.isOnline %}background-color:#449d44;border-color:#449d44{% else %}background-color:#e74c3c;border-color:#e74c3c;{% endif %}">
+                        <i class="fa {% if option.isOnline %}fa-check{% else %}fa-times{% endif %}" style="color: #fff;font-size: 15px;"></i>
+                    </a>
+                    <div class="col-md-6 col-md-offset-2"><b>{{ option.value }}</b><br>{{ option.option.name }}</div>
+                </li>
+        {% endfor %}
+        </ul>
+    </div>
+{% endif %}
+</div>
+<script>
+
+    $(document).ready(function(){
+
+        $('.search').keyup(function(){
+           var filter = $(this).val();
+            if(filter!=""){
+                $(this).parents('.col-md-4').find('li.list-group-item').each(function(){
+                    if($(this).attr('filter').toLowerCase().indexOf(filter.toLowerCase())<0){
+                        $(this).hide();
+                    }else{
+                        $(this).show();
+                    }
+                });
+            }else{
+                $(this).parents('.col-md-4').find('li.list-group-item').show();
+            }
+        });
+
+        $('.status').click(function(){
+            var $self = $(this),
+                slug = $(this).attr('reference'),
+                isOnline = !$(this).hasClass('online'),
+                url ="";
+
+            if($(this).attr('type') == 'product')
+               url = "{{ path('manager_product_status',{slug:'SLUG',isOnline:'IS_ONLINE'}) }}";
+            else if($(this).attr('type') == 'meal')
+                url = "{{ path('manager_meal_status',{slug:'SLUG',isOnline:'IS_ONLINE'}) }}";
+            else
+                url = "{{ path('manager_option_status',{id:'SLUG',isOnline:'IS_ONLINE'}) }}";
+
+            url = url.replace('SLUG',slug);
+            url = url.replace('IS_ONLINE',isOnline);
+            $.ajax({
+                type: "POST",
+                url: url,
+                beforeSend: function(){
+                        $self.find('i.fa').removeClass('fa-check fa-times').addClass('fa-spinner fa-spin');
+                },
+                success:function(result){
+                    $self.find('i.fa').removeClass('fa-spinner fa-spin');
+                    if(!isOnline) {
+                        console.log($(this))
+                        $self.removeClass('online').css({'background-color':'#e74c3c','border-color':'#e74c3c'});
+                        $self.find('i.fa').addClass('fa-times');
+                    }else{
+                        console.log(result)
+                        $self.css({'background-color':'#449d44','border-color':'#449d44'}).addClass('online');
+                        $self.find('i.fa').addClass('fa-check');
+                    }
+
+                },error: function(XMLHttpRequest, textStatus, errorThrown)
+                {
+                    $self.find('i.fa').removeClass('fa-spinner fa-spin');
+                    if(!isOnline) {
+                        $self.css({'background-color':'#449d44','border-color':'#449d44'}).addClass('online');
+                        $self.find('i.fa').addClass('fa-check');
+                    }else{
+                        $self.removeClass('online').css({'background-color':'#e74c3c','border-color':'#e74c3c'});
+                        $self.find('i.fa').addClass('fa-times');
+                    }
+                    alert('Error : ' + errorThrown);
+                }
+            });
+        });
+    });
+
+</script>

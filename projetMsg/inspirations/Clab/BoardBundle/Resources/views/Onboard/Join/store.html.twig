@@ -1,0 +1,60 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block nav %}{% endblock %}
+{% block bodyClass %}login{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="user">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well text-center">
+                <br>
+                <img src="{{ asset('front/bundle/board/img/logo-dark.png') }}" id="logo">
+                <br><br><br>
+
+                <p class="lead">Créez votre boutique en moins d'une minute.</p>
+
+                {% if foodtruckName is defined and foodtruckName %}
+                    <h4>{{ foodtruckName }} <small>- <a href="{{ path('board_onboard_join_foodtruck') }}">Changer</a></small></h4>
+                {% elseif address is defined and address %}
+                    <h4>{{ address.verbose }} <small>- <a href="{{ path('board_onboard_join_address') }}">Changer</a></small></h4>
+                {% endif %}
+
+                <form action="{{ path('board_onboard_join_store', { slug: restaurant.slug }) }}" method="post" class="text-left">
+
+                    {% if form.name is defined %}
+                    <div class="form-group">
+                        {{ form_row(form.name, { attr: { class: 'form-control' } }) }}
+                    </div>
+                    {% endif %}
+
+                    <div class="form-group">
+                        {{ form_row(form.managerPhone, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.managerEmail, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    <div class="form-group">
+                        {{ form_row(form.deal.discover, { attr: { class: 'form-control' } }) }}
+                    </div>
+
+                    {{ form_rest(form) }}
+
+                    <br>
+                    <button type="submit" class="btn btn-primary btn-block btn-lg" name="_submit">Continuer<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $('form').on('submit', function(e) {
+        $(this).find('button[type="submit"]').addClass('disabled');
+    });
+</script>
+{% endblock %}

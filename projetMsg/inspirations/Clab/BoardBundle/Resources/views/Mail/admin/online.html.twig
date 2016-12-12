@@ -1,0 +1,26 @@
+<p>Hello la team,</p>
+
+<p>On a un nouveau {% if restaurant.isMobile %}food truck{% else %}restaurant{% endif %} : <strong>{{ restaurant.name }}</strong>.
+
+{% if restaurant.isMobile %}
+<p>Si vous le connaissez, <a href="{{ url('ttt_profile', { slug: restaurant.slug }) }}">laissez-lui un avis</a> :)</p>
+{% else %}
+<p>Si vous souhaitez le tester - via Clickeat ;) - il est situé <strong>{{ restaurant.address.verbose }}</strong> et son profil Clickeat est accessible ici <a href="{{ url('clickeat_store_profile', { slug: restaurant.slug }) }}">{{ url('clickeat_store_profile', { slug: restaurant.slug }) }}</a>.</p>
+
+<p>Vous connaissez déjà ? <a href="{{ url('clickeat_review_restaurant_write', { id: restaurant.id }) }}">Laissez-lui déjà un avis</a> :)</p>
+{% endif %}
+
+<br><br>
+
+<p>Félicitations {% if restaurant.commercial %}{{ restaurant.commercial.profile.firstName }}{% else %}commercial inconnu{% endif %} et à vous tous la team Clickeat & TTTruck :)</p>
+
+<br><br>
+
+{% set gif = random(range(1, 14)) %}
+<img src="{{ url('clickeat_home')|slice(0, -1) }}{{ asset('front/bundle/board/img/gif/' ~ gif ~ '.gif') }}" alt="Yeah">
+
+
+<br><br>
+
+
+<p>La team</p>

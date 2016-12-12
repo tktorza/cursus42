@@ -1,0 +1,40 @@
+manager_dashboard:
+    path:  /dashboard
+    defaults: { _controller: ClabManagerBundle:Dashboard:dashboard }
+
+manager_order_dialog:
+    path:  /order-dialog/{id}
+    defaults: { _controller: ClabManagerBundle:Dashboard:orderDialog, id: null }
+
+manager_switch_restaurant:
+    path:  /switch-restaurant/{slug}
+    defaults: { _controller: ClabManagerBundle:Dashboard:switchRestaurant, slug: null }
+
+manager_order_update:
+    path:  /order/update
+    defaults: { _controller: ClabManagerBundle:Order:updateOrder }
+    methods: [POST]
+
+manager_order_mail_validation:
+    path:  /order-validation-by-mail/{token}
+    defaults: { _controller: ClabManagerBundle:Order:mailValidation }
+
+manager_get_catalog:
+    path: /dashboard/catalog/{slug}
+    defaults: { _controller: ClabManagerBundle:Catalog:getCatalog }
+
+manager_product_status:
+    path: /dashboard/catalog/product/{slug}/{isOnline}
+    defaults: { _controller: ClabManagerBundle:Catalog:updateProductOnline}
+
+manager_meal_status:
+    path: /dashboard/catalog/meal/{slug}/{isOnline}
+    defaults: { _controller: ClabManagerBundle:Catalog:updateMealOnline}
+
+manager_option_status:
+    path: /dashboard/catalog/option/{id}/{isOnline}
+    defaults: { _controller: ClabManagerBundle:Catalog:updateOptionChoiceOnline}
+
+manager_order_preparation_status:
+    path: /dashboard/order/state/{id}
+    defaults: { _controller: ClabManagerBundle:Order:updatePreparationState}

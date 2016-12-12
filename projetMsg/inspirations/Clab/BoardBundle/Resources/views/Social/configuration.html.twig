@@ -1,0 +1,89 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'social',
+        route: 'board_social_configuration',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding" id="planning">
+    <form method="POST" action="{{ path('board_social_configuration', { contextPk: contextPk }) }}">
+    <div class="row">
+        <div class="col-md-8 padding-v-40 padding-h-40 bg-white">
+
+            <h2>Facebook</h2>
+
+            <div class="big-label">
+                {{ form_row(form.facebookSynch, { attr: { class: 'icheck' } }) }}
+            </div>
+
+            <p><small>Gagnez du temps : les horaires et informations de votre page Facebook sont mis à jour dès que vous les changez sur myClickeat.</small></p>
+
+            {% if proxy.isMobile %}
+            <hr>
+            <h2>Track the Truck</h2>
+
+            <div class="big-label">
+                {{ form_row(form.tttEventToFacebook, { attr: { class: 'icheck' } }) }}
+            </div>
+
+            <div class="big-label">
+                {{ form_row(form.tttEventToTwitter, { attr: { class: 'icheck' } }) }}
+            </div>
+
+            <hr>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="richEdit">
+                        {{ form_row(form.tttEventValidationMessage, { attr: { class: 'form-control', rows: 6 } }) }}
+                        <br>
+                        <div class="btn-group">
+                            <a class="btn btn-default btn-xs insert-name">{{ 'pro.communication.conf.ttt.validationMessage.nameButton'|trans }}</a>
+                            <a class="btn btn-default btn-xs insert-address">{{ 'pro.communication.conf.ttt.validationMessage.addressButton'|trans }}</a>
+                            <a class="btn btn-default btn-xs insert-time">{{ 'pro.communication.conf.ttt.validationMessage.hourButton'|trans }}</a>
+                        </div>
+                    </div>
+                    <br>
+                    <p><small>
+                        {{ 'pro.communication.conf.ttt.validationMessage.nameHelp'|trans }}<br>
+                        {{ 'pro.communication.conf.ttt.validationMessage.addressHelp'|trans }}<br>
+                        {{ 'pro.communication.conf.ttt.validationMessage.hourHelp'|trans }}<br>
+                    </small></p>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="richEdit">
+                        {{ form_row(form.tttEventAnnulationMessage, { attr: { class: 'form-control', rows: 6 } }) }}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
+            {{ form_rest(form) }}
+        </div>
+
+        <div class="col-md-4 padding-v-40 padding-h-40">
+
+        </div>
+    </div>
+    {% include 'ClabBoardBundle:Base:formBottom.html.twig' with { cancelRoute: path('board_social_configuration', { contextPk: contextPk }) } %}
+    </form>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+$('a.insert-name').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '[[nom]]');
+});
+$('a.insert-address').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '[[adresse]]');
+});
+$('a.insert-time').on('click', function(e) {
+  $(this).closest('.richEdit').find('textarea').val($(this).closest('.richEdit').find('textarea').val() + '[[heure]]');
+});
+</script>
+{% endblock %}

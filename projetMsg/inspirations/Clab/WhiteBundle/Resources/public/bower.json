@@ -1,0 +1,25 @@
+{
+  "name": "Bagelstein",
+  "version": "1.0.0",
+  "authors": [
+    "Thomas Piard <tom.piard@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "modernizr": "^3.3.1",
+    "jquery": "^2.2.1",
+    "bootstrap": "^3.3.6",
+    "font-awesome": "fontawesome#^4.5.0",
+    "SelectOrDie": "^0.1.8",
+    "jquery-storelocator-plugin": "^2.5.2",
+    "bootstrap-datepicker": "^1.6.0",
+    "jcf": "^1.2.1"
+  }
+}

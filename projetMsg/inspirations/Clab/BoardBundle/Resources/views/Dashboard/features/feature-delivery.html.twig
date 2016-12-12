@@ -1,0 +1,35 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_delivery',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/features/icon-delivery.png') }}">
+                    <br><br>
+                    <h2>La commande en ligne à livrer</h2>
+                    <span class="label label-primary">Gratuit</span>
+                    <br><br>
+                    <p>
+                        Vos clients commandent en ligne et se font livrer au bureau ou chez eux. Accessible depuis votre profil Clickeat, votre page Facebook ou votre site web. Optimisez votre service en gérant le planning de vos livraisons  et proposez à vos clients de suivre leur livreur.
+                    </p>
+                    <br><br>
+                    {% if proxy.isMobile %}
+                        <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'delivery' }) }}">Activer</a>
+                    {% else %}
+                        <a class="btn btn-success btn-lg" href="{{ path('board_feature_activate', { contextPk: contextPk, feature: 'delivery' }) }}">Activer</a>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

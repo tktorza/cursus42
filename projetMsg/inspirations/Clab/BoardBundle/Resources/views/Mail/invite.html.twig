@@ -1,0 +1,54 @@
+{% extends 'ClabBoardBundle:Mail:base.html.twig' %}
+{% import 'ClabBoardBundle:Mail:macro/mail.html.twig' as mail %}
+
+{% if restaurant.isMobile %}
+{% set service = 'Clickeat et Track the Truck' %}
+{% else %}
+{% set service = 'Clickeat' %}
+{% endif %}
+
+{% block body %}
+    {% if restaurant.commercial %}
+        {% include 'ClabBoardBundle:Mail:partials/blockWhite.html.twig' with {
+            block1: true,
+            title1: "Bonjour " ~ user.firstName,
+            content1: "
+                Je viens de vous créer un accès à  myClickeat, l’interface pour gérer toutes les informations en ligne sur votre restaurant.<br>
+                <br>
+                Pour poursuivre votre inscription, cliquez ci-dessous : 
+            ",
+            button1: true,
+            button1Label: "Accèder à myClickeat",
+            button1Link: url('board_onboard_custom_infos', { slug: restaurant.slug }),
+            block2: true,
+            content2: '
+                Notre mission est de vous aider à développer votre activité en ligne facilement. N’hésitez donc pas à nous solliciter si vous avez besoin d’aide ou si vous avez des suggestions.<br>
+                <br><br>
+                ' ~ restaurant.commercial.profile.firstName ~ ' de ' ~ service
+            ,
+        } %}
+    {% else %}
+        {% include 'ClabBoardBundle:Mail:partials/blockWhite.html.twig' with {
+            block1: true,
+            title1: "Bonjour " ~ user.firstName,
+            content1: "
+                Nous vous avons créé un accès à  myClickeat, l’interface pour gérer toutes les informations en ligne sur votre restaurant.<br>
+                <br>
+                Pour poursuivre votre inscription, cliquez ci-dessous : 
+            ",
+            button1: true,
+            button1Label: "Accèder à myClickeat",
+            button1Link: url('board_onboard_custom_infos', { slug: restaurant.slug }),
+            block2: true,
+            content2: '
+                Notre mission est de vous aider à développer votre activité en ligne facilement. N’hésitez donc pas à nous solliciter si vous avez besoin d’aide ou si vous avez des suggestions.<br>
+                <br><br>
+                Antoine de ' ~ service ~ ' - 06 78 82 48 92
+            ',
+        } %}
+    {% endif %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockAppstore.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/spacer.html.twig' %}
+    {% include 'ClabBoardBundle:Mail:partials/blockHelp.html.twig' %}
+{% endblock %}

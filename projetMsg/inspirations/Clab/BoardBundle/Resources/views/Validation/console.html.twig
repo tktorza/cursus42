@@ -1,0 +1,88 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_restaurant_planning',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="validation">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body">
+                    <h1>
+                        <div class="pull-right text-center">
+                            <small>
+                                {{ validationPercent }}% de certification<br>
+                                ({{ validationCount }}/{{ validationRequestCount }})
+                            </small>
+                        </div>
+                        <img src="{{ asset('front/bundle/board/img/big-icon-calendar.png') }}" class="margin-left margin-right">Votre planning du jour</h1>
+
+                    <hr>
+                    {% for flashMessage in app.session.flashbag.get('success') %}
+                        <div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">×</button>{{ flashMessage }}</div>
+                    {% endfor %}
+
+                    {% if events|length > 0 %}
+                        {% for event in events %}
+                            <div class="row">
+                                <div class="col-md-4 text-center">
+                                    <h2>
+                                        <small>De</small><br>
+                                        {{ event.start|date('H:i') }}<br>
+                                        <small>à</small><br>
+                                        {{ event.end|date('H:i') }}
+                                    </h2>
+                                </div>
+
+                                <div class="col-md-8">
+                                    {% if event.type == 0 %}
+                                        <br><br>
+                                        <p class="lead">Le restaurant est fermé.</p>
+                                        <form method="post" action="{{ path('board_restaurant_planning_delete', { contextPk: contextPk, id: event.timesheetId, backUrl: url('board_validation_console', { contextPk: contextPk }) }) }}">
+                                            <button type="submit" class="btn btn-warning" href="">Annuler la fermeture</button>
+                                        </form>
+                                    {% else %}
+                                        <br><br>
+                                        <p class="lead"><i class="fa fa-map-marker icon-left"></i>{{ event.address.verbose }}</p>
+                                        {% if event.validation is defined and event.validation %}
+                                            <span class="fa-stack location-check icon-left" data-toggle="tooltip" data-title="Emplacement vérifié">
+                                              <i class="fa fa-certificate icon-success fa-stack-2x"></i>
+                                              <i class="fa fa-check fa-stack-1x fa-inverse"></i>
+                                            </span>
+                                            Présence validée
+                                            <br><br>
+                                            <a class="btn btn-warning" href="{{ path('board_validation_cancel', { contextPk: contextPk, date: event.timestamp, start: event.start.timestamp }) }}">Annuler</a>
+                                        {% else %}
+                                            <a class="btn btn-success" href="{{ path('board_validation_validate', { slug: contextPk, date: event.timestamp, start: event.start.timestamp }) }}">J'y serai</a>
+                                            &nbsp;&nbsp;
+                                            <a class="btn btn-default" data-target="ajaxModal" href="{{ path('board_foodtruck_planning_calender_edit', { contextPk: contextPk, date: event.timestamp, id: event.timesheetId }) }}">Je souhaite modifier les informations</a>
+                                            &nbsp;&nbsp;
+                                            <a class="btn btn-danger" href="{{ path('board_validation_close', { slug: contextPk, date: event.timestamp, start: event.start.timestamp }) }}">Je suis fermé</a>
+                                        {% endif %}
+                                    {% endif %}
+                                    {% if event.validation is defined and event.validation %}
+                                        {% if event.validation.isPublished %}
+                                            <strong>Publié !</strong>
+                                        {% else %}
+                                            <a class="btn btn-success" href="{{ path('board_validation_publish', { contextPk: contextPk, date: event.timestamp, start: event.start.timestamp }) }}"><i class="fa fa-bullhorn icon-left"></i>Publier</a>
+                                            <a class="btn btn-success" data-target="ajaxModal" href="{{ path('board_validation_publish_custom', { contextPk: contextPk, date: event.timestamp, start: event.start.timestamp }) }}"><i class="fa fa-bullhorn icon-left"></i>Personnaliser le message</a>
+                                        {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                            {% if not loop.last %}<hr>{% endif %}
+                        {% endfor %}
+                    {% else %}
+                        <p class="lead">Vous n'avez pas d'évènement prévu aujourd'hui.</p>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

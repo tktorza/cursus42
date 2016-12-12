@@ -1,0 +1,65 @@
+{% extends 'ClabWhiteBundle::baseModal.html.twig' %}
+
+{% block modalClass %}{% endblock %}
+{% block modalId %}suggestionModal{% endblock %}
+{% block modalTitle %}{% endblock %}
+{% block modalContentClass %}col-sm-10 col-sm-offset-1 col-xs-12 {% endblock %}
+{% block modalBody %}
+    <div class=" border-transparent well background-white padding-bottom-80" {% if is_mobile() %}style="overflow: hidden"{% endif %}>
+            {% if is_mobile() %}<div class="swiper-pagination col-xs-12"></div>{% endif %}
+           <div> <h4 class="text-center">N'aimeriez-vous pas ajouter...</h4></div>
+        <div class="products {% if is_mobile() %}swiper-container-suggestion{% endif %}">
+            <ul {% if is_mobile() %}class="swiper-wrapper"{% endif %}style="height: 400px">
+                {% set iterate = 0 %}
+                {% for p in suggestion %}
+                    {% include 'ClabWhiteBundle:Order:modalProduct.html.twig' with {i: iterate, product: p, category: p.category, orderType: cart.orderType, suggestion: true, suggest: suggestion} %}
+                    {% set iterate = iterate + 1 %}
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <p class="text-center">
+        <button class="btn btn-lg btn-primary" id="Continue">Continuer</button>
+    </p>
+    <script src="{{ asset('vendors/Swiper/dist/js/swiper.jquery.min.js') }}" type="application/javascript"></script>
+    <script>
+        $('#Continue').click(function () {
+            $('.modal').modal('hide');
+        });
+        var url = '{{ path('clab_white_cart_add', { slug: 'SLUG', noInteraction: 1 }) }}';
+
+        $('.suggestion').on("click", function(){
+
+            var slug = $(this).data('slug');
+
+            $.post(url.replace('SLUG', slug), function (response) {
+                $('.cart-wrapper').html(response);
+            });
+            $('.modal').modal('hide');
+        });
+
+        var mySwiper = null;
+
+        {% if is_mobile() %}
+            mySwiper = new Swiper('.swiper-container-suggestion', {
+                pagination: '.swiper-pagination',
+                paginationClickable: true,
+                autoplay: 2500,
+                autoplayDisableOnInteraction: false,
+                width: 270,
+                height: 550,
+                slidesPerView: 1,
+                slideToClickedSlide: true,
+                freeMode: true
+            });
+        {% endif %}
+
+        if(mySwiper) {
+            $('.swiper-container-suggestion').attr('style', 'margin-bottom: 31px!important;');
+            mySwiper.slideTo(0, 400);
+            mySwiper.update();
+        }
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Modification {{ date|date('d/m/Y') }}{% endblock %}
+
+{% block body %}
+    {% if timesheet.type == 0 %}
+        <form method="post" action="{{ path('board_restaurant_planning_delete', { contextPk: contextPk, id: timesheet.id }) }}">
+            <button type="submit" class="btn btn-danger btn-lg btn-block">Supprimer la fermeture</button>
+        </form>
+    {% elseif timesheet.type == 1 %}
+        <a class="btn btn-primary btn-lg btn-block" href="{{ path('board_foodtruck_edit_event', { contextPk: contextPk, date: date|date('Y-m-d') }) }}">Modifier pour cette date</a>
+        <br>
+        <a class="btn btn-info btn-lg btn-block" href="{{ path('board_foodtruck_edit_event', { contextPk: contextPk, id: timesheet.id }) }}">Modifier l'évènement récurrent</a>
+        <br>
+        <a class="btn btn-danger btn-lg btn-block" href="{{ path('board_foodtruck_planning_quick_close', { contextPk: contextPk, date: date, id: timesheet.id }) }}">Fermer à cette date</a>
+    {% elseif timesheet.type == 2 %}
+        <a class="btn btn-primary btn-lg btn-block" href="{{ path('board_foodtruck_edit_event', { contextPk: contextPk, id: timesheet.id }) }}">Modifier l'évènement</a>
+        <br>
+        <a class="btn btn-warning btn-lg btn-block" href="{{ path('board_foodtruck_planning_quick_close', { contextPk: contextPk, date: date, id: timesheet.id }) }}">Fermer à cette date</a>
+        <br>
+        <form method="post" action="{{ path('board_restaurant_planning_delete', { contextPk: contextPk, id: timesheet.id }) }}">
+            <button class="btn btn-danger btn-lg btn-block" >Supprimer l'évènement</button>
+        </form>
+    {% endif %}
+{% endblock %}

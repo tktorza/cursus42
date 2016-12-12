@@ -1,0 +1,158 @@
+board_catalog:
+    resource: "@ClabBoardBundle/Resources/config/routing/catalog.yml"
+    prefix: /{context}/{contextPk}
+
+board_user:
+    resource: "@ClabBoardBundle/Resources/config/routing/user.yml"
+    prefix: /{context}/{contextPk}
+
+board_caisse:
+    resource: "@ClabBoardBundle/Resources/config/routing/caisse.yml"
+    prefix: /{context}/{contextPk}/caisse
+
+board_user_database:
+    resource: "@ClabBoardBundle/Resources/config/routing/user_database.yml"
+    prefix: /{context}/{contextPk}
+
+board_staff:
+    resource: "@ClabBoardBundle/Resources/config/routing/staff.yml"
+    prefix: /{contextPk}
+
+board_pincode:
+    resource: "@ClabBoardBundle/Resources/config/routing/pincode.yml"
+    prefix: /{contextPk}
+
+board_customer:
+    resource: "@ClabBoardBundle/Resources/config/routing/customer.yml"
+    prefix: /{contextPk}
+
+board_store:
+    resource: "@ClabBoardBundle/Resources/config/routing/store.yml"
+    prefix: /{contextPk}
+
+board_client:
+    resource: "@ClabBoardBundle/Resources/config/routing/client.yml"
+    prefix: /client/{contextPk}
+
+board_delivery:
+    resource: "@ClabBoardBundle/Resources/config/routing/delivery.yml"
+    prefix: /{context}/{contextPk}
+
+board_sales:
+    resource: "@ClabBoardBundle/Resources/config/routing/sales.yml"
+    prefix: /{contextPk}
+
+board_social:
+    resource: "@ClabBoardBundle/Resources/config/routing/social.yml"
+    prefix: /{contextPk}
+
+board_discount:
+    resource: "@ClabBoardBundle/Resources/config/routing/discount.yml"
+    prefix: /{contextPk}
+
+board_coupon:
+    resource: "@ClabBoardBundle/Resources/config/routing/coupon.yml"
+    prefix: /{contextPk}
+
+board_admin:
+    resource: "@ClabBoardBundle/Resources/config/routing/admin.yml"
+    prefix: /{contextPk}
+
+board_review:
+    resource: "@ClabBoardBundle/Resources/config/routing/review.yml"
+    prefix: /{contextPk}
+
+board_tools:
+    resource: "@ClabBoardBundle/Resources/config/routing/tools.yml"
+    prefix: /{contextPk}
+
+board_appstore:
+    resource: "@ClabBoardBundle/Resources/config/routing/appstore.yml"
+    prefix: /{contextPk}
+
+board_upgrade:
+    resource: "@ClabBoardBundle/Resources/config/routing/upgrade.yml"
+    prefix: /{contextPk}
+
+board_onboarding:
+    resource: "@ClabBoardBundle/Resources/config/routing/onboarding.yml"
+    prefix: /{contextPk}
+
+board_onboard:
+    resource: "@ClabBoardBundle/Resources/config/routing/onboard.yml"
+    prefix: /
+
+board_gallery:
+    resource: "@ClabBoardBundle/Resources/config/routing/gallery.yml"
+    prefix: /{context}/{contextPk}
+
+board_subscription:
+    resource: "@ClabBoardBundle/Resources/config/routing/subscription.yml"
+
+board_validation:
+    resource: "@ClabBoardBundle/Resources/config/routing/validation.yml"
+
+board_preview:
+    resource: "@ClabBoardBundle/Resources/config/routing/preview.yml"
+
+board_subscribe:
+    path:  /subscribe
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /board/onboard/address
+        permanent: true
+
+board_subscribe_foodtruck:
+    path:  /subscribe/foodtruck
+    defaults:
+        _controller: FrameworkBundle:Redirect:urlRedirect
+        path: /board/onboard/foodtruck
+        permanent: true
+
+board_store_create:
+    path:  /add
+    defaults: { _controller: ClabBoardBundle:Dashboard:addNewRestaurant }
+
+board_register:
+    path:  /register
+    defaults: { _controller: ClabBoardBundle:User:register }
+
+board_contact:
+    path:  /contact
+    defaults: { _controller: ClabBoardBundle:Dashboard:contact }
+
+board_test_end:
+    path:  /{contextPk}/letsdothis
+    defaults: { _controller: ClabBoardBundle:Dashboard:endTest }
+
+board_feature_showcase:
+    path:  /{contextPk}/feature/{feature}
+    defaults: { _controller: ClabBoardBundle:Dashboard:feature }
+
+board_feature_activate:
+    path:  /{contextPk}/feature/{feature}/activate
+    defaults: { _controller: ClabBoardBundle:Dashboard:activateFeature }
+
+board_feature_desactivate:
+    path:  /{contextPk}/feature/{feature}/desactivate
+    defaults: { _controller: ClabBoardBundle:Dashboard:desactivateFeature }
+
+board_go_online:
+    path:  /{contextPk}/goonline
+    defaults: { _controller: ClabBoardBundle:Dashboard:goOnline }
+
+board_dashboard:
+    path:  /{context}/{contextPk}
+    defaults: { _controller: ClabBoardBundle:Dashboard:dashboard, context: null, contextPk: null }
+
+board_additional_sale:
+    resource: "@ClabBoardBundle/Resources/config/routing/additionalsale.yml"
+    prefix: /{contextPk}
+
+board_apps:
+    resource: "@ClabBoardBundle/Resources/config/routing/apps.yml"
+    prefix: /{contextPk}
+
+board_accounting:
+    path:  /{context}/{contextPk}/accounting/{slug}
+    defaults: { _controller: ClabBoardBundle:Client:accounting , slug: null}

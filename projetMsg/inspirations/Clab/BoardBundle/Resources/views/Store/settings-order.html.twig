@@ -1,0 +1,106 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'store',
+        route: 'board_restaurant_settings_orders',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container-fluid form-bottom-padding" id="planning">
+    <form method="post" action="{{ path('board_restaurant_settings_orders', { contextPk: contextPk }) }}">
+    <div class="row">
+        <div class="col-md-9 padding-v-10 padding-h-40 bg-white">
+
+            {% for flashMessage in app.session.flashbag.get('error') %}
+                <div class="alert alert-danger" role="alert">
+                    <button type="button" class="close" data-dismiss="alert"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    {{ flashMessage }}
+                </div>
+            {% endfor %}
+
+            <h2>Moyens de paiement</h2>
+            <br>
+
+            {{ form_widget(form.paymentMethods, { attr: { class: 'icheck inline' } }) }}
+
+            <hr>
+
+            <h2>Prix moyen</h2>
+            <br>
+
+            {{ form_row(form.averagePrice, { attr: { class: 'form-control' } }) }}
+
+            <hr>
+
+            <h2>Gestion des créneaux</h2>
+            <br>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_row(form.maxOrderBySlot, { attr: { class: 'form-control' } }) }}
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_row(form.maxOrderPriceBySlot, { attr: { class: 'form-control' } }) }}
+                    </div>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        {{ form_row(form.orderDelay, { attr: { class: 'form-control' } }) }}
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <h2>Temps de préparation supplémentaire</h2>
+            <br>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <a class="btn btn-block btn-primary ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_restaurant_extra_making_time', { context: context, contextPk: contextPk }) }}">Gérer les temps de préparation</a>
+                    <br>
+                    {% if products|length > 0 %}
+                        <ul class="list-group">
+                        {% for product in products %}
+                            <li class="list-group-item">
+                                <img src="{{ product.coverSmall }}" style="max-width:40px; margin-right: 10px;" class="img-circle">
+                                {{ product.name }}
+                                <span class="pull-right" style="margin-top: 10px;">{{ product.extraMakingTime }}min</span>
+                            </li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-md-3 padding-v-20 padding-h-20">
+            <div class="big-label">
+                  {% if "preorder" in orderTypes %}
+                     <h4>Commande en ligne déjà active</h4>
+                <a class="btn btn-danger confirmModal text-center" href="#" data-route="{{ path
+                ('board_feature_desactivate', { contextPk: contextPk, feature: 'preorder' }) }}">Désactiver la
+                                                                                                 commande en ligne</a>
+                  {% else %}
+                    <a class="btn btn-primary" href="{{ path('board_feature_activate', { contextPk:
+                        contextPk, feature: 'preorder' }) }}">Activer la commande en ligne</a>
+                {% endif %}
+
+            </div>
+            {{ form_rest(form) }}
+        </div>
+    </div>
+    {% include 'ClabBoardBundle:Base:formBottom.html.twig' with { cancelRoute: path('board_restaurant_settings_orders', { contextPk: contextPk }) } %}
+    </form>
+</div>
+{% endblock %}

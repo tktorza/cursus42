@@ -1,0 +1,10 @@
+{% extends 'ClabBoardBundle:Base:baseModal.html.twig' %}
+
+{% block title %}Gestion des modules{% endblock %}
+
+{% block body %}
+    {% for key, module in modules %}
+        <a class="btn btn-default btn-block confirmModal" data-route="{{ url('board_appstore_desactivate', { contextPk: contextPk, module: key }) }}">Désactiver le module {{ module }}</a>
+        <br>
+    {% endfor %}
+{% endblock %}

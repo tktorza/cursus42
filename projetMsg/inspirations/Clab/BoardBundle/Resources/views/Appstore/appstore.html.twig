@@ -1,0 +1,104 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore',
+        rightLink: path('board_appstore_manage', { contextPk: contextPk }),
+        rightLinkLabel: 'Désactiver un module',
+        rightLinkAjaxModal: true,
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-20" id="appstore">
+    <div class="row">
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <div class="text-center">
+                    <br>
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-discount.png') }}">
+                </div>
+                <div class="caption">
+                    <div class="text-center">
+                        <h3>Offres</h3>
+                        <span class="label label-success">Gratuit</span>
+                    </div>
+                    <br>
+                    <p class="description"><small>Générez des offres et coupons pour vos clients Clickeat. Menez des campagnes d'offres à destination de vos clients et des salariés autour de vous.</small></p>
+                    {% if subscriptionManager.hasAccess(proxy, 'discount') %}
+                        <a href="{{ path('board_discount_library', { contextPk: contextPk }) }}" class="btn btn-default btn-block">Accèder</a>
+                    {% else %}
+                        <a href="{{ path('board_appstore_activate', { contextPk: contextPk, module: 'discount' }) }}" class="btn btn-success btn-block">Activer</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <div class="text-center">
+                    <br>
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-iframe.png') }}">
+                </div>
+                <div class="caption">
+                    <div class="text-center">
+                        <h3>Site marchand</h3>
+                        <span class="label label-success">Gratuit</span>
+                    </div>
+                    <br>
+                    <p class="description"><small>Intégrez une interface de commande en ligne directement sur votre site web ou votre page Facebook. Vos clients pourront directement commander via ces canaux.</small></p>
+                    {% if subscriptionManager.hasAccess(proxy, 'iframe') %}
+                        <a href="{{ path('board_appstore_iframe', { contextPk: contextPk }) }}" class="btn btn-default btn-block">Accèder</a>
+                    {% else %}
+                        <a href="{{ path('board_appstore_activate', { contextPk: contextPk, module: 'iframe' }) }}" class="btn btn-success btn-block">Activer</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <div class="text-center">
+                    <br>
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-website.png') }}">
+                </div>
+                <div class="caption">
+                    <div class="text-center">
+                        <h3>Site web</h3>
+                        <span class="label label-success">Gratuit</span>
+                    </div>
+                    <br>
+                    <p class="description"><small>En 1 clic, mettez en place un site web à votre image, toujours à jour grâce à vos informations renseignées sur votre espace pro. Diffusez vos offres, vos produits et vos nouveautés.</small></p>
+                    {% if subscriptionManager.hasAccess(proxy, 'website') %}
+                        <a href="{{ path('board_appstore_website', { contextPk: contextPk }) }}" class="btn btn-default btn-block">Accèder</a>
+                    {% else %}
+                        <a href="{{ path('board_appstore_activate', { contextPk: contextPk, module: 'website' }) }}" class="btn btn-success btn-block">Activer</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {#
+        <div class="col-md-3">
+            <div class="thumbnail">
+                <div class="text-center">
+                    <br>
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-app.png') }}">
+                </div>
+                <div class="caption">
+                    <div class="text-center">
+                        <h3>Application mobile</h3>
+                        <span class="label label-success">350€ + 30€/mois</span>
+                    </div>
+                    <br>
+                    <p class="description"><small>Une application mobile iOS à vos couleurs.</small></p>
+                    {% if subscriptionManager.hasAccess(proxy, 'app') %}
+                        <a href="{{ path('board_appstore_website', { contextPk: contextPk }) }}" class="btn btn-default btn-block">Accèder</a>
+                    {% else %}
+                        <a href="{{ path('board_appstore_activate', { contextPk: contextPk, module: 'app' }) }}" class="btn btn-success btn-block">Activer</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        #}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block nav %}{% endblock %}
+{% block bodyClass %}login{% endblock %}
+
+{% block body %}
+<div class="container-fluid padding-v-10" id="user">
+    <div class="row">
+        <div class="col-md-6 col-md-offset-3">
+            <div class="well text-center">
+                <br>
+                <img src="{{ asset('images/bagelstein.jpg') }}" id="logo">
+                <br><br><br>
+
+                <p class="lead">Créez votre profil manager</p>
+
+                <form action="{{ path('board_register', { email: email, firstname: firstname, lastname: lastname }) }}" method="post" class="text-left" {{ form_enctype(form) }}>
+
+                    <div class="form-group" {% if email is defined and email and form.email.vars.errors|length == 0 %}style="display:none;"{% endif %}>
+                        {{ form_row(form.email, { 'attr': { 'class': 'form-control input-lg' } }) }}
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 form-group" {% if firstname is defined and firstname and form.first_name.vars.errors|length == 0 %}style="display:none;"{% endif %}>
+                            {{ form_row(form.first_name, { 'attr': { 'class': 'form-control input-lg', autocomplete: 'off' } }) }}
+                        </div>
+                        <div class="col-md-6 form-group" {% if lastname is defined and lastname and form.last_name.vars.errors|length == 0 %}style="display:none;"{% endif %}>
+                            {{ form_row(form.last_name, { 'attr': { 'class': 'form-control input-lg', autocomplete: 'off' } }) }}
+                        </div>
+                    </div>
+
+                    {{ form_row(form.plainPassword, { 'attr': { 'class': 'form-control input-lg', autocomplete: 'off' } }) }}
+
+                    <div style="display:none;">
+                        {% if form.subscribed_newsletter is defined %}
+                            {{ form_row(form.subscribed_newsletter) }}
+                        {% endif %}
+                    </div>
+
+                    <input type="hidden" name="_target_path" value="" />
+
+                    {{ form_rest(form) }}
+
+                    <br>
+                    <button type="submit" id="_submit" class="btn btn-primary btn-block btn-lg" name="_submit">Continuer<i class="fa fa-arrow-circle-right icon-right"></i></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+<script type="text/javascript">
+    $('form').on('submit', function(e) {
+        $(this).find('button[type="submit"]').addClass('disabled');
+    });
+</script>
+{% endblock %}

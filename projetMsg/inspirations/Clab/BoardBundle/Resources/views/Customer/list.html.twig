@@ -1,0 +1,46 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'sales',
+        route: 'board_customer_list',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10" id="customers">
+    <section class="panel">
+        <div class="panel-body" id="customerTable">
+            <table class="table table-hover table-bordered table-stripped" id="datatable" width="100%">
+                <thead>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                <th class="search"><input type="text" placeholder="Rechercher" style="width:100%;"/></th>
+                </thead>
+                <thead>
+                    <th>Source</th>
+                    <th>Nom</th>
+                    <th>Prénom</th>
+                    <th>Code postal (domicile/bureau)</th>
+                    <th>Commandes</th>
+                </thead>
+                <tbody id="customerList" class="list">
+                    {% for customer in customers %}
+                    {% set user = customer.user %}
+                    {#<tr data-target="drawer" href="{{ path('board_customer_view', { contextPk: contextPk, id: user.id }) }}">#}
+                    <tr data-target="drawer" href="{{ path('board_customer_view', { contextPk: contextPk, id: user.id }) }}">
+                        <td>{{ customer.source|join(', ') }}</td>
+                        <td>{{ user.lastName }}</td>
+                        <td>{{ user.firstName }}</td>
+                        <td>{% if user.homeAddress %}{{ user.homeAddress.zip }}{% endif %}{% if user.homeAddress and user.jobAddress %} / {% endif %}{% if user.jobAddress %}{{ user.jobAddress.zip }}{% endif %}</td>
+                        <td><span class="badge badge-primary">{{ user.orders|length }}</span></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </section>
+</div>
+{% endblock %}

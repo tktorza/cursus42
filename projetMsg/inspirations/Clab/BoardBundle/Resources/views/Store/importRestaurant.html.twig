@@ -1,0 +1,48 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+    category: 'admin',
+    route: 'board_restaurant_import'
+    } %}
+{% endblock %}
+
+{% block body %}
+    <div class="container-fluid form-bottom-padding" id="planning">
+        <form method="post" action="{{ path('board_restaurant_import', { contextPk: contextPk }) }}" {{ form_enctype(form) }}>
+            <div class="row">
+                <div class="col-md-8 padding-v-10 bg-white">
+
+                    <h2>Importez vos restaurants</h2>
+                    <br>
+
+                    <h4>Etape 1 : Téléchargez le fichier suivant.</h4>
+
+                    <a class="btn btn-success" href="{{ asset('downloads/clickeat-restaurants.xlsx') }}"><i class="fa fa-download icon-left"></i>Télécharger le fichier</a>
+
+                    <hr>
+
+                    <h4>Etape 2 : Remplissez le fichier.</h4>
+
+                    <hr>
+
+                    <h4>Etape 3 : Envoyez nous le fichier via le formulaire suivant.</h4>
+
+                    {{ form_widget(form.file, { attr: { class: 'form-control' } }) }}
+                    {{ form_errors(form.file) }}
+
+                    {{ form_rest(form) }}
+
+                    <br><br>
+
+                    <button type="submit" class="btn btn-primary"><i class="fa fa-upload icon-left"></i>Importer les restaurants</button>
+
+                    <br><br><br><br><br><br>
+                </div>
+
+                <div class="col-md-4 padding-v-10">
+                </div>
+            </div>
+        </form>
+    </div>
+{% endblock %}

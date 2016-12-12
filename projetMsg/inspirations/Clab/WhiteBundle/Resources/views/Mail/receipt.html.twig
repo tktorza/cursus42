@@ -1,0 +1,74 @@
+{% extends 'ClabWhiteBundle:Mail:base.html.twig' %}
+
+{% block title %}
+Merci de votre commande chez {{ restaurant.name }}, voici votre reçu
+{% endblock %}
+
+{% block body %}
+<p>Date: {{ order.time|date('d/m/Y') }}</p>
+
+<p>Restaurant: {{ restaurant.name }}<br>
+{{ restaurant.address.verbose }}<br>
+Siret:  {{ restaurant.siret }} <br>
+{% if order.company is defined and order.company is not null %}
+  <b>Commande facturée au compte société de: {{ order.company.name }}</b>
+{% endif %}
+</p>
+<br>
+
+<table>
+  <tbody>
+    {% set total = 0 %}
+
+    {% for element in order.cart.elements %}
+      <tr>
+        {% if element.product != null %}
+
+        <td>
+          {{ element.product.name }} (x{{ element.quantity }})
+        </td>
+        <td>{{ (element.price*element.quantity)|number_format(2) }}€</td>
+      </tr>
+      {% set total = total + (element.price*element.quantity) %}
+
+      {% elseif element.meal != null %}
+
+        <td>{{ element.meal.name }} (x{{ element.quantity }})</td>
+
+        <td>{{ (element.price*element.quantity)|number_format(2) }}€</td>
+      </tr>
+      {% for children in element.childrens %}
+        <tr>
+          <td> - {{ children.product.name }} (x{{ children.quantity * element.quantity }})</td>
+          <td>{{ (children.price * children.quantity * element.quantity)|number_format(2) }}€</td>
+        </tr>
+      {% endfor %}
+
+      {% endif %}
+
+    {% endfor %}
+    {% if order.cart.discount is not null %}
+        <tr>
+          <td colspan="2">Offre : {{ order.cart.discount.name }}</td>
+        </tr>
+    {% endif %}
+    <tr>
+      <td><strong>Total</strong></td>
+      <td><strong>{{ order.cart.totalPrice|number_format(2) }}€</strong></td>
+    </tr>
+    <tr><td>------</td></tr>
+    {% for key, tax in order.taxesAmount %}
+    <tr>
+      <td>{{ key }}</td>
+      <td>{{ tax }}€</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<br><br>
+Conservez ce ticket<br>
+A très bientôt,<br>
+<br><br>
+L’équipe {{ restaurant.name }} et Clickeat.
+{% endblock %}

@@ -1,0 +1,44 @@
+{% extends 'ClabBoardBundle:Base:base.html.twig' %}
+
+{% block subnav %}
+    {% include 'ClabBoardBundle:Base:subnav.html.twig' with {
+        category: 'appstore',
+        route: 'board_appstore_app',
+    } %}
+{% endblock %}
+
+{% block body %}
+<div class="container padding-v-10 padding-h-40" id="dashboard">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <section class="panel">
+                <div class="panel-body text-center">
+                    <img src="{{ asset('front/bundle/board/img/appstore/icon-app.png') }}">
+                    <br><br>
+                    <h2>Application</h2>
+                    <br>
+                    <p>
+                        Une application mobile iOS à vos couleurs.
+                    </p>
+                    <br><br>
+                    {% if interested %}
+                        <p>Nous avons bien reçu votre demande. Nous reviendrons très prochainement vers vous</p>
+                    {% else %}
+                        <form action="{{ path('board_appstore_app_deal', { contextPk: contextPk }) }}" method="post">
+
+                            <div class="form-group">
+                                {{ form_row(form.interestedInApp, { attr: { class: 'icheck' } }) }}
+                            </div>
+
+                            {{ form_rest(form) }}
+
+                            <br>
+                            <button type="submit" class="btn btn-success btn-lg">Confirmer</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,44 @@
+{% for review in reviews %}
+<tr
+    id="review-{{ review.id }}"
+    class="mix clickable"
+    data-target="drawer" data-read="{{ review.isRead }}" href="{{ path('board_review_edit', { contextPk: contextPk,
+    id: review.id }) }}">
+    <td class="name">{{ review.title }}</td>
+    <td>
+        {{ review.body| truncate(100, true)  }}
+    </td>
+    <td>
+        {{ review.created|date("d/m/Y")  }}
+    </td>
+    <td>
+      {{ review.score }}
+    </td>
+    <td>
+        {{ review.cookScore }}
+    </td>
+    <td>
+        {{ review.hygieneScore }}
+    </td>
+    <td>
+        {{ review.serviceScore }}
+    </td>
+    <td>
+        {{ review.qualityScore }}
+    </td>
+    <td>
+        {% if review.response is not null %}
+            <i class="fa fa-check"></i>
+        {% else %}
+            <i class="fa fa-times"></i>
+        {% endif %}
+    </td>
+    <td>
+        {% if review.isRead == true %}
+            <span class="label label-success">Oui</span>
+        {% else %}
+            <span class="label label-danger">Non</span>
+        {% endif %}
+    </td>
+</tr>
+{% endfor %}

@@ -1,0 +1,44 @@
+api_rest_product_list:
+    path:  /menu/{menuId}
+    defaults: { _controller: ClabApiBundle:RestProduct:list, _format: json }
+    methods: [GET]
+
+api_rest_product_from_restaurant:
+    path:  /restaurant/{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestProduct:getForRestaurant, _format: json }
+    methods: [GET]
+
+api_rest_product_new:
+    path:  /create
+    defaults: { _controller: ClabApiBundle:RestProduct:new, _format: json }
+    methods: [POST]
+
+api_rest_product_get:
+    path:  /{productId}
+    defaults: { _controller: ClabApiBundle:RestProduct:get, _format: json }
+    methods: [GET]
+
+api_rest_product_edit:
+    path:  /{productId}
+    defaults: { _controller: ClabApiBundle:RestProduct:edit, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_product_post_edit:
+    path:  /{productId}
+    defaults: { _controller: ClabApiBundle:RestProduct:editPost, _format: json }
+    methods: [POST]
+
+api_rest_product_delete:
+    path:  /{productId}
+    defaults: { _controller: ClabApiBundle:RestProduct:delete, _format: json }
+    methods: [DELETE]
+
+api_rest_product_reset_stock:
+    path:  /{productId}/reset-stock
+    defaults: { _controller: ClabApiBundle:RestProduct:resetStock, _format: json }
+    methods: [PUT,PATCH]
+
+api_rest_tax:
+    path:  /taxes
+    defaults: { _controller: ClabApiBundle:RestProduct:taxes, _format: json }
+    methods: [GET]

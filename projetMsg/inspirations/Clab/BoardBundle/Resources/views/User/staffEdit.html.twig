@@ -1,0 +1,28 @@
+<form method="post" action="{{ path('board_staff_edit', { contextPk: contextPk, id: staff.id }) }}" {{ form_enctype(form) }}>
+    <div class="drawer-scroll">
+
+        <div class="form-group text-center">
+            {% if staff.image %}
+            <img src="{{ vich_uploader_asset(staff, 'image')| imagine_filter('square_100') }}" class="img-circle">
+            {% endif %}
+            <div class="btn btn-success btn-file">
+                {{ form_widget(form.image) }}
+                <i class="fa fa-upload icon-left"></i>Uploader une image
+            </div>
+            {{ form_errors(form.image) }}
+        </div>
+
+        <hr>
+
+        <div class="form-group">
+            {{ form_row(form.name, { attr: { class: 'form-control input-lg' } }) }}
+        </div>
+
+        <div class="form-group">
+            {{ form_row(form.description, { attr: { class: 'form-control', rows: 6 } }) }}
+        </div>
+
+        {{ form_rest(form) }}
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: staff.id ? path('board_staff_delete', { contextPk: contextPk, id: staff.id }) : null } %}
+</form>

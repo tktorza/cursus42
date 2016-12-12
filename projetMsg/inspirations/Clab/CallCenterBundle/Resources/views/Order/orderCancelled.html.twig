@@ -1,0 +1,23 @@
+{% extends 'ClabCallCenterBundle:Default:base.html.twig' %}
+
+{% block body %}
+<div class="container padding-h-20 padding-v-20">
+    <div class="row">
+        <div class="col-md-5">
+            <div class="box padding-v-20 padding-h-20">
+                {% include 'ClabCallCenterBundle:Default:cart.html.twig' with {'noInteraction':true} %}
+            </div>
+        </div>
+
+        <div class="col-md-7">
+            <div class="box padding-v-20 padding-h-20">
+                <div class="text-center">
+                    <h3 class="text-info">{{ 'clickeat.order.order_cancelled.title'|trans({ '%date%': order.time|date('d/m/Y'), '%restaurant%': order.restaurant.name })|nl2br }}</h3>
+                    <img src="{{ asset('front/bundle/clickeat/img/icon-bag.png') }}" alt="Receipt" class="receipt">
+                    <p>{{ 'clickeat.order.order_cancelled.description'|trans }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

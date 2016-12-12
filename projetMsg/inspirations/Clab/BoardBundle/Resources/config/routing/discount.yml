@@ -1,0 +1,15 @@
+board_discount_library:
+    path:  /discounts/library
+    defaults: { _controller: ClabBoardBundle:Discount:library }
+
+board_discount_library_list:
+    path:  /discounts/library-list
+    defaults: { _controller: ClabBoardBundle:Discount:libraryList }
+
+board_discount_edit:
+    path:  /discounts/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:Discount:edit, slug: null }
+
+board_discount_delete:
+    path:  /discounts/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:Discount:delete }

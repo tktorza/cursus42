@@ -1,0 +1,20 @@
+#
+api_rest_friends:
+    path: /
+    defaults: { _controller: ClabApiBundle:RestUserFriend:getFriends, _format: json }
+    methods: [GET]
+#
+api_rest_post_friends:
+    path: /{userId}
+    defaults: { _controller: ClabApiBundle:RestUserFriend:postFriend, _format: json }
+    methods: [POST]
+#
+api_rest_remove_friends:
+    path: /{userId}
+    defaults: { _controller: ClabApiBundle:RestUserFriend:removeFriend, _format: json }
+    methods: [DELETE]
+#
+api_rest_friends:
+    path:  /whoLikedRestaurant/{restaurantId}
+    defaults: { _controller: ClabApiBundle:RestUserFriend:getFriendsWhoLikedRestaurant, _format: json }
+    methods: [GET]

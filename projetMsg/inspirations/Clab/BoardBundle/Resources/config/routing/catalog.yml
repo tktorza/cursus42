@@ -1,0 +1,152 @@
+## Categories ##
+board_category_library:
+    path:  /categories/library
+    defaults: { _controller: ClabBoardBundle:ProductCategory:library }
+
+board_category_library_list:
+    path:  /categories/library-list
+    defaults: { _controller: ClabBoardBundle:ProductCategory:libraryList }
+
+board_category_edit:
+    path:  /categories/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:ProductCategory:edit, slug: null }
+
+board_category_delete:
+    path:  /categories/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:ProductCategory:delete }
+
+board_category_reorder:
+    path:  /categories/reorder
+    defaults: { _controller: ClabBoardBundle:ProductCategory:reorder }
+
+board_category_assign:
+    path:  /categories/assign/{slug}
+    defaults: { _controller: ClabBoardBundle:ProductCategory:assign }
+
+## Products ##
+board_product_library:
+    path:  /products/library
+    defaults: { _controller: ClabBoardBundle:Product:library }
+
+board_product_library_list:
+    path:  /products/library-list
+    defaults: { _controller: ClabBoardBundle:Product:libraryList }
+
+board_product_edit:
+    path:  /products/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:Product:edit, slug: null }
+
+board_product_delete:
+    path:  /products/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:Product:delete }
+
+board_product_options:
+    path:  /products/options/{slug}
+    defaults: { _controller: ClabBoardBundle:Product:options }
+
+board_product_assign_restaurant:
+    path:  /products/assign/restaurant/{slug}
+    defaults: { _controller: ClabBoardBundle:Product:assignRestaurant }
+
+## Options ##
+board_option_library:
+    path:  /options/library
+    defaults: { _controller: ClabBoardBundle:Option:library }
+
+board_option_library_list:
+    path:  /options/library-list
+    defaults: { _controller: ClabBoardBundle:Option:libraryList }
+
+board_option_edit:
+    path:  /options/edit/{id}
+    defaults: { _controller: ClabBoardBundle:Option:edit, id: null }
+
+board_option_delete:
+    path:  /options/delete/{id}
+    defaults: { _controller: ClabBoardBundle:Option:delete }
+
+board_option_assign:
+    path:  /options/assign/{id}
+    defaults: { _controller: ClabBoardBundle:Option:assign }
+
+board_option_assign_choices:
+    path:  /options/assign-choices/{id}
+    defaults: { _controller: ClabBoardBundle:Option:assignChoices }
+
+board_option_duplicate:
+    path:  /options/duplicate/{id}
+    defaults: { _controller: ClabBoardBundle:Option:duplicate }
+
+board_option_choice_library:
+    path:  /options-choice/library
+    defaults: { _controller: ClabBoardBundle:Option:choiceLibrary }
+
+board_option_choice_library_list:
+    path:  /options-choice/library-list
+    defaults: { _controller: ClabBoardBundle:Option:choiceLibraryList }
+
+board_option_choice_edit:
+    path:  /options-choice/edit/{id}
+    defaults: { _controller: ClabBoardBundle:Option:choiceEdit, id: null }
+
+board_option_choice_delete:
+    path:  /options-choice/delete/{id}
+    defaults: { _controller: ClabBoardBundle:Option:choiceDelete }
+
+## Meal ##
+board_meal_library:
+    path:  /meals/library
+    defaults: { _controller: ClabBoardBundle:Meal:library }
+
+board_meal_library_list:
+    path:  /meals/library-list
+    defaults: { _controller: ClabBoardBundle:Meal:libraryList }
+
+board_meal_edit:
+    path:  /meals/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:edit, slug: null }
+
+board_meal_delete:
+    path:  /meals/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:delete }
+
+board_meal_slots:
+    path:  /meals/slots/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:slots }
+
+board_meal_slot_library:
+    path:  /meal-slots/library
+    defaults: { _controller: ClabBoardBundle:Meal:slotLibrary }
+
+board_meal_slot_library_list:
+    path:  /meal-slots/library-list
+    defaults: { _controller: ClabBoardBundle:Meal:slotLibraryList }
+
+board_meal_slot_edit:
+    path:  /meal-slots/edit/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:slotEdit, slug: null }
+
+board_meal_slot_delete:
+    path:  /meal-slots/delete/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:slotDelete }
+
+board_meal_slot_categories:
+    path:  /meal-slots/categories/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:slotCategories }
+
+board_meal_slot_assign:
+    path:  /meal-slots/assign/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:slotAssign }
+
+board_meal_reorder:
+    path:  /meals/reorder
+    defaults: { _controller: ClabBoardBundle:Meal:reorder }
+
+board_meal_assign_restaurant:
+    path:  /products/meal/restaurant/{slug}
+    defaults: { _controller: ClabBoardBundle:Meal:assignRestaurant }
+
+# Catalog
+board_catalog:
+    path:  /catalog
+    defaults: { _controller: ClabBoardBundle:Product:catalog }

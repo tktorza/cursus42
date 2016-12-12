@@ -1,0 +1,26 @@
+services:
+    app_shop.cart_manager:
+        class: Clab\ShopBundle\Manager\CartManager
+        arguments: [ @doctrine.orm.entity_manager, @router, @request, @app_shop.discount_manager, @clab_delivery.delivery_manager, @session ]
+        scope: request
+
+    app_shop.order_manager:
+        class: Clab\ShopBundle\Manager\OrderManager
+        arguments: [ @doctrine.orm.entity_manager, @router, @form.factory, @session, @request, @translator, @logger, @app_user.user_manager, @app_shop.cart_manager, @app_restaurant.timesheet_manager, @clab_delivery.delivery_manager, @app_admin.subscription_manager, @clab_core.mail_manager]
+        scope: request
+
+    app_shop.loyalty_manager:
+        class: Clab\ShopBundle\Manager\LoyaltyManager
+        arguments: [ @doctrine.orm.entity_manager, @request]
+        scope: request
+
+    app_shop.discount_manager:
+        class: Clab\ShopBundle\Manager\DiscountManager
+        arguments: [ @doctrine.orm.entity_manager, @router, @request ]
+        scope: request
+
+
+    app_shop.suggestion_manager:
+          class: Clab\ShopBundle\Manager\SuggestionManager
+          arguments: [ @doctrine.orm.entity_manager, @router, @request, @session ]
+          scope: request

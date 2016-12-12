@@ -1,0 +1,60 @@
+<form method="post" action="{{ path('board_option_choice_edit', { context: context, contextPk: contextPk, id: choice.id }) }}" novalidation novalidate class="ajax-form" data-callback="#choiceList">
+    <div class="drawer-scroll">
+        {% if context == 'client' %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-warning icon-left"></i>Les modifications s'appliqueront sur tous vos restaurants.</p>
+        </div>
+        {% elseif choice.parent %}
+        <div class="drawer-client-alert">
+            <p><i class="fa fa-lock icon-left"></i>Cette option provient de votre enseigne, les options d'édition peuvent être limitées.</p>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            {% if not choice.parent %}
+            <div class="col-md-3">
+                <div class="img-uploader">
+                    {% if choice.id %}
+                        <img src="{{ choice.cover }}" id="galleryCover">
+                        <a class="btn btn-primary btn-block btn-sm ladda-button" data-style="expand-right" data-target="ajaxModal" href="{{ path('board_gallery_get', { context: context, contextPk: contextPk, entityType: 'choice', entityId: choice.id }) }}">Modifier</a>
+                    {% else %}
+                        <img src="{{ asset('files/blank.png') | imagine_filter('square_180') }}" id="galleryCover">
+                        <a class="btn btn-primary btn-block btn-sm saveForm" href="#">Modifier</a>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
+
+            <div class="col-md-9">
+                {% if form.value is defined %}
+                <div class="form-group">
+                    {{ form_row(form.value, { attr: { class: 'form-control input-lg' } }) }}
+                </div>
+                    <div class="form-group">
+                        {{ form_row(form.isOnline, { attr: { class: 'form-control icheck' } }) }}
+                    </div>
+                {% endif %}
+
+            </div>
+        </div>
+
+        {% if options|length > 0 %}
+        <hr>
+        <h4>Options utilisant ce choix</h4>
+        <ul class="list-group">
+            {% set newArray = [] %}
+            {% for option in options %}
+                {% if option.name not in newArray %}
+                <li class="list-group-item">
+                    {{ option.name }}
+                </li>
+                {% set newArray = newArray|merge([option.name]) %}
+                {% endif %}
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {{ form_rest(form) }}
+    </div>
+    {% include 'ClabBoardBundle:Base:drawerBottom.html.twig' with { deleteLink: choice.id and not choice.parent ? path('board_option_choice_delete', { context: context, contextPk: contextPk, id: choice.id }) : null } %}
+</form>

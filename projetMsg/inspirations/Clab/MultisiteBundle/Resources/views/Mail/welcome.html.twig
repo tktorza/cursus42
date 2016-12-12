@@ -1,0 +1,28 @@
+{% extends 'ClabMultisiteBundle:Mail:base.html.twig' %}
+
+{% block title %}
+Bienvenue sur la commande en ligne chez {{ restaurant.name }} !
+{% endblock %}
+
+{% block body %}
+<p>
+Bonjour {{ user.fullName }},<br>
+<br>
+<br>
+Tout est bon : vous pouvez désormais vous régaler chez {{ restaurant.name }} en commandant en ligne, c’est encore meilleur !<br>
+<br>
+Votre identifiant est {{ user.email }}. Votre mot de passe a été choisi par vous directement et peut être changé à tout moment sur votre profil.<br>
+Pour garantir la fiabilité de votre compte, pensez à renseigner votre numéro de téléphone. Si ce n’est pas déjà fait, rendez-vous sur votre profil.<br>
+<br>
+<br>
+La commande en ligne chez {{ restaurant.name }} est offerte par le service Clickeat, spécialisé dans les solutions de commande et visibilité en ligne pour les restaurants. Vous pouvez désormais utiliser tous nos services avec ce même identifiant.<br>
+<br>
+En vous inscrivant, vous avez accepté les conditions générales d’utilisation du service. Si vous rencontrez un problème pour accéder à nos solutions, contactez le service client au 01 75 43 21 40.<br>
+<br>
+<br>
+Nous vous remercions pour votre confiance et votre appétit.<br>
+<br>
+L’équipe {{ restaurant.name }} et Clickeat
+
+</p>
+{% endblock %}
