@@ -1,6 +1,0 @@
-Clab\UserBundle\Entity\User:
-    constraints:
-        - Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity: { fields: 'emailCanonical', errorPath: 'email', message: Cette email est déjà utilisée }
-    properties:
-        email:
-            - Email: ~

@@ -1,5 +1,0 @@
-## Social ##
-api_0_rest_taxonomy_vocabulary_terms:
-    path:  /vocabularies/{slug}/terms
-    defaults: { _controller: ClabApiOldBundle:RestTaxonomy:vocabularyTerms, _format: json}
-    methods: [GET]

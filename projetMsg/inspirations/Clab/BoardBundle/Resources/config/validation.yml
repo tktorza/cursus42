@@ -1,6 +1,0 @@
-Clab\BoardBundle\Entity\POSPrinter:
-    properties:
-        name:
-            - NotBlank: ~
-        address:
-            - NotBlank: ~

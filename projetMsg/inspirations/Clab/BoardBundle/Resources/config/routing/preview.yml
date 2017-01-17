@@ -1,3 +1,0 @@
-board_preview:
-    path:  /{contextPk}/preview
-    defaults: { _controller: ClabBoardBundle:Preview:preview }

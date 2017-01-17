@@ -1,8 +1,0 @@
-services:
-    clab_core.core_manager:
-        class: Clab\WhiteBundle\Manager\CoreManager
-        arguments: [  "@doctrine.orm.entity_manager" ]
-
-    clab_core.mail_manager:
-        class: Clab\WhiteBundle\Manager\MailManager
-        arguments: [ @doctrine.orm.entity_manager, @mailer, @templating, @service_container,'%mailer_host%','%mailer_user%','%mailer_password%','%mailer_port%','%mailer_sender_address%' ]
