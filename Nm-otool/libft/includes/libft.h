@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: tktorza <marvin@42.fr>                     +#+  +:+       +#+        */
+/*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/11/27 17:26:40 by tktorza           #+#    #+#             */
-/*   Updated: 2016/03/14 15:50:47 by tktorza          ###   ########.fr       */
+/*   Created: 2017/10/03 12:07:38 by tktorza           #+#    #+#             */
+/*   Updated: 2017/10/18 14:03:01 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <string.h>
+# include "header.h"
 
 typedef struct		s_list
 {
@@ -41,6 +42,7 @@ int					ft_isascii(int c);
 int					ft_isdigit(int c);
 int					ft_isprint(int c);
 char				*ft_itoa(int n);
+char				*ft_itohex(int n, int nb_z);
 void				*ft_memalloc(size_t size);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
 int					ft_memcmp(const void *s1, const void *s2, size_t n);
@@ -90,5 +92,6 @@ int					ft_compt(int nbr);
 size_t				ft_word_number(char const *s, char c);
 void				ft_itoto(char *str, int n);
 size_t				ft_place(char const *s, char c);
+int					ft_printf(const char *s, ...);
 
 #endif
