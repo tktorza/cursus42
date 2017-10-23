@@ -14,7 +14,7 @@ NAME = nm
 
 SRC_DIR	= ./src
 
-SRC = ft_nm.c sort.c
+SRC = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c
 
 VPATH	= $(SRC_DIR)
 

@@ -37,10 +37,26 @@ typedef struct          s_symtab
     int i;
     int j;
     int ns;
+    int exec;
 }                       t_symtab;
 
-struct nlist_64     *tri_bulle(char *stringtable, struct nlist_64 *tab,
-                    int taille);
+
+void nm(char *ptr, t_symtab *symt);
+int main(int ac, char **av);
+
+struct nlist     *tri_bulle(char *stringtable, struct nlist *tab,
+    int taille);
+struct nlist_64     *tri_bulle_64(char *stringtable, struct nlist_64 *tab,
+    int taille);
+    
+void handle_32(char *ptr, t_symtab *symt);
+
+void handle_64(char *ptr, t_symtab *symt);
+
+void display_out_64(int value, char *str, char type, t_symtab *symt);
+void display_out(int value, char *str, char type, t_symtab *symt);
+char type_n_sect(unsigned int n_sect, t_symtab *symt);
+
 int                 ft_printf(const char *str, ...);
 
 #endif
