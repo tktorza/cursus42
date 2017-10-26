@@ -12,10 +12,10 @@
 
 #include "../includes/nm_tool.h"
 
-static struct nlist_64     *fill_array_64(struct nlist_64 *tab, int taille)
+static struct nlist_64     *fill_array_64(struct nlist_64 *tab, uint32_t taille)
 {
     struct nlist_64 *tab2;
-    int             i;
+    uint32_t             i;
 
     tab2 = (struct nlist_64*)malloc(sizeof(struct nlist_64) * taille);
     i = 0;
@@ -27,10 +27,10 @@ static struct nlist_64     *fill_array_64(struct nlist_64 *tab, int taille)
     return (tab2);
 }
 
-static struct nlist     *fill_array(struct nlist *tab, int taille)
+static struct nlist     *fill_array(struct nlist *tab, uint32_t taille)
 {
     struct nlist *tab2;
-    int             i;
+    uint32_t             i;
 
     tab2 = (struct nlist*)malloc(sizeof(struct nlist) * taille);
     i = 0;
@@ -42,12 +42,40 @@ static struct nlist     *fill_array(struct nlist *tab, int taille)
     return (tab2);
 }
 
-struct nlist_64     *tri_bulle_64(char *stringtable, struct nlist_64 *tab, int taille)
+struct nlist_64     *tri_by_value_64(char *stringtable, struct nlist_64 *tab, uint32_t taille)
+{
+    uint32_t i;
+    uint32_t j;
+    struct nlist_64 tmp;
+
+    i = 0;
+    while (i < taille - 1)
+    {
+        j = i + 1;
+        while(j < taille)
+        {
+            if (ft_strcmp(stringtable + tab[i].n_un.n_strx,
+                stringtable + tab[j].n_un.n_strx) == 0 &&
+                tab[j].n_value < tab[i].n_value)
+            {
+                tmp = tab[j];
+                tab[j] = tab[i];
+                tab[i] = tmp;
+                return (tri_by_value_64(stringtable, tab, taille));
+            }
+            j++;
+        }
+        i++;
+    }
+    return (tab);
+}
+
+struct nlist_64     *tri_bulle_64(char *stringtable, struct nlist_64 *tab, uint32_t taille)
 {
     struct nlist_64 *tab2;
     struct nlist_64 temp;
-    int i;
-    int j;
+    uint32_t i;
+    uint32_t j;
 
     i = 0;
     tab2 = fill_array_64(tab, taille);
@@ -67,15 +95,43 @@ struct nlist_64     *tri_bulle_64(char *stringtable, struct nlist_64 *tab, int t
         }
         i++;
     }
-    return (tab2);
+    return (tri_by_value_64(stringtable, tab2, taille));
 }
 
-struct nlist     *tri_bulle(char *stringtable, struct nlist *tab, int taille)
+struct nlist     *tri_by_value(char *stringtable, struct nlist *tab, uint32_t taille)
+{
+    uint32_t i;
+    uint32_t j;
+    struct nlist tmp;
+
+    i = 0;
+    while (i < taille - 1)
+    {
+        j = i + 1;
+        while(j < taille)
+        {
+            if (ft_strcmp(stringtable + tab[i].n_un.n_strx,
+                stringtable + tab[j].n_un.n_strx) == 0 &&
+                tab[j].n_value < tab[i].n_value)
+            {
+                tmp = tab[j];
+                tab[j] = tab[i];
+                tab[i] = tmp;
+                return (tri_by_value(stringtable, tab, taille));
+            }
+            j++;
+        }
+        i++;
+    }
+    return (tab);
+}
+
+struct nlist     *tri_bulle(char *stringtable, struct nlist *tab, uint32_t taille)
 {
     struct nlist *tab2;
     struct nlist temp;
-    int i;
-    int j;
+    uint32_t i;
+    uint32_t j;
 
     i = 0;
     tab2 = fill_array(tab, taille);
@@ -95,5 +151,5 @@ struct nlist     *tri_bulle(char *stringtable, struct nlist *tab, int taille)
         }
         i++;
     }
-    return (tab2);
+    return (tri_by_value(stringtable, tab2, taille));
 }

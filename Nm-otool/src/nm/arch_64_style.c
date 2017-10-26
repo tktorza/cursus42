@@ -1,6 +1,6 @@
 #include "../includes/nm_tool.h"
 
-static char type_element(struct nlist_64 list, struct load_command *lc, t_symtab *symt)
+static char type_element(struct nlist_64 list, t_symtab *symt)
 {
     char car;
 
@@ -25,8 +25,37 @@ static char type_element(struct nlist_64 list, struct load_command *lc, t_symtab
     return (car);
 }
 
+
+
+void			print_res(long unsigned int addr, unsigned int size, char *ptr)
+{
+	unsigned int	i;
+	char			*str;
+
+	i = 0;
+	while (i < size)
+	{
+		if (i == 0 || i % 16 == 0)
+		{
+			if (i != 0)
+				addr += 16;
+			ft_printf("%016llx ", addr);
+        }
+        str = ft_itoa_base(ptr[i], 16);
+        ft_strlen(str);
+        str = ft_strsub(str, ft_strlen(str) - 2, 2);
+        
+		ft_printf("%s ", str);
+		//free(str);
+		if ((i + 1) % 16 == 0)
+			write(1, "\n", 1);
+		i++;
+    }
+	write(1, "\n", 1);
+}
+
 static void    symtab_building_bis(t_symtab *symt, struct segment_command_64\
-    *seg, struct section_64 *sect)
+    *seg, struct section_64 *sect, struct mach_header_64 *header)
 {
    symt->i = 0;
    while (symt->i < seg->nsects)
@@ -34,7 +63,8 @@ static void    symtab_building_bis(t_symtab *symt, struct segment_command_64\
        if (ft_strcmp(sect->sectname, SECT_TEXT) == 0 &&
            ft_strcmp(sect->segname, SEG_TEXT) == 0)
          {
-         
+            write(1, "(__TEXT,__text) section\n", 24);
+			print_res(sect->addr, sect->size, (char *)header + sect->offset);
            symt->text = symt->ns;
        }  
              
@@ -69,7 +99,7 @@ static void    symtab_building(t_symtab *symt, struct mach_header_64 *header,\
        {
            seg = (struct segment_command_64 *)lc;
            sect = (struct section_64 *)((void *)seg + sizeof(*seg));
-           symtab_building_bis(symt, seg, sect);
+           symtab_building_bis(symt, seg, sect, header);
           // printf("NS:: %d\n", symt->ns);
        }
        lc = (void *)lc + lc->cmdsize;
@@ -84,17 +114,17 @@ static void print_output_64(struct symtab_command *sym, char *ptr, \
    struct load_command *lc;
    char *stringtable;
    struct nlist_64 *array;
-
+    int i;     
    array = (void *)ptr + sym->symoff;
    stringtable = (void *)ptr + sym->stroff;
    lc = (void *)ptr + sizeof(*header);
    // printf("%d %d %d %d\n", symt.bss, symt.data, symt.i, symt.text);
    array = tri_bulle_64(stringtable, array, sym->nsyms);
    symtab_building(symt, header, lc);
-   symt->i = -1;
-   while (++symt->i < sym->nsyms)
-       display_out_64(array[symt->i].n_value, stringtable + \
-           array[symt->i].n_un.n_strx, type_element(array[symt->i], lc, symt), symt);
+   i = -1;
+   while ((uint32_t)++i < sym->nsyms)
+       display_out_64(array[i], stringtable + \
+           array[i].n_un.n_strx, type_element(array[i], symt));
 }
 
 void handle_64(char *ptr, t_symtab *symt)
@@ -105,7 +135,6 @@ void handle_64(char *ptr, t_symtab *symt)
    struct load_command *lc;
    struct symtab_command *sym;
 
-   //converti en header
    header = (struct mach_header_64 *)ptr;
    ncmds = header->ncmds;
    i = 0;
@@ -114,7 +143,6 @@ void handle_64(char *ptr, t_symtab *symt)
    {
        if (lc->cmd == LC_SYMTAB)
        {
-           //envoie de liste créee précédemment
            sym = (struct symtab_command *)lc;
            print_output_64(sym, ptr, header, symt);
            break;

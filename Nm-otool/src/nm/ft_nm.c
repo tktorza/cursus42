@@ -10,34 +10,42 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/nm_tool.h"
+#include "../../includes/nm_tool.h"
 
 #define ERROR(name)                                                                   \
     ft_putstr(ft_strjoin(ft_strjoin("nm: ", name), " No such file or directory.\n")); \
     return (-1)
 
-void nm(char *ptr, t_symtab *symt)
+int type_bin(char *ptr, char *file, t_symtab *symt)
 {
-    int magic_number;
+    uint32_t magic_number;
     //on prend le premier octet que l'on convertit en int
-    magic_number = *(int *)ptr;
+    magic_number = *(uint32_t *)ptr;
     //regarder si 64bits
     if (magic_number == MH_MAGIC_64)
         handle_64(ptr, symt);
     else if (magic_number == MH_MAGIC)
         handle_32(ptr, symt);
+    else if (ft_strncmp(ptr, ARMAG, SARMAG) == 0)
+        handle_lib(ptr, file, symt);
+    else if (magic_number == FAT_MAGIC || magic_number == FAT_CIGAM/*a lenvers*/)
+        handle_fat(ptr, file, symt);
+    else
+    {
+        ft_printf("%s\n", ptr);
+        return (-1);
+    }
+    return (1);
 }
 
-int main(int ac, char **av)
+int ft_nm(char *av)
 {
     int fd;
     void *ptr;
     struct stat buf;
-    t_symtab symt = {0, 0, 0, -1, 0, 1, 0};
-    
-    if (ac < 2)
-        av[1] = "a.out\0";
-    if ((fd = open(av[1], O_RDONLY)) != -1)
+    t_symtab symt = {0, 0, 0, -1, 0, 1, 0, 0};
+
+    if ((fd = open(av, O_RDONLY)) != -1)
     {
         if (fstat(fd, &buf) < 0)
         {
@@ -48,10 +56,21 @@ int main(int ac, char **av)
             ERROR("ok");
         }
         symt.exec = ((buf.st_mode & S_IXUSR) ? 1 : 0);
-
-        nm(ptr, &symt);
+        return (type_bin(ptr, av, &symt));
     }
     else
-        ERROR(av[1]);
+        ERROR(av);
+}
+
+int main(int ac, char **av)
+{
+    int i;
+    
+    i = 0;
+    if (ac < 2)
+        av[1] = "a.out\0";
+    while (++i < ac)
+        if (ft_nm(av[i]) == -1)
+            break;
     return 0;
 }

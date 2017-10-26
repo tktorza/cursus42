@@ -12,41 +12,26 @@
 
 #include "../inc/libft.h"
 
-static int	ft_check_digit(char *str)
+int		ft_atoi(char *str)
 {
 	int		i;
+	int		sign;
+	int		result;
 
+	result = 0;
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || (str[i] >= '0' && str[i] <= '9'))
+	if (!str)
+		return 0;
+	while (0 < str[i] && str[i] < 33)
 		i++;
-	if (i == (int)ft_strlen(str))
-		return (1);
-	return (0);
-}
-
-int			ft_atoi(char *str)
-{
-	long	sign;
-	long	nbr;
-
-	sign = 1;
-	while (*str == ' ' || *str == '\f' || *str == '\n' || *str == '\r' ||
-			*str == '\t' || *str == '\v')
-		str++;
-	if (*str == '-' || *str == '+')
+	if (str[i] == 43 || str[i] == 45)
 	{
-		if (*str == '-')
-			sign = -1;
-		str++;
+		sign = 44 - str[i];
+		i++;
 	}
-	nbr = 0;
-	while (ft_isdigit((int)*str))
-	{
-		nbr = nbr * 10 + *str - '0';
-		str++;
-	}
-	if (!(sign * nbr <= 2147483647 && sign * nbr >= -2147483648) ||
-		ft_check_digit(str) != 1)
-		return (-1);
-	return (sign * nbr);
+	else
+		sign = 1;
+	while (str[i] >= 48 && str[i] <= 57)
+		result = (result * 10) + (str[i++] - 48);
+	return (result * sign);
 }

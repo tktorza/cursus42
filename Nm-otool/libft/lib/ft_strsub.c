@@ -12,21 +12,28 @@
 
 #include <stdlib.h>
 #include "../inc/libft.h"
-
-char	*ft_strsub(char const *s, unsigned int start, size_t len)
+#include <stdio.h>
+char    *ft_strsub(char const *s, unsigned int start, size_t len)
 {
-	size_t	i;
-	char	*str;
+    char    *new;
+    size_t    i;
+    size_t    j;
 
-	i = 0;
-	str = (char *)malloc(sizeof(char) * len + 1);
-	if (str == NULL)
+    if (!s)
+        return (NULL);
+    i = 0;
+    j = 0;
+    new = (char *)malloc(sizeof(char) * len + 1);
+    if (new == NULL || start > ft_strlen(s))
 		return (NULL);
-	while (i < len)
-	{
-		str[i] = s[start + i];
+    while (i < start)
 		i++;
+    while (s[i] && j < len)
+    {
+        new[j] = ((char *)s)[i];
+        i++;
+        j++;
 	}
-	str[i] = '\0';
-	return (str);
+    new[j] = '\0';
+    return (new);
 }

@@ -10,18 +10,29 @@
 #                                                                              #
 # **************************************************************************** #
 
-NAME = nm
+NAME_NM = ft_nm
 
-SRC_DIR	= ./src
+NAME_OTOOL = ft_otool
 
-SRC = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c
+SRC_NM_DIR	= ./src/nm
 
-VPATH	= $(SRC_DIR)
+SRC_OTOOL_DIR	= ./src/otool
 
-O_DIR	= ./obj
-OBJ		= $(addprefix $(O_DIR)/,$(SRC:.c=.o))
+SRC_NM = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c \
+	arch_lib_style.c arch_fat_style.c
 
-WFLAGS = #-W -Wall -Werror -Wextra -fPIC
+SRC_OTOOL = ft_otool.c diplay_text_section.c sort.c arch_32_style.c \
+	arch_64_style.c arch_lib_style.c arch_fat_style.c
+
+VPATH	= $(SRC_NM_DIR)
+
+O_DIR = ./obj
+
+OBJ_NM	= $(addprefix $(O_DIR)/,$(SRC_NM:.c=.o))
+
+OBJ_OTOOL		= $(addprefix $(O_DIR)/,$(SRC_OTOOL:.c=.o))
+
+WFLAGS = -W -Wall -Werror -Wextra -fPIC
 
 CC = gcc
 
@@ -33,21 +44,32 @@ I_PRINTF = libft/ft_printf/libftprintf.a
 
 LIBFT = $(I_LIBFT) -Llibft -lft
 
-all : $(NAME)
+all : $(NAME_NM) $(NAME_OTOOL)
 
-$(NAME): obj $(OBJ)
+$(NAME_NM): obj $(OBJ_NM)
 	@echo "\n"---------------------- NM COMPILING -------------------------
 	@echo "\n\033[31m==> COMPILING in progress ...\033[0m\n"
 	@make -C libft
-	@$(CC) $(WFLAGS) -o $@ $(OBJ) $(HEADERS) $(LIBFT) $(I_PRINTF)
+	@$(CC) $(WFLAGS) -o $@ $(OBJ_NM) $(HEADERS) $(LIBFT) $(I_PRINTF)
 	@echo "\033[37mNM: \033[35mOK\n"
 	@echo "\033[32m==> SUCCESS !\033[0m\n"
 
-obj/%.o: %.c
-	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
+$(NAME_OTOOL): $(OBJ_OTOOL)
+	@echo "\n"---------------------- OTOOL COMPILING -------------------------
+	@echo "\n\033[31m==> COMPILING in progress ...\033[0m\n"
+	@make -C libft
+	@$(CC) $(WFLAGS) -o $@ $(OBJ_OTOOL) $(HEADERS) $(LIBFT) $(I_PRINTF)
+	@echo "\033[37mNM: \033[35mOK\n"
+	@echo "\033[32m==> SUCCESS !\033[0m\n"
 
 obj:
 	@mkdir -p obj/
+
+$(O_DIR)/%.o: $(SRC_NM_DIR)/%.c
+	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
+
+$(O_DIR)/%.o: $(SRC_OTOOL_DIR)/%.c
+	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
 
 clean:
 	@echo "\n"----------------------- NM CLEAN ---------------------------

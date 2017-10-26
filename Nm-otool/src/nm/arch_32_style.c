@@ -1,6 +1,6 @@
 #include "../includes/nm_tool.h"
 
-static char type_element_32(struct nlist list, struct load_command *lc, t_symtab *symt)
+static char type_element_32(struct nlist list, t_symtab *symt)
 {
     char car;
 
@@ -87,6 +87,7 @@ static void print_output_32(struct symtab_command *sym, char *ptr, \
     struct load_command *lc;
     char *stringtable;
     struct nlist *array;
+    int i;
 
     array = (void *)ptr + sym->symoff;
     stringtable = (void *)ptr + sym->stroff;
@@ -94,10 +95,10 @@ static void print_output_32(struct symtab_command *sym, char *ptr, \
     // printf("%d %d %d %d\n", symt->bss, symt->data, symt->i, symt->text);
     array = tri_bulle(stringtable, array, sym->nsyms);
     symtab_building_32(symt, header, lc);
-    symt->i = -1;
-    while (++symt->i < sym->nsyms)
-        display_out(array[symt->i].n_value, stringtable + \
-            array[symt->i].n_un.n_strx, type_element_32(array[symt->i], lc, symt), symt);
+    i = -1;
+    while ((uint32_t)++i < sym->nsyms)
+        display_out(array[i], stringtable + \
+            array[i].n_un.n_strx, type_element_32(array[i], symt));
 }
 
 void handle_32(char *ptr, t_symtab *symt)
