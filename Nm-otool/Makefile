@@ -19,10 +19,10 @@ SRC_NM_DIR	= ./src/nm
 SRC_OTOOL_DIR	= ./src/otool
 
 SRC_NM = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c \
-	arch_lib_style.c arch_fat_style.c
+	arch_lib_style.c arch_fat_style.c catch_properties.c fill_array.c
 
-SRC_OTOOL = ft_otool.c diplay_text_section.c sort.c arch_32_style.c \
-	arch_64_style.c arch_lib_style.c arch_fat_style.c
+SRC_OTOOL = ft_otool.c arch_lib_style.c arch_fat_style.c \
+	symtab_building.c handle_o.c catch_properties.c fill_array.c
 
 VPATH	= $(SRC_NM_DIR)
 
@@ -30,9 +30,9 @@ O_DIR = ./obj
 
 OBJ_NM	= $(addprefix $(O_DIR)/,$(SRC_NM:.c=.o))
 
-OBJ_OTOOL		= $(addprefix $(O_DIR)/,$(SRC_OTOOL:.c=.o))
+OBJ_OTOOL = $(addprefix $(O_DIR)/,$(SRC_OTOOL:.c=.o))
 
-WFLAGS = -W -Wall -Werror -Wextra -fPIC
+WFLAGS =# -W -Wall -Werror -Wextra -fPIC
 
 CC = gcc
 

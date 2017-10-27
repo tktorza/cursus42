@@ -69,6 +69,7 @@ char				**ft_strsplit(char const *s, char c);
 char				*ft_itoa(int n);
 char				*ft_itoa_base(unsigned long long value, int base);
 char				*ft_itoa_base_maj(unsigned long long value, int base);
+char				*ft_itoa_base_sub(int val, int base, int output_size);
 char				*ft_itohex(int n, int nb_z);
 
 void				ft_putchar(char c);
