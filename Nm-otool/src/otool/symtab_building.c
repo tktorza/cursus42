@@ -12,7 +12,7 @@
 
 #include "../../includes/nm_tool.h"
 
-static void		print_res(long unsigned int addr, unsigned int size, char *ptr)
+void			print_res(long unsigned int addr, unsigned int size, char *ptr)
 {
 	unsigned int	i;
 	char			*str;
@@ -33,7 +33,6 @@ static void		print_res(long unsigned int addr, unsigned int size, char *ptr)
 			write(1, "\n", 1);
 		i++;
 	}
-	write(1, "\n", 1);
 }
 
 static void		symtab_building_bis(t_symtab *symt,
@@ -45,19 +44,13 @@ static void		symtab_building_bis(t_symtab *symt,
 	{
 		if (ft_strcmp(sect->sectname, SECT_TEXT) == 0 &&
 				ft_strcmp(sect->segname, SEG_TEXT) == 0)
-		{
-			ft_putstr("Contents of (__TEXT,__text) section\n");
-			print_res(sect->addr, sect->size, (char *)header + sect->offset);
-			symt->text = symt->ns;
-		}
+				display_text_64(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_DATA) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-		{
-			symt->data = symt->ns;
-		}
+				display_data_64(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_BSS) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-			symt->bss = symt->ns;
+				display_bss_64(symt, sect, header);
 		sect = (void *)sect + sizeof(*sect);
 		symt->ns++;
 		symt->i++;
@@ -73,19 +66,13 @@ static void		symtab_building_bis_32(t_symtab *symt,
 	{
 		if (ft_strcmp(sect->sectname, SECT_TEXT) == 0 &&
 				ft_strcmp(sect->segname, SEG_TEXT) == 0)
-		{
-			ft_putstr("Contents of (__TEXT,__text) section\n");
-			print_res(sect->addr, sect->size, (char *)header + sect->offset);
-			symt->text = symt->ns;
-		}
+				display_text_32(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_DATA) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-		{
-			symt->data = symt->ns;
-		}
+				display_text_32(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_BSS) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-			symt->bss = symt->ns;
+				display_text_32(symt, sect, header);
 		sect = (void *)sect + sizeof(*sect);
 		symt->ns++;
 		symt->i++;

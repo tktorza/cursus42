@@ -12,7 +12,7 @@
 
 #include "../../includes/nm_tool.h"
 
-static void	symt_init(t_symtab *symt)
+static void	symt_init(t_symtab *symt, int bonus)
 {
 	symt->data = 0;
 	symt->bss = 0;
@@ -25,13 +25,15 @@ static void	symt_init(t_symtab *symt)
 	symt->x = 0;
 	symt->size = 0;
 	symt->size_name = 0;
+	symt->bonus = bonus;
+	symt->lib = (symt && symt->lib && symt->lib != 0) ? symt->lib : 0;
 }
 
-int			type_bin(char *ptr, char *file, t_symtab *symt)
+int			type_bin(char *ptr, char *file, t_symtab *symt, int bonus)
 {
 	uint32_t	magic_number;
 
-	symt_init(symt);
+	symt_init(symt, bonus);
 	magic_number = *(uint32_t *)ptr;
 	if (magic_number == MH_MAGIC_64)
 		handle_64(ptr, symt);
@@ -46,7 +48,7 @@ int			type_bin(char *ptr, char *file, t_symtab *symt)
 	return (1);
 }
 
-int			ft_nm(char *av)
+int			ft_nm(char *av, int bonus)
 {
 	int				fd;
 	void			*ptr;
@@ -57,29 +59,57 @@ int			ft_nm(char *av)
 	{
 		if (fstat(fd, &buf) < 0)
 		{
-			ERROR(ft_strjoin(av, ": Error with fstat"));
+			ERROR_NM(ft_strjoin(av, ": Error with fstat"));
 		}
 		if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) \
 		== MAP_FAILED)
 		{
-			ERROR(ft_strjoin(av, "Is a directory"));
+			ERROR_NM(ft_strjoin(av, "Is a directory"));
 		}
 		symt.exec = ((buf.st_mode & S_IXUSR) ? 1 : 0);
-		return (type_bin(ptr, av, &symt));
+		return (type_bin(ptr, av, &symt, bonus));
 	}
 	else
-		ERROR(ft_strjoin(av, ": No such file or directory."));
+		ERROR_NM(ft_strjoin(av, ": No such file or directory."));
+}
+
+int		is_bonus(char **s, int *i, int ac)
+{
+	int bonus;
+
+	bonus = 0;
+	while (*i < ac)
+	{
+		if (ft_strcmp(s[*i], "-p") == 0)
+			bonus += ((bonus & NO_SORT) == 0 ) ? NO_SORT : 0;
+		else if (ft_strcmp(s[*i], "-u") == 0)
+			bonus += ((bonus & UNDEFINED) == 0 ) ? UNDEFINED : 0;
+		else if (ft_strcmp(s[*i], "-U") == 0)
+			bonus += ((bonus & NOT_UNDEFINED) == 0 ) ? NOT_UNDEFINED : 0;
+		else if (ft_strcmp(s[*i], "-d") == 0)
+			bonus += ((bonus & DECIMAL) == 0 ) ? DECIMAL : 0;
+		else if (ft_strcmp(s[*i], "-j") == 0)
+			bonus += ((bonus & SYMBOL_NAME) == 0 ) ? SYMBOL_NAME : 0;
+		else
+			break ;
+		*i += 1;
+	}
+	return (bonus);
 }
 
 int			main(int ac, char **av)
 {
 	int	i;
+	int bonus;
 
-	i = 0;
+	i = 1;
 	if (ac < 2)
 		av[1] = "a.out\0";
+	else
+		bonus = is_bonus(av, &i, ac);
+	i--;
 	while (++i < ac)
-		if (ft_nm(av[i]) == -1)
+		if (ft_nm(av[i], bonus) == -1)
 			break ;
 	return (0);
 }

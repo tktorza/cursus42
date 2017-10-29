@@ -23,7 +23,7 @@ void	handle_o_64(char *ptr, char *file, t_symtab *symt)
 	ncmds = header->ncmds;
 	i = 0;
 	lc = (void *)ptr + sizeof(*header);
-	ft_printf("%s:\n", file);
+	(symt->lib == 1) ? 0 : ft_printf("%s:\n", file);
 	symtab_building(symt, header, lc);
 }
 
@@ -38,7 +38,7 @@ void	handle_o_32(char *ptr, char *file, t_symtab *symt)
 	ncmds = header->ncmds;
 	i = 0;
 	lc = (void *)ptr + sizeof(*header);
-	ft_printf("%s:\n", file);
+	(symt->lib == 1) ? 0 : ft_printf("%s:\n", file);
 	symtab_building_32(symt, header, lc);
 }
 
@@ -49,6 +49,7 @@ void	handle_o_lib(char *ptr, char *name, t_symtab *symt)
 	t_offlist		*lst;
 	char			*test;
 
+	symt->lib = 1;
 	ft_printf("Archive : %s", name);
 	symt->x = 0;
 	arch = (void*)ptr + SARMAG;
@@ -64,4 +65,5 @@ void	handle_o_lib(char *ptr, char *name, t_symtab *symt)
 		symt->x++;
 	}
 	print_ar(order_off(lst), ptr, name, symt);
+	write(1, "\n", 1);
 }

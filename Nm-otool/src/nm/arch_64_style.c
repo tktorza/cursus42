@@ -93,12 +93,13 @@ static void		print_output_64(struct symtab_command *sym, char *ptr,
 	array = (void *)ptr + sym->symoff;
 	stringtable = (void *)ptr + sym->stroff;
 	lc = (void *)ptr + sizeof(*header);
-	array = tri_bulle_64(stringtable, array, sym->nsyms);
+	array = symt->bonus == NO_SORT ? array 
+	: tri_bulle_64(stringtable, array, sym->nsyms);
 	symtab_building(symt, header, lc);
 	while (i < sym->nsyms)
 	{
 		display_out_64(array[i], stringtable + array[i].n_un.n_strx,
-		type_element(array[i], symt));
+		type_element(array[i], symt), symt);
 		i++;
 	}
 }

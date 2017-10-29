@@ -22,7 +22,8 @@ SRC_NM = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c \
 	arch_lib_style.c arch_fat_style.c catch_properties.c fill_array.c
 
 SRC_OTOOL = ft_otool.c arch_lib_style.c arch_fat_style.c \
-	symtab_building.c handle_o.c catch_properties.c fill_array.c
+	symtab_building.c handle_o.c catch_properties.c fill_array.c \
+	display_by_type_32.c display_by_type_64.c
 
 VPATH	= $(SRC_NM_DIR)
 
@@ -71,6 +72,21 @@ $(O_DIR)/%.o: $(SRC_NM_DIR)/%.c
 $(O_DIR)/%.o: $(SRC_OTOOL_DIR)/%.c
 	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
 
+test:
+	@echo "\n"---------------------- tests -------------------------
+	@echo "\033[37mNM: \n"
+	@echo "\033[37mX64: \n\n"
+	@echo "\n\033[32m==> ./ft_nm -p ft_nm > diff1 && nm -p ft_nm > diff2 && diff diff*\033[0m\n"
+	@./ft_nm -p ft_nm > diff1 && nm -p ft_nm > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_nm -p libft/libft.a > diff1 && nm -p libft/libft.a > diff2 && diff diff*\033[0m\n"
+	@./ft_nm -p libft/libft.a > diff1 && nm -p libft/libft.a > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_nm -p obj/ft_nm.o > diff1 && nm -p obj/ft_nm.o > diff2 && diff diff*\033[0m\n"
+	@./ft_nm -p obj/ft_nm.o > diff1 && nm -p obj/ft_nm.o > diff2 && diff diff*
+	@echo "\n\033[32m==> nm -t d ft_nm > diff2 && ./ft_nm -d ft_nm > diff1 && diff diff*\033[0m\n"
+	@nm -t d ft_nm > diff2 && ./ft_nm -d ft_nm > diff1 && diff diff*
+	@echo "\n\033[32m==> nm -t d libft/libft.a  > diff2 && ./ft_nm -d libft/libft.a > diff1 && diff diff*\033[0m\n"
+	@nm -t d libft/libft.a  > diff2 && ./ft_nm -d libft/libft.a > diff1 && diff diff*
+	
 clean:
 	@echo "\n"----------------------- NM CLEAN ---------------------------
 	@echo "\n\033[35m==> CLEANING in progress ...\033[0m\n"

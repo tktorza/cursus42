@@ -74,7 +74,8 @@ void		print_ar(t_offlist *lst, char *ptr, char *file,
 		name = catch_name(arch->ar_name);
 		size_name = catch_size(arch->ar_name);
 		ft_printf("\n%s(%s):\n", file, name);
-		type_bin((void*)arch + sizeof(*arch) + size_name, file, symt);
+		type_bin((void*)arch + sizeof(*arch) + size_name, file, symt,
+		symt->bonus);
 		tmp = tmp->next;
 	}
 }

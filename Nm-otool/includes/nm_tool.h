@@ -26,7 +26,23 @@
 # include "../libft/inc/libft.h"
 # include "../libft/inc/ft_printf.h"
 
-#define ERROR(name) ft_printf("ft_nm: %s", name); return (-1)
+/*
+** FT_NM
+*/
+#define ERROR_NM(name) ft_printf("ft_nm: %s", name); return (-1)
+#define NO_SORT 1
+#define SYMBOL_NAME 2
+#define DECIMAL 4
+#define UNDEFINED 8
+#define NOT_UNDEFINED 16
+
+/*
+** FT_OTOOL
+*/
+#define ERROR_OTOOL(name) ft_printf("ft_otool: %s", name); return (-1)
+#define DATA_OT 1
+#define BSS_OT 2
+#define ALL_OT 4
 
 int g_data;
 int g_bss;
@@ -46,7 +62,9 @@ typedef struct          s_symtab
 	int				otool;
 	int				x;
 	int				size;
-	int				size_name;
+    int				size_name;
+    int             lib;
+    int             bonus;
 }                       t_symtab;
 
 typedef struct			s_offlist
@@ -62,8 +80,8 @@ struct nlist_64	*fill_array_64(struct nlist_64 *tab, uint32_t taille);
 struct nlist	*fill_array(struct nlist *tab, uint32_t taille);
 
 uint32_t   swap_uint32(struct fat_header *fheader, uint32_t val);
-int ft_nm(char *av);
-int type_bin(char *ptr, char *file, t_symtab *symt);
+int ft_nm(char *av, int bonus);
+int type_bin(char *ptr, char *file, t_symtab *symt, int bonus);
 int main(int ac, char **av);
 
 struct nlist     *tri_bulle(char *stringtable, struct nlist *tab,
@@ -88,8 +106,8 @@ void			browse_ar(t_offlist *lst, char *ptr, char *name, t_symtab *symt);
 void handle_fat(char *ptr, char * file, t_symtab *symt);
 
 
-void display_out_64(struct nlist_64 elem, char *str, char type);
-void display_out(struct nlist elem, char *str, char type);
+void display_out_64(struct nlist_64 elem, char *str, char type, t_symtab *symt);
+void display_out(struct nlist elem, char *str, char type, t_symtab *symt);
 char type_n_sect(unsigned int n_sect, t_symtab *symt);
 
 
@@ -100,6 +118,23 @@ void    symtab_building_32(t_symtab *symt, struct mach_header *header,\
     struct load_command *lc);
 void    symtab_building(t_symtab *symt, struct mach_header_64 *header,\
     struct load_command *lc);
+void			print_res(long unsigned int addr, unsigned int size,\
+    char *ptr);
+    
+
+void    display_text_32(t_symtab *symt, struct section *sect,
+    struct mach_header *header);
+void    display_data_32(t_symtab *symt, struct section *sect,
+    struct mach_header *header);
+void    display_bss_32(t_symtab *symt, struct section *sect,
+    struct mach_header *header);
+
+void    display_text_64(t_symtab *symt, struct section_64 *sect,
+    struct mach_header_64 *header);
+void    display_data_64(t_symtab *symt, struct section_64 *sect,
+    struct mach_header_64 *header);
+void    display_bss_64(t_symtab *symt, struct section_64 *sect,
+    struct mach_header_64 *header);
 
 int                 ft_printf(const char *str, ...);
 
