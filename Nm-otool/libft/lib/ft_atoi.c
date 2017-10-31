@@ -21,7 +21,7 @@ int		ft_atoi(char *str)
 	result = 0;
 	i = 0;
 	if (!str)
-		return 0;
+		return (0);
 	while (0 < str[i] && str[i] < 33)
 		i++;
 	if (str[i] == 43 || str[i] == 45)

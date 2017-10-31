@@ -12,7 +12,7 @@
 
 #include "../../includes/nm_tool.h"
 
-int			search_lst(t_offlist *lst, uint32_t off)
+int				search_lst(t_offlist *lst, uint32_t off)
 {
 	t_offlist	*cur;
 
@@ -32,6 +32,13 @@ struct nlist_64	*fill_array_64(struct nlist_64 *tab, uint32_t taille)
 	uint32_t		i;
 
 	tab2 = (struct nlist_64 *)malloc(sizeof(struct nlist_64) * taille);
+	if (!verif((void *)tab))
+	{
+		file_broken();
+		return (NULL);
+	}
+	if (!tab2)
+		return (NULL);
 	i = 0;
 	while (i < taille)
 	{
@@ -47,6 +54,13 @@ struct nlist	*fill_array(struct nlist *tab, uint32_t taille)
 	uint32_t		i;
 
 	tab2 = (struct nlist *)malloc(sizeof(struct nlist) * taille);
+	if (!verif((void *)tab))
+	{
+		file_broken();
+		return (NULL);
+	}
+	if (!tab2)
+		return (NULL);
 	i = 0;
 	while (i < taille)
 	{

@@ -6,7 +6,7 @@
 /*   By: tktorza <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/27 14:04:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/10/27 14:05:26 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/10/30 12:03:01 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,11 @@ void	handle_o_64(char *ptr, char *file, t_symtab *symt)
 	struct load_command		*lc;
 
 	header = (struct mach_header_64 *)ptr;
-	ncmds = header->ncmds;
 	i = 0;
 	lc = (void *)ptr + sizeof(*header);
+	if (!verif((void *)header) || !verif((void *)lc))
+		return (file_broken());
+	ncmds = header->ncmds;
 	(symt->lib == 1) ? 0 : ft_printf("%s:\n", file);
 	symtab_building(symt, header, lc);
 }
@@ -35,9 +37,11 @@ void	handle_o_32(char *ptr, char *file, t_symtab *symt)
 	struct load_command		*lc;
 
 	header = (struct mach_header *)ptr;
+	lc = (void *)ptr + sizeof(*header);
+	if (!verif((void *)header) || !verif((void *)lc))
+		return (file_broken());
 	ncmds = header->ncmds;
 	i = 0;
-	lc = (void *)ptr + sizeof(*header);
 	(symt->lib == 1) ? 0 : ft_printf("%s:\n", file);
 	symtab_building_32(symt, header, lc);
 }
@@ -53,10 +57,13 @@ void	handle_o_lib(char *ptr, char *name, t_symtab *symt)
 	ft_printf("Archive : %s", name);
 	symt->x = 0;
 	arch = (void*)ptr + SARMAG;
+	if (!verif((void *)arch))
+		return (file_broken());
 	symt->size_name = catch_size(arch->ar_name);
 	test = (void*)ptr + sizeof(*arch) + SARMAG + symt->size_name;
 	ran = (void*)ptr + sizeof(*arch) + SARMAG + symt->size_name + 4;
 	symt->size = *((int *)test);
+	VERIF((void *)ran, NULL);
 	lst = NULL;
 	symt->size = symt->size / sizeof(struct ranlib);
 	while (symt->x < symt->size)

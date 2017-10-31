@@ -6,7 +6,7 @@
 #    By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/10/03 12:02:00 by tktorza           #+#    #+#              #
-#    Updated: 2017/10/18 14:09:32 by tktorza          ###   ########.fr        #
+#    Updated: 2017/10/30 14:49:21 by tktorza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,11 +19,12 @@ SRC_NM_DIR	= ./src/nm
 SRC_OTOOL_DIR	= ./src/otool
 
 SRC_NM = ft_nm.c sort.c arch_32_style.c arch_64_style.c display_output.c \
-	arch_lib_style.c arch_fat_style.c catch_properties.c fill_array.c
+	arch_lib_style.c arch_fat_style.c catch_properties.c fill_array.c \
+	tools.c
 
 SRC_OTOOL = ft_otool.c arch_lib_style.c arch_fat_style.c \
 	symtab_building.c handle_o.c catch_properties.c fill_array.c \
-	display_by_type_32.c display_by_type_64.c
+	display_by_type_32.c display_by_type_64.c tools.c
 
 VPATH	= $(SRC_NM_DIR)
 
@@ -33,7 +34,7 @@ OBJ_NM	= $(addprefix $(O_DIR)/,$(SRC_NM:.c=.o))
 
 OBJ_OTOOL = $(addprefix $(O_DIR)/,$(SRC_OTOOL:.c=.o))
 
-WFLAGS =# -W -Wall -Werror -Wextra -fPIC
+WFLAGS = -W -Wall -Werror -Wextra -fPIC
 
 CC = gcc
 
@@ -72,8 +73,40 @@ $(O_DIR)/%.o: $(SRC_NM_DIR)/%.c
 $(O_DIR)/%.o: $(SRC_OTOOL_DIR)/%.c
 	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
 
-test:
+testfirstnm:
 	@echo "\n"---------------------- tests -------------------------
+	@echo "\033[37mNM: \n"
+	@echo "\033[37mX64: \n\n"
+	@echo "\n\033[32m==> ./ft_nm ft_nm > diff1 && nm ft_nm > diff2 && diff diff*\033[0m\n"
+	@./ft_nm ft_nm > diff1 && nm ft_nm > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_nm libft/libft.a > diff1 && nm libft/libft.a > diff2 && diff diff*\033[0m\n"
+	@./ft_nm libft/libft.a > diff1 && nm libft/libft.a > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_nm obj/ft_nm.o > diff1 && nm obj/ft_nm.o > diff2 && diff diff*\033[0m\n"
+
+testfirstotool:
+	@echo "\n"---------------------- tests -------------------------
+	@echo "\033[37mOTOOL: \n"
+	@echo "\033[37mX64: \n\n"
+	@echo "\n\033[32m==> ./ft_otool ft_otool > diff1 && otool ft_otool > diff2 && diff diff*\033[0m\n"
+	@./ft_otool ft_otool > diff1 && otool -t ft_otool > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_otool libft/libft.a > diff1 && otool -t libft/libft.a > diff2 && diff diff*\033[0m\n"
+	@./ft_otool libft/libft.a > diff1 && otool -t libft/libft.a > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_otool obj/ft_otool.o > diff1 && otool -t obj/ft_otool.o > diff2 && diff diff*\033[0m\n"
+	@./ft_otool obj/ft_otool.o > diff1 && otool -t obj/ft_otool.o > diff2 && diff diff*
+
+testotool:
+	@echo "\n"---------------------- tests BONUS OTOOL -------------------------
+	@echo "\033[37mNM: \n"
+	@echo "\033[37mX64: \n\n"
+	@echo "\n\033[32m==> ./ft_otool -d ft_otool > diff1 && otool -d ft_otool > diff2 && diff diff*\033[0m\n"
+	@./ft_otool -d ft_otool > diff1 && otool -d ft_otool > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_otool -d libft/libft.a > diff1 && otool -d libft/libft.a > diff2 && diff diff*\033[0m\n"
+	@./ft_otool -d libft/libft.a > diff1 && otool -d libft/libft.a > diff2 && diff diff*
+	@echo "\n\033[32m==> ./ft_otool -d obj/ft_otool.o > diff1 && otool -d obj/ft_otool.o > diff2 && diff diff*\033[0m\n"
+	@./ft_otool -d obj/ft_otool.o > diff1 && otool -d obj/ft_otool.o > diff2 && diff diff*
+
+test: all testfirstnm testfirstotool testotool
+	@echo "\n"---------------------- tests BONUS NM -------------------------
 	@echo "\033[37mNM: \n"
 	@echo "\033[37mX64: \n\n"
 	@echo "\n\033[32m==> ./ft_nm -p ft_nm > diff1 && nm -p ft_nm > diff2 && diff diff*\033[0m\n"
@@ -86,11 +119,17 @@ test:
 	@nm -t d ft_nm > diff2 && ./ft_nm -d ft_nm > diff1 && diff diff*
 	@echo "\n\033[32m==> nm -t d libft/libft.a  > diff2 && ./ft_nm -d libft/libft.a > diff1 && diff diff*\033[0m\n"
 	@nm -t d libft/libft.a  > diff2 && ./ft_nm -d libft/libft.a > diff1 && diff diff*
+	@echo "\033[32m	 _____   _   _   _____   _____   _____   _____   _____ "
+	@echo "\033[32m/  ___/ | | | | /  ___| /  ___| | ____| /  ___/ /  ___/ "
+	@echo "\033[32m| |___  | | | | | |     | |     | |__   | |___  | |___  "
+	@echo "\033[32m\___  \ | | | | | |     | |     |  __|  \___  \ \___  \ "
+	@echo "\033[32m ___| | | |_| | | |___  | |___  | |___   ___| |  ___| | "
+	@echo "\033[32m/_____/ \_____/ \_____| \_____| |_____| /_____/ /_____/ "
 	
 clean:
 	@echo "\n"----------------------- NM CLEAN ---------------------------
 	@echo "\n\033[35m==> CLEANING in progress ...\033[0m\n"
-	@rm -rf $(OBJ) $(NAME)
+	@rm -rf $(OBJ) $(NAME_NM) $(NAME_OTOOL) diff*
 
 fclean: clean
 	@make fclean -C libft

@@ -39,7 +39,7 @@ t_offlist	*order_off(t_offlist *lst)
 	return (lst);
 }
 
-t_offlist		*add_off(t_offlist *lst, uint32_t off, uint32_t strx)
+t_offlist	*add_off(t_offlist *lst, uint32_t off, uint32_t strx)
 {
 	t_offlist	*tmp;
 	t_offlist	*tmp2;
@@ -71,9 +71,15 @@ void		print_ar(t_offlist *lst, char *ptr, char *file,
 	while (tmp)
 	{
 		arch = (void*)ptr + tmp->off;
+		if (!verif((void *)arch))
+			return (file_broken());
 		name = catch_name(arch->ar_name);
 		size_name = catch_size(arch->ar_name);
-		ft_printf("\n%s(%s):\n", file, name);
+		if (((symt->bonus & DATA_OT) != 0 ||
+		(symt->bonus & BSS_OT) != 0) && symt->lib == 1)
+			ft_printf("\n%s(%s):", file, name);
+		else
+			ft_printf("\n%s(%s):\n", file, name);
 		type_bin((void*)arch + sizeof(*arch) + size_name, file, symt,
 		symt->bonus);
 		tmp = tmp->next;
@@ -90,10 +96,14 @@ void		handle_lib(char *ptr, char *name, t_symtab *symt)
 	lst = NULL;
 	symt->x = 0;
 	arch = (void *)ptr + SARMAG;
+	if (!verif((void *)arch))
+		return (file_broken());
 	symt->size_name = catch_size(arch->ar_name);
 	offset_struct = (void *)ptr + sizeof(*arch) + SARMAG + symt->size_name;
 	ran = (void *)ptr + sizeof(*arch) + SARMAG + symt->size_name + 4;
 	symt->size = *((int *)offset_struct);
+	if (!verif((void *)ran))
+		return (file_broken());
 	symt->size = symt->size / sizeof(struct ranlib);
 	while (symt->x < symt->size)
 	{

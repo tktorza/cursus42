@@ -13,7 +13,7 @@
 #include <stdlib.h>
 #include "../inc/libft.h"
 
-static int	ft_sizer(unsigned long long *value, int base)
+static int		ft_sizer(unsigned long long *value, int base)
 {
 	int					tall;
 	unsigned long long	bis;
@@ -36,7 +36,7 @@ static char		read_tab(int i)
 	return (tab[i]);
 }
 
-char		*ft_itoa_base(unsigned long long value, int base)
+char			*ft_itoa_base(unsigned long long value, int base)
 {
 	char	*s;
 	int		tall;
@@ -61,7 +61,7 @@ char		*ft_itoa_base(unsigned long long value, int base)
 	return (s);
 }
 
-char		*ft_itoa_base_sub(int val, int base, int output_size)
+char			*ft_itoa_base_sub(int val, int base, int output_size)
 {
 	char			buffer[output_size + 1];
 	char			*p;
@@ -89,7 +89,7 @@ char		*ft_itoa_base_sub(int val, int base, int output_size)
 	return (ft_strdup(p));
 }
 
-char		*ft_itoa_base_maj(unsigned long long value, int base)
+char			*ft_itoa_base_maj(unsigned long long value, int base)
 {
 	char	*s;
 	int		tall;

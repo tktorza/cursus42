@@ -14,27 +14,25 @@
 
 static char		type_element_32(struct nlist list, t_symtab *symt)
 {
-	char car;
+	char		c;
 
-	car = '?';
-	if ((list.n_type & N_TYPE) == N_UNDF)
-	{
-		if (list.n_value)
-			car = 'C';
-		else
-			car = 'U';
-	}
-	else if ((list.n_type & N_TYPE) == N_ABS)
-		car = 'A';
-	else if ((list.n_type & N_TYPE) == N_PBUD)
-		car = 'U';
-	else if ((list.n_type & N_TYPE) == N_SECT)
-		car = type_n_sect(list.n_sect, symt);
-	else if ((list.n_type & N_TYPE) == N_INDR)
-		car = 'I';
-	if (!(list.n_type & N_EXT) && car != '?')
-		car = ft_tolower(car);
-	return (car);
+	c = list.n_type;
+	if (c & N_STAB)
+		return ('-');
+	c = c & N_TYPE;
+	if (c == N_UNDF && list.n_value != 0)
+		c = 'C';
+	else if ((c == N_UNDF && list.n_value == 0) || c == N_PBUD)
+		c = 'U';
+	else if (c == N_ABS)
+		c = 'A';
+	else if (c == N_SECT)
+		c = type_n_sect(list.n_sect, symt);
+	else
+		c = (c == N_INDR ? 'I' : '?');
+	if (!(list.n_type & N_EXT))
+		c = ft_tolower(c);
+	return (c);
 }
 
 static void		symtab_building_bis_32(t_symtab *symt,
@@ -56,6 +54,8 @@ static void		symtab_building_bis_32(t_symtab *symt,
 		else if (ft_strcmp(sect->sectname, SECT_BSS) == 0 &&
 			ft_strcmp(sect->segname, SEG_DATA) == 0)
 			symt->bss = symt->ns;
+		if (!verif((void *)sect + sizeof(*sect)))
+			return (file_broken());
 		sect = (void *)sect + sizeof(*sect);
 		symt->ns++;
 		symt->i++;
@@ -76,6 +76,8 @@ void			symtab_building_32(t_symtab *symt, struct mach_header
 			sect = (struct section *)((void *)seg + sizeof(*seg));
 			symtab_building_bis_32(symt, seg, sect);
 		}
+		if (!verif((void *)lc + lc->cmdsize))
+			return (file_broken());
 		lc = (void *)lc + lc->cmdsize;
 		symt->j++;
 	}
@@ -93,7 +95,10 @@ static void		print_output_32(struct symtab_command *sym, char *ptr,
 	array = (void *)ptr + sym->symoff;
 	stringtable = (void *)ptr + sym->stroff;
 	lc = (void *)ptr + sizeof(*header);
-	array = symt->bonus == NO_SORT ? array 
+	if (!verif((void *)array) || !verif((void *)stringtable) ||
+	!verif((void *)lc))
+		return (file_broken());
+	array = symt->bonus == NO_SORT ? array
 	: tri_bulle(stringtable, array, sym->nsyms);
 	symtab_building_32(symt, header, lc);
 	while (i < sym->nsyms)
@@ -113,9 +118,11 @@ void			handle_32(char *ptr, t_symtab *symt)
 	struct symtab_command	*sym;
 
 	header = (struct mach_header *)ptr;
+	lc = (void *)ptr + sizeof(*header);
+	if (!verif((void *)lc) || !verif((void *)header))
+		return (file_broken());
 	ncmds = header->ncmds;
 	i = 0;
-	lc = (void *)ptr + sizeof(*header);
 	while (i < ncmds)
 	{
 		if (lc->cmd == LC_SYMTAB)
@@ -124,6 +131,8 @@ void			handle_32(char *ptr, t_symtab *symt)
 			print_output_32(sym, ptr, header, symt);
 			break ;
 		}
+		if (!verif((void *)lc + lc->cmdsize))
+			return (file_broken());
 		lc = (void *)lc + lc->cmdsize;
 		i++;
 	}

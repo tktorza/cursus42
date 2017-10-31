@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/18 13:15:23 by tktorza           #+#    #+#             */
-/*   Updated: 2017/10/18 13:37:23 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/10/30 12:02:57 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ static void		symt_init(t_symtab *symt, int bonus)
 	symt->x = 0;
 	symt->size = 0;
 	symt->size_name = 0;
-	symt->lib = (symt && symt->lib && symt->lib != 0) ? symt->lib: 0;
+	symt->lib = (symt && symt->lib && symt->lib != 0) ? symt->lib : 0;
 	symt->bonus = bonus;
 }
 
@@ -33,7 +33,7 @@ int				type_bin(char *ptr, char *file, t_symtab *symt, int bonus)
 {
 	uint32_t magic_number;
 
-	symt_init(symt, bonus);	
+	symt_init(symt, bonus);
 	magic_number = *(uint32_t *)ptr;
 	if (magic_number == MH_MAGIC_64)
 		handle_o_64(ptr, file, symt);
@@ -54,7 +54,7 @@ int				ft_otool(char *av, int bonus)
 	void		*ptr;
 	struct stat	buf;
 	t_symtab	symt;
-	
+
 	if ((fd = open(av, O_RDONLY)) != -1)
 	{
 		if (fstat(fd, &buf) < 0)
@@ -64,16 +64,19 @@ int				ft_otool(char *av, int bonus)
 		if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0))
 		== MAP_FAILED)
 		{
-			ERROR_OTOOL("Is a directory");
+			ERROR_OTOOL(": Is a directory");
 		}
 		symt.exec = ((buf.st_mode & S_IXUSR) ? 1 : 0);
-		return (type_bin(ptr, av, &symt, bonus));
+		g_buff = (t_buffy *)malloc(sizeof(t_buffy));
+		g_buff->adr = ptr;
+		g_buff->size = buf.st_size;
+		return (buf.st_size == 0 ? -1 : type_bin(ptr, av, &symt, bonus));
 	}
 	else
 		ERROR_OTOOL(ft_strjoin(av, ": No such file or directory."));
 }
 
-int		is_bonus(char **s, int *i, int ac)
+int				is_bonus(char **s, int *i, int ac)
 {
 	int bonus;
 
@@ -81,13 +84,13 @@ int		is_bonus(char **s, int *i, int ac)
 	while (*i < ac)
 	{
 		if (ft_strcmp(s[*i], "-t") == 0)
-			bonus += ((bonus & NO_SORT) == 0 ) ? 0 : 0;
+			bonus += ((bonus & NO_SORT) == 0) ? 0 : 0;
 		else if (ft_strcmp(s[*i], "-d") == 0)
-			bonus += ((bonus & DATA_OT) == 0 ) ? DATA_OT : 0;
+			bonus += ((bonus & DATA_OT) == 0) ? DATA_OT : 0;
 		else if (ft_strcmp(s[*i], "-b") == 0)
-			bonus += ((bonus & BSS_OT) == 0 ) ? BSS_OT : 0;
+			bonus += ((bonus & BSS_OT) == 0) ? BSS_OT : 0;
 		else if (ft_strcmp(s[*i], "-all") == 0)
-			bonus += ((bonus & ALL_OT) == 0 ) ? ALL_OT : 0;
+			bonus += ((bonus & ALL_OT) == 0) ? ALL_OT : 0;
 		else
 			break ;
 		*i += 1;
@@ -95,14 +98,14 @@ int		is_bonus(char **s, int *i, int ac)
 	return (bonus);
 }
 
-int			main(int ac, char **av)
+int				main(int ac, char **av)
 {
 	int	i;
 	int bonus;
 
 	i = 1;
 	if (ac < 2)
-		av[1] = "a.out\0";
+		ft_otool("a.out\0", 0);
 	else
 		bonus = is_bonus(av, &i, ac);
 	i--;

@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/18 13:15:23 by tktorza           #+#    #+#             */
-/*   Updated: 2017/10/27 12:27:05 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/10/30 15:31:29 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,16 +64,20 @@ int			ft_nm(char *av, int bonus)
 		if ((ptr = mmap(0, buf.st_size, PROT_READ, MAP_PRIVATE, fd, 0)) \
 		== MAP_FAILED)
 		{
-			ERROR_NM(ft_strjoin(av, "Is a directory"));
+			ERROR_NM(ft_strjoin(av, ": Is a directory"));
 		}
 		symt.exec = ((buf.st_mode & S_IXUSR) ? 1 : 0);
-		return (type_bin(ptr, av, &symt, bonus));
+		if ((g_buff = (t_buffy *)malloc(sizeof(t_buffy))) == NULL)
+			return (-1);
+		g_buff->adr = ptr;
+		g_buff->size = buf.st_size;
+		return (buf.st_size == 0 ? -1 : type_bin(ptr, av, &symt, bonus));
 	}
 	else
 		ERROR_NM(ft_strjoin(av, ": No such file or directory."));
 }
 
-int		is_bonus(char **s, int *i, int ac)
+int			is_bonus(char **s, int *i, int ac)
 {
 	int bonus;
 
@@ -81,15 +85,15 @@ int		is_bonus(char **s, int *i, int ac)
 	while (*i < ac)
 	{
 		if (ft_strcmp(s[*i], "-p") == 0)
-			bonus += ((bonus & NO_SORT) == 0 ) ? NO_SORT : 0;
+			bonus += ((bonus & NO_SORT) == 0) ? NO_SORT : 0;
 		else if (ft_strcmp(s[*i], "-u") == 0)
-			bonus += ((bonus & UNDEFINED) == 0 ) ? UNDEFINED : 0;
+			bonus += ((bonus & UNDEFINED) == 0) ? UNDEFINED : 0;
 		else if (ft_strcmp(s[*i], "-U") == 0)
-			bonus += ((bonus & NOT_UNDEFINED) == 0 ) ? NOT_UNDEFINED : 0;
+			bonus += ((bonus & NOT_UNDEFINED) == 0) ? NOT_UNDEFINED : 0;
 		else if (ft_strcmp(s[*i], "-d") == 0)
-			bonus += ((bonus & DECIMAL) == 0 ) ? DECIMAL : 0;
+			bonus += ((bonus & DECIMAL) == 0) ? DECIMAL : 0;
 		else if (ft_strcmp(s[*i], "-j") == 0)
-			bonus += ((bonus & SYMBOL_NAME) == 0 ) ? SYMBOL_NAME : 0;
+			bonus += ((bonus & SYMBOL_NAME) == 0) ? SYMBOL_NAME : 0;
 		else
 			break ;
 		*i += 1;
@@ -104,12 +108,17 @@ int			main(int ac, char **av)
 
 	i = 1;
 	if (ac < 2)
-		av[1] = "a.out\0";
+		ft_nm("a.out\0", 0);
 	else
 		bonus = is_bonus(av, &i, ac);
 	i--;
 	while (++i < ac)
+	{
+		if (((ac == 3 && bonus == 0) || ac > 3) &&
+		(av[i][ft_strlen(av[i]) - 1] != 'a'))
+			ft_printf("\n%s:\n", av[i]);
 		if (ft_nm(av[i], bonus) == -1)
-			break ;
+			return (1);
+	}
 	return (0);
 }

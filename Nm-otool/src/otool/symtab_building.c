@@ -6,7 +6,7 @@
 /*   By: tktorza <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/10/27 14:05:07 by tktorza           #+#    #+#             */
-/*   Updated: 2017/10/27 14:05:18 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/10/30 12:03:08 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,17 +40,21 @@ static void		symtab_building_bis(t_symtab *symt,
 	struct mach_header_64 *header)
 {
 	symt->i = 0;
+	if (!verif((void *)sect))
+		return (file_broken());
 	while (symt->i < seg->nsects)
 	{
 		if (ft_strcmp(sect->sectname, SECT_TEXT) == 0 &&
 				ft_strcmp(sect->segname, SEG_TEXT) == 0)
-				display_text_64(symt, sect, header);
+			display_text_64(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_DATA) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-				display_data_64(symt, sect, header);
+			display_data_64(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_BSS) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-				display_bss_64(symt, sect, header);
+			display_bss_64(symt, sect, header);
+		if (!verif((void *)sect + sizeof(sect)))
+			return (file_broken());
 		sect = (void *)sect + sizeof(*sect);
 		symt->ns++;
 		symt->i++;
@@ -62,17 +66,21 @@ static void		symtab_building_bis_32(t_symtab *symt,
 	struct mach_header *header)
 {
 	symt->i = 0;
+	if (!verif((void *)sect))
+		return (file_broken());
 	while (symt->i < seg->nsects)
 	{
 		if (ft_strcmp(sect->sectname, SECT_TEXT) == 0 &&
 				ft_strcmp(sect->segname, SEG_TEXT) == 0)
-				display_text_32(symt, sect, header);
+			display_text_32(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_DATA) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-				display_text_32(symt, sect, header);
+			display_text_32(symt, sect, header);
 		else if (ft_strcmp(sect->sectname, SECT_BSS) == 0 &&
 				ft_strcmp(sect->segname, SEG_DATA) == 0)
-				display_text_32(symt, sect, header);
+			display_text_32(symt, sect, header);
+		if (!verif((void *)sect + sizeof(sect)))
+			return (file_broken());
 		sect = (void *)sect + sizeof(*sect);
 		symt->ns++;
 		symt->i++;
@@ -85,6 +93,8 @@ void			symtab_building_32(t_symtab *symt,
 	struct segment_command	*seg;
 	struct section			*sect;
 
+	if (!verif((void *)lc))
+		return (file_broken());
 	while (symt->j < header->ncmds)
 	{
 		if (lc->cmd == LC_SEGMENT)
@@ -93,6 +103,8 @@ void			symtab_building_32(t_symtab *symt,
 			sect = (struct section *)((void *)seg + sizeof(*seg));
 			symtab_building_bis_32(symt, seg, sect, header);
 		}
+		if (!verif((void *)lc + lc->cmdsize))
+			return (file_broken());
 		lc = (void *)lc + lc->cmdsize;
 		symt->j++;
 	}
@@ -105,6 +117,8 @@ void			symtab_building(t_symtab *symt,
 	struct section_64			*sect;
 
 	symt->j = 0;
+	if (!verif((void *)lc))
+		return (file_broken());
 	while (symt->j < header->ncmds)
 	{
 		if (lc->cmd == LC_SEGMENT_64)
@@ -113,6 +127,8 @@ void			symtab_building(t_symtab *symt,
 			sect = (struct section_64 *)((void *)seg + sizeof(*seg));
 			symtab_building_bis(symt, seg, sect, header);
 		}
+		if (!verif((void *)lc + lc->cmdsize))
+			return (file_broken());
 		lc = (void *)lc + lc->cmdsize;
 		symt->j++;
 	}
