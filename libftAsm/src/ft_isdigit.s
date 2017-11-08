@@ -5,14 +5,8 @@ _ft_isdigit:
 	jl no
 	cmp rdi, 57
 	jg no
-
-yes:
 	mov rax, 1
-	jmp return
-
+	ret
 no:
 	mov rax, 0
-	jmp return
-
-return:
 	ret

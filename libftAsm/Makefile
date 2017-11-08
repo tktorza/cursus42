@@ -25,6 +25,10 @@ SRC =   ft_isdigit.s \
 		ft_isalpha.s \
 		ft_isalnum.s \
 		ft_isascii.s \
+		ft_isprint.s \
+		ft_toupper.s \
+		ft_tolower.s \
+		ft_bzero.s \
 
 OBJ = $(addprefix $(PATH_SRC), $(SRC:.s=.o))
 
@@ -44,5 +48,5 @@ fclean: clean
 
 re: fclean all
 
-test: $(OBJ) main.c
+test: all $(OBJ) main.c
 	$(CC) main.c $(LIBS) -o $(NAME_TEST)

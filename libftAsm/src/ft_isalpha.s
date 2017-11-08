@@ -7,6 +7,7 @@ _ft_isalpha:
 	jg no
 	cmp rdi, 90
 	jg isbetween
+	jmp no
 
 isbetween:
 	cmp rdi, 97

@@ -14,6 +14,15 @@
 #include <stdlib.h>
 #include "includes/libfts.h"
 
+void	test_bzero()
+{
+	char *ok = "abcde\0";
+
+	printf("ok = %s ", ok);
+	ft_bzero(ok, 3);
+	printf("-bzero-> %s\n", ok);
+}
+
 int main()
 {
 	char	num;
@@ -21,10 +30,16 @@ int main()
 
 	letter = 'a';
 	num = '2';
+	printf("\\0 -- > %d\n", '\0');
 	printf("%c is num? %d\n%c is num? %d\n", num, ft_isdigit(num), letter, ft_isdigit(letter));
 	printf("%c is alpha? %d\n%c is alpha? %d\n", num, ft_isalpha(num), letter, ft_isalpha(letter));
 	printf("%c is alnum? %d\n%c is alnum? %d\n", num, ft_isalnum(num), letter, ft_isalnum(letter));
-	printf("%c is ascii? %d\n%c is ascii? %d\n== > 73242 isascii? %d\n", num, ft_isascii(num), letter, ft_isascii(letter), ft_isascii(73291));
-
+	printf("%c is ascii? %d\n%c is ascii? %d\nma== > 73242 isascii? %d\n", num, ft_isascii(num), letter, ft_isascii(letter), ft_isascii(73291));
+	printf("%c is print? %d\n%c is print? %d\nma== > \\t isprint? %d\n", num, ft_isprint(num), letter, ft_isprint(letter), ft_isprint('\t'));
+	printf("%c -toupper-> %c | %c -tolower-> %c\n", letter, ft_toupper(letter), 'A', ft_tolower('A'));
+	printf("%c -toupper-> %c | %c -tolower-> %c\n", 'z', ft_toupper('z'), 'Z', ft_tolower('Z'));
+	printf("%d -toupper-> %d | %d -tolower-> %d\n", 10, ft_toupper(10), 233, ft_tolower(233));
+	
+	test_bzero();
 	return (0);
 }
