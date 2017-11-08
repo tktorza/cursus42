@@ -13,14 +13,24 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "includes/libfts.h"
+#include <strings.h>
 
 void	test_bzero()
 {
-	char *ok = "abcde\0";
-
-	printf("ok = %s ", ok);
-	ft_bzero(ok, 3);
-	printf("-bzero-> %s\n", ok);
+	printf("=== TEST ft_bzero ===\n");
+	
+		char test[] = "salut";
+		int i;
+		printf("String test = salut\n");
+		for (i = 0; i < 5; i++){
+			printf("%d\n", test[i]);
+		}
+		printf("calling ft_bzero(void *, size_t)\n");
+		ft_bzero(test, 5);
+		for (i = 0; i < 5; i++){
+			printf("%d\n", test[i]);
+		}
+		printf("=== end ft_bzero ===\n");
 }
 
 int main()
