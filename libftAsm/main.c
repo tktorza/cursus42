@@ -17,6 +17,8 @@
 
 void	test_bzero()
 {
+	const char *s = "dewdewde";
+
 	printf("=== TEST ft_bzero ===\n");
 	
 		char test[] = "salut";
@@ -31,8 +33,60 @@ void	test_bzero()
 			printf("%d\n", test[i]);
 		}
 		printf("=== end ft_bzero ===\n");
+
+		printf("PUTS\n");
+		ft_puts(s);
+		printf("\nputs end\n");
+		printf("%d\n", ft_put("a"));
+		printf("%d\n", ft_put("a"));
+		printf("%d\n", ft_put("a"));
+		printf("%d\n", ft_put("a"));
+		printf("%d\n", ft_put("a"));
 }
 
+void 	test_strlen()
+{
+	char s[200] = "aa";
+	 char s2[100] = "zzz\0";
+	// ft_puts(s);
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+	printf("STRCAT: %s\n", ft_strcat(s, s2));
+}
+
+void	test_mem()
+{
+	
+		char	mems[4];
+	
+		ft_bzero(mems, 4);
+		printf("str[0] = %d\n", mems[0]);
+		printf("str[1] = %d\n", mems[1]);
+		printf("str[2] = %d\n", mems[2]);
+		printf("str[3] = %d\n", mems[3]);
+		printf("--- memseting with 'a' ---\n");
+		ft_memset(mems, 'a', 4);
+		printf("str[0] = %c (%d)\n", mems[0], mems[0]);
+		printf("str[1] = %c (%d)\n", mems[1], mems[1]);
+		printf("str[2] = %c (%d)\n", mems[2], mems[2]);
+		printf("str[3] = %c (%d)\n", mems[3], mems[3]);
+
+		char * tata = strdup("yolo");
+		char * toto = ft_strdup(tata);
+		char * titi = NULL;
+	
+		printf(" original string : [%p] [%s]\n", tata, tata);
+		printf("duplicate string : [%p] [%s]\n", toto, toto);
+	
+		printf("test with null :\n");
+		printf("titi = %s\n", titi);
+		titi = ft_strdup(NULL);
+		printf("titi = %s\n", titi);
+}
+/*
 int main()
 {
 	char	num;
@@ -51,5 +105,28 @@ int main()
 	printf("%d -toupper-> %d | %d -tolower-> %d\n", 10, ft_toupper(10), 233, ft_tolower(233));
 	
 	test_bzero();
+	test_strlen();
+	test_mem();
 	return (0);
+}*/
+
+int main(int ac, char ** av)
+{
+	int ret = 0;
+	if (ac == 1) {
+		ft_cat(0);
+	}
+	else if (ac == 2) {
+		int fd = open(av[1], O_RDONLY);
+		ret = ft_cat(fd);
+		if (fd != -1) {
+			close(fd);
+		} else {
+			printf("error\n");
+		}
+	}
+	else {
+		printf("usage: %s [file]\n", av[0]);
+	}
+	return (ret);
 }
