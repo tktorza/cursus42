@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/15 17:04:34 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/15 17:54:34 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,12 @@ void	woody_start(void *ptr)
     printf("section->sh_name: %u\n", section_h->sh_name);
     printf("section->sh_offset: %llu\n", section_h->sh_offset);
     printf("section->sh_link: %u\n", section_h->sh_link);
-	for (uint64_t i = 0;i < header->e_phnum;i++)
+	for (uint16_t i = 0;i < header->e_phnum;i++)
 	{
+		crypt(section);
 		section_h = (void *)section_h + sizeof(Elf64_Shdr);
 		printf("section->sh_name: %u\n", section_h->sh_name);
 		printf("section->sh_offset: %llu\n", section_h->sh_offset);
 		printf("section->sh_link: %u\n", section_h->sh_link);
 	}
-	
-    
 }
