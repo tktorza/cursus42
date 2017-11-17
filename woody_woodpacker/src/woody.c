@@ -6,24 +6,38 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/17 16:00:52 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/17 16:40:33 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/woody.h"
 #include "../includes/elf.h"
 
-char *ft_nimp(char *key)
+char *ft_nimp(char *key, int nb)
 {
 	int size = ft_strlen(key);
 	char *str = (char *)malloc((sizeof(char) * size) + 1);
 
-	str[size + 1] = '\0';
-	str[0] = key[ft_strlen(key) % 3];
-	for (int i = 1;i < size;i++)
+	int i = 1;
+	if (nb == 0)
 	{
-		str[i] = key[i - 1];
-	}	
+		str[0] = key[ft_strlen(key) % 3];
+		while (i < size)
+		{
+			str[i] = key[i - 1];
+			i++;
+		}
+	}
+	else if (nb == 2)
+	{
+		str[0] = key[ft_strlen(key) % 3];
+		while (i < size)
+		{
+			str[i] = (char)(key[i] - (15 % (i + 3)));
+			i++;
+		}
+	}
+	str[i] = '\0';
 	return (str);
 }
 
@@ -35,12 +49,15 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data)
 	unsigned long long rand_start = &section[header->e_shnum % 3].sh_entsize;
 
 	key =  ft_itoa_base_maj(rand_start, 16);
-	fake_start = ft_nimp(key);
+	fake_start = ft_nimp(key, 0);
 	real_start = ft_strlen(fake_start);
 	//depart à strlen
 	key = ft_strjoin(fake_start, key);
 	printf(" %llu === %s | %s -- > %s\n", rand_start, fake_start, &key[real_start], key);
-	
+	ft_printf("key ? %s \n", key);
+	fake_start = ft_nimp(key, 2);
+	ft_strjoin(key, fake_start);
+	ft_printf(" key ?%s \n", key);
 	return (key);
 }
 void        print_error(char *file, char *str)
