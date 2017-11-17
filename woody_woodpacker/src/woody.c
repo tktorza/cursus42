@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/17 16:40:33 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/17 17:23:40 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,12 +16,15 @@
 char *ft_nimp(char *key, int nb)
 {
 	int size = ft_strlen(key);
-	char *str = (char *)malloc((sizeof(char) * size) + 1);
-
+	char *test = key;
+	int c;
+	char *str = (char *)malloc(sizeof(char) * (size + 1));
+	fprintf(stderr, "after 0 = %s\n", key);
+	
 	int i = 1;
 	if (nb == 0)
 	{
-		str[0] = key[ft_strlen(key) % 3];
+		str[0] = key[ft_strlen(key) / 3];
 		while (i < size)
 		{
 			str[i] = key[i - 1];
@@ -30,14 +33,22 @@ char *ft_nimp(char *key, int nb)
 	}
 	else if (nb == 2)
 	{
-		str[0] = key[ft_strlen(key) % 3];
+	fprintf(stderr, "1 = %s\n", key);
+	
+		str[0] = key[size / 3];
+	fprintf(stderr, "2 = %s | %d\n", key, size / 3);
+	
 		while (i < size)
 		{
-			str[i] = (char)(key[i] - (15 % (i + 3)));
+			c = key[i];
+			str[i] = (char)(c - 15);
 			i++;
 		}
+	fprintf(stderr, "3 = %s\n", key);
+	
 	}
 	str[i] = '\0';
+	fprintf(stderr, "KEY = %s\n", key);
 	return (str);
 }
 
@@ -53,11 +64,13 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data)
 	real_start = ft_strlen(fake_start);
 	//depart à strlen
 	key = ft_strjoin(fake_start, key);
-	printf(" %llu === %s | %s -- > %s\n", rand_start, fake_start, &key[real_start], key);
-	ft_printf("key ? %s \n", key);
+	fprintf(stderr, " %llu === %s | %s -- > %s\n", rand_start, fake_start, &key[real_start], key);
+	fprintf(stderr, "key ? %s \n", key);
 	fake_start = ft_nimp(key, 2);
+	fprintf(stderr, "1 key ?%s \n", key);
+	
 	ft_strjoin(key, fake_start);
-	ft_printf(" key ?%s \n", key);
+	fprintf(stderr, " key ?%s \n", key);
 	return (key);
 }
 void        print_error(char *file, char *str)
