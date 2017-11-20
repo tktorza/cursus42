@@ -18,13 +18,14 @@ char *ft_nimp(char *key, int nb)
 	int size = ft_strlen(key);
 	char *test = key;
 	int c;
-	char *str = (char *)malloc(sizeof(char) * (size + 1));
-	fprintf(stderr, "after 0 = %s\n", key);
+	char *str;
 	
+	if ((str = (char *)malloc(sizeof(char) * (size + 1))) == NULL)
+		return (NULL);
 	int i = 1;
 	if (nb == 0)
 	{
-		str[0] = key[ft_strlen(key) / 3];
+		str[0] = key[size / 3];
 		while (i < size)
 		{
 			str[i] = key[i - 1];
@@ -33,22 +34,16 @@ char *ft_nimp(char *key, int nb)
 	}
 	else if (nb == 2)
 	{
-	fprintf(stderr, "1 = %s\n", key);
-	
-		str[0] = key[size / 3];
-	fprintf(stderr, "2 = %s | %d\n", key, size / 3);
-	
+	i = 2;
+		str[2] = key[size / 3];
 		while (i < size)
 		{
 			c = key[i];
 			str[i] = (char)(c - 15);
 			i++;
 		}
-	fprintf(stderr, "3 = %s\n", key);
-	
 	}
 	str[i] = '\0';
-	fprintf(stderr, "KEY = %s\n", key);
 	return (str);
 }
 
@@ -59,15 +54,30 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data, int *in
 	int real_start;
 	unsigned long long rand_start = &section[header->e_shnum % 3].sh_entsize;
 
-	key =  ft_itoa_base_maj(rand_start, 16);
+	key =  ft_itoa_base(rand_start, 16);
+	//taille de 9 à tj checker
+	printf("SIZE = %d\n\n", ft_strlen(key));
 	fake_start = ft_nimp(key, 0);
 	real_start = ft_strlen(fake_start);
 	//depart à strlen
 	key = ft_strjoin(fake_start, key);
+	
 	// fprintf(stderr, " %llu === %s | %s -- > %s\n", rand_start, fake_start, &key[real_start], key);
 	// fprintf(stderr, "key ? %s \n", key);
-	fake_start = ft_nimp(key, 2);
-	// fprintf(stderr, "1 key ?%s \n", key);
+	for (int i =0;i < ft_strlen(key) + 1;i++)
+	{
+		printf("%c", key[i]);
+	}
+	printf("\n");
+	fake_start = ft_nimp(fake_start, 2);
+		
+	for (int i =0;i < ft_strlen(key) + 1;i++)
+	{
+		printf("%c", key[i]);
+	}
+	printf("\n");
+	
+	// fprintf(stderr, "key=%s \n", key);
 	
 	ft_strjoin(key, fake_start);
 	// fprintf(stderr, " key ?%s \n", key);
@@ -104,15 +114,15 @@ void	encrypt_text(uint8_t *data, size_t k, int key)
 	data[k] = data[k] + key;
 }
 
-Elf32_Addr	loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr *section, char *sectname, size_t size_to_search)
+Elf32_Addr	*loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr *section, char *sectname, size_t size_to_search)
 {
 	void *ptr;
 	for (size_t i = 0; i < header->e_shnum;i++)
     {
-		if (section[i].sh_offset => size_to_search /*+ appel vers previous virtual address*/)
+		if (section[i].sh_offset >= size_to_search /*+ appel vers previous virtual address*/)
 		{
-			ptr = (void *)(section[i]) + section[i].sh_size;
-			//copier decrypt bit par bit for (int i = 0;ptr + i; i < size);
+			// ptr = (void *)(section[i]) + section[i].sh_size;
+			//copier decrypt bit par bit for (int i = 0;ptr + i; i < size); --> il faut copier le code compilé de l'asm en lui envoyant les bons arguments (faire un exec puis ouverture du fichier puis boucle vers .text puis copier zone .text en gros)
 			//copier appel vers header.e_entry
 			/*printf("\nname: %s\n", &sectname[section[i].sh_name]);
 			printf("size: %llu\n", section[i].sh_size);
@@ -162,7 +172,7 @@ void	woody_start(void *ptr, unsigned int size)
 			printf("\nname: %s\n", &sectname[section[i].sh_name]);
 			printf("size: %llu\n", section[i].sh_size);
 			printf("addr: %#llx\n", section[i].sh_addr);
-			printf("offset: %#llu\n", section[i].sh_offset);
+			printf("offset: %llu\n", section[i].sh_offset);
 			//header->e_entry = loop_section_offset_free_for_decrypt(header->e_entry);
 			//ajouter decrypt à la fin
 			break;
