@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   woody.c                                            :+:      :+:    :+:   */
+/*   woody_test.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/22 15:40:45 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/22 17:24:18 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,7 +94,6 @@ void        print_error(char *file, char *str)
 void 	decypt()
 {
 	printf("...WOODY...\n");
-	
 }
 
 
@@ -113,6 +112,7 @@ void	encrypt_text(uint8_t *data, size_t k, int key)
 	// printf("keyyyy ===== %d\n", key);
 	data[k] = data[k] + key;
 }
+
 //segment
 void	deplace_text_section(Elf64_Shdr *section, size_t i, struct stat buf, char *ptr, uint8_t *data)
 {
@@ -140,6 +140,22 @@ void	deplace_text_section(Elf64_Shdr *section, size_t i, struct stat buf, char *
 	}
 }
 
+void    *open_decrypt(struct stat *buf, int *gap)
+{
+    int					fd;
+    void 				*ptr;
+
+    if ((fd = open("./src/decrypt", O_RDONLY)) < 0)
+		print_error("./src/decrypt", "No such file or directory");
+	if (fstat(fd, buf) < 0)
+		print_error("./src/decrypt", "Error with fstat");
+	if ((ptr = mmap(0, buf->st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
+	== MAP_FAILED)
+        print_error("./src/decrypt", "Is a directory");
+    *gap = buf->st_size;
+	return (ptr);
+}
+
 Elf32_Addr	*loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr *section, char *sectname, uint8_t *data)
 {
 		struct stat			buf;
@@ -153,108 +169,58 @@ Elf32_Addr	*loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr 
 		if ((ptr = mmap(0, buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
 		== MAP_FAILED)
 			print_error("./src/decrypt", "Is a directory");
-	// for (size_t i = 0; i < header->e_shnum;i++)
-    // {
-		// if (section[i].sh_offset >= size_to_search /*+ appel vers previous virtual address*/)
-		// {
-			// ptr = (void *)(section[i]) + section[i].sh_size;
-			//copier decrypt bit par bit for (int i = 0;ptr + i; i < size); --> il faut copier le code compilé de l'asm en lui envoyant les bons arguments (faire un exec puis ouverture du fichier puis boucle vers .text puis copier zone .text en gros)
-			//copier appel vers header.e_entry
-			/*printf("\nname: %s\n", &sectname[section[i].sh_name]);
-			printf("size: %llu\n", section[i].sh_size);
-			printf("addr: %#llx\n", section[i].sh_addr);
-			printf("offset: %#llu\n", section[i].sh_offset);
-		*/	//header->e_entry = loop_section_offset_free_for_decrypt(header->e_entry);
-			//ajouter decrypt à la fin
-			// break;
-		// }
-	// 	if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
-	// 		{
-	// 			deplace_text_section(section, i, buf, (char *)ptr, data);
-	// 		}
-	// }
-	fprintf(stderr, "0 -- e_entry = %llu \n", header->e_entry);
-	void *addr = header->e_entry;
-	char *tab = addr;
-	fprintf(stderr, "0 -- addr = %d \n", tab[0]);
-	// fprintf(stderr, "0.5 -- e_entry = %llu | addr = %llu | &addr = %p \n", header->e_entry, *addr);
-	
-	// char *tab = (char *)ptr;
 
-	// fprintf(stderr, "1 \n");
-	for (size_t i = 0;i < buf.st_size;i++)
-	{
-		// fprintf(stderr, "prev \n");
-		// addr[i] = tab[i];
-	// fprintf(stderr, "after \n");
-	
-	}
-	// fprintf(stderr, "2 \n");
-	
 	return (ptr);
+}
+
+Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
+{
+    Elf64_Ehdr *elf_hdr = (void *)ptr;
+    Elf64_Phdr *elf_seg, *text_seg;
+    int         n_seg = elf_hdr->e_phnum;
+    int i, text_end, gap=size;
+    // struct stat buf;
+    // char    *infect_addr;
+    
+    // infect_addr = (char *)open_decrypt(&buf, &gap);
+    elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr + (unsigned int) elf_hdr->e_phoff);
+
+    for (size_t i = 0;i < n_seg;i++)
+    {
+        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
+        {
+            printf("Segment .text found: #%lu\n", i);
+            text_seg = elf_seg;
+            text_end = text_seg->p_offset + text_seg->p_filesz;
+        }
+        else
+        {
+          if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - text_end) < gap) 
+            {
+              printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x)\n",
+                  i, (unsigned int)elf_seg->p_offset);
+              gap = elf_seg->p_offset - text_end;
+            }
+        }
+          elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg 
+                    + (unsigned int) elf_hdr->e_phentsize);
+    }
+    *p = text_end;
+    *len = gap;
+
+    return (text_seg);
 }
 
 void	woody_start(void *ptr, unsigned int size)
 {
-	Elf64_Ehdr *header;
-    Elf64_Shdr *section;
-	char *sectname;
-	uint8_t *data;
-	char *key;
-	int int_key;
-
-	data = ptr;
-    header = (void *)ptr;
-    section = (void *)header + header->e_shoff;	
-	sectname = (char*)(ptr + section[header->e_shstrndx].sh_offset);
-	key = create_key(header, section, data, &int_key);
-	loop_section_offset_free_for_decrypt(header, section, sectname, data);
-
-    /*for (size_t i = 0; i < header->e_shnum;i++)
-    {
-		printf("\n\nname: %s\n", &sectname[section[i].sh_name]);
-		printf("size: %llu\n", section[i].sh_size);
-		printf("addr: %#llx\n", section[i].sh_addr);
-		printf("addr: %#x\n", section[i].sh_link);
-		printf("offset: %llu\n", section[i].sh_offset);
-		printf("addr: %llu + %llu = %llu\n", data[section[i].sh_offset], section[i].sh_size, section[i].sh_link);
-	*/	
-		// if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
-		// {
-			/*
-			int j = 1;
-			for (size_t k = section[i].sh_offset; k < section[i].sh_offset + section[i].sh_size; ++k)
-			{
-				encrypt_text(data, k, int_key);
-				if (!(j % 4))
-					printf("%02x ", data[k]);
-				else
-					printf("%02x", data[k]);
-				if (!(j % 16))
-					printf("\n");
-				++j;
-			}
-*/
-// printf("\nname: %s\n", &sectname[section[i].sh_name]);
-// printf("size: %llu\n", section[i].sh_size);
-// printf("addr: %#llx\n", section[i].sh_addr);
-// printf("addr: %#llx\n", section[i].sh_link);
-// printf("offset: %llu\n", section[i].sh_offset);
-// printf("addr: %#llu + %#llu = %#llu\n", section[i].sh_offset, section[i].sh_size, section[i].sh_link);
-
-// 			for (size_t k = section[i].sh_offset; k < section[i].sh_offset + section[i].sh_size; ++k)
-// 			{
-// 				printf("%p %c ", &data[k], data[k]);
-// 			}
-// 			printf("\n");
-			
-			
-// 			//header->e_entry = loop_section_offset_free_for_decrypt(header->e_entry);
-// 			//ajouter decrypt à la fin
-// 			break;
-// 		}	
-	// }
-
+	
+  
+    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
+  
+    // return text_seg;
+    
+	// key = create_key(header, section, data, &int_key);
+    // loop_section_offset_free_for_decrypt(header, section, sectname, data);
 
 	open_woody(ptr, size);
 }
