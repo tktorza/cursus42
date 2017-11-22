@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/17 17:23:40 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/21 14:17:13 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,6 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data, int *in
 
 	key =  ft_itoa_base(rand_start, 16);
 	//taille de 9 à tj checker
-	printf("SIZE = %d\n\n", ft_strlen(key));
 	fake_start = ft_nimp(key, 0);
 	real_start = ft_strlen(fake_start);
 	//depart à strlen
@@ -116,7 +115,17 @@ void	encrypt_text(uint8_t *data, size_t k, int key)
 
 Elf32_Addr	*loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr *section, char *sectname, size_t size_to_search)
 {
-	void *ptr;
+		struct stat			buf;
+		int					fd;
+		void 				*ptr;
+	
+		if ((fd = open("./src/decrypt", O_RDONLY)) < 0)
+			print_error("./src/decrypt", "No such file or directory");
+		if (fstat(fd, &buf) < 0)
+			print_error("./src/decrypt", "Error with fstat");
+		if ((ptr = mmap(0, buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
+		== MAP_FAILED)
+			print_error("./src/decrypt", "Is a directory");
 	for (size_t i = 0; i < header->e_shnum;i++)
     {
 		if (section[i].sh_offset >= size_to_search /*+ appel vers previous virtual address*/)
@@ -152,8 +161,15 @@ void	woody_start(void *ptr, unsigned int size)
 	key = create_key(header, section, data, &int_key);
     for (size_t i = 0; i < header->e_shnum;i++)
     {
-		if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
-		{
+		printf("\n\nname: %s\n", &sectname[section[i].sh_name]);
+		printf("size: %llu\n", section[i].sh_size);
+		printf("addr: %#llx\n", section[i].sh_addr);
+		printf("addr: %#x\n", section[i].sh_link);
+		printf("offset: %llu\n", section[i].sh_offset);
+		printf("addr: %llu + %llu = %llu\n", data[section[i].sh_offset], section[i].sh_size, section[i].sh_link);
+		
+		// if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
+		// {
 			/*
 			int j = 1;
 			for (size_t k = section[i].sh_offset; k < section[i].sh_offset + section[i].sh_size; ++k)
@@ -168,15 +184,24 @@ void	woody_start(void *ptr, unsigned int size)
 				++j;
 			}
 */
+// printf("\nname: %s\n", &sectname[section[i].sh_name]);
+// printf("size: %llu\n", section[i].sh_size);
+// printf("addr: %#llx\n", section[i].sh_addr);
+// printf("addr: %#llx\n", section[i].sh_link);
+// printf("offset: %llu\n", section[i].sh_offset);
+// printf("addr: %#llu + %#llu = %#llu\n", section[i].sh_offset, section[i].sh_size, section[i].sh_link);
 
-			printf("\nname: %s\n", &sectname[section[i].sh_name]);
-			printf("size: %llu\n", section[i].sh_size);
-			printf("addr: %#llx\n", section[i].sh_addr);
-			printf("offset: %llu\n", section[i].sh_offset);
-			//header->e_entry = loop_section_offset_free_for_decrypt(header->e_entry);
-			//ajouter decrypt à la fin
-			break;
-		}	
+// 			for (size_t k = section[i].sh_offset; k < section[i].sh_offset + section[i].sh_size; ++k)
+// 			{
+// 				printf("%p %c ", &data[k], data[k]);
+// 			}
+// 			printf("\n");
+			
+			
+// 			//header->e_entry = loop_section_offset_free_for_decrypt(header->e_entry);
+// 			//ajouter decrypt à la fin
+// 			break;
+// 		}	
 	}
 
 	open_woody(ptr, size);

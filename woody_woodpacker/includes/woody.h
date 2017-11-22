@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:37:57 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/14 16:39:23 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/17 15:45:53 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,5 +20,7 @@
 #include <fcntl.h>
 # include "../libft/inc/libft.h"
 # include "../libft/inc/ft_printf.h"
+
+void	woody_start(void *ptr, unsigned int size);
 
 #endif
