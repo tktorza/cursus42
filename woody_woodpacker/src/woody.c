@@ -6,12 +6,13 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/21 14:17:13 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/22 13:00:30 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/woody.h"
 #include "../includes/elf.h"
+#include "../includes/uint.h"
 
 char *ft_nimp(char *key, int nb)
 {
