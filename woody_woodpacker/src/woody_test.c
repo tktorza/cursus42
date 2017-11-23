@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 17:06:12 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 17:07:40 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,13 +317,13 @@ static void        *get_ptr(char *filename, unsigned int *size, int *fd)
 	*size = buf.st_size;
 	return (ptr);
 }
-Z
 
 int         main(int ac, char **av)
 {
 	void 				*ptr;
 	unsigned int		size;
 	int					fd;
+	
 	if (ac == 2)
 	{
 		ptr = get_ptr(av[1], &size, &fd);
