@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 16:59:42 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 17:06:12 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,13 +311,13 @@ static void        *get_ptr(char *filename, unsigned int *size, int *fd)
 		print_error(filename, "No such file or directory");
 	if (fstat(*fd, &buf) < 0)
 		print_error(filename, "Error with fstat");
-	if ((ptr = mmap(0, buf.st_size, PROT_READ| PROT_WRITE| PROT_EXEC,
-		MAP_SHARED, *fd, 0)) == MAP_FAILED)
+	if ((ptr = mmap(0, buf.st_size, PROT_READ| PROT_WRITE| PROT_EXEC, MAP_SHARED, *fd, 0))
+	== MAP_FAILED)
 		print_error(filename, "Is a directory");
 	*size = buf.st_size;
 	return (ptr);
 }
-
+Z
 
 int         main(int ac, char **av)
 {
