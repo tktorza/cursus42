@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 17:16:22 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 17:26:11 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,116 +148,15 @@ void    *open_decrypt(struct stat *buf, int *fd/*, int *gap*/)
 {
     void 				*ptr;
 
-    if ((*fd = open("./src/test", O_RDONLY)) < 0)
+    if ((*fd = open("./src/test", O_APPEND | O_RDWR, 0)) < 0)
 		print_error("./src/test", "No such file or directory");
 	if (fstat(*fd, buf) < 0)
 		print_error("./src/test", "Error with fstat");
-	if ((ptr = mmap(0, buf->st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, *fd, 0))
+	if ((ptr = mmap(0, buf->st_size,  PROT_READ | PROT_WRITE | PROT_EXEC, MAP_SHARED, *fd, 0))
 	== MAP_FAILED)
         print_error("./src/test", "Is a directory");
     /**gap = buf->st_size;*/
 	return (ptr);
-}
-
-Elf32_Addr	*loop_section_offset_free_for_decrypt(Elf64_Ehdr *header, Elf64_Shdr *section, char *sectname, uint8_t *data)
-{
-		struct stat			buf;
-		int					fd;
-		void 				*ptr;
-	
-		if ((fd = open("./src/test", O_RDONLY)) < 0)
-			print_error("./src/test", "No such file or directory");
-		if (fstat(fd, &buf) < 0)
-			print_error("./src/test", "Error with fstat");
-		if ((ptr = mmap(0, buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0))
-		== MAP_FAILED)
-			print_error("./src/test", "Is a directory");
-
-	return (ptr);
-}
-
-Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
-{
-    Elf64_Ehdr *elf_hdr = (void *)ptr;
-    Elf64_Phdr *elf_seg, *text_seg;
-    int         n_seg = elf_hdr->e_phnum;
-    int text_end, gap=size;
-    // struct stat buf;
-    // char    *infect_addr;
-    
-    // infect_addr = (char *)open_decrypt(&buf, &gap);
-    elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr + (unsigned int) elf_hdr->e_phoff);
-
-    for (size_t i = 0;i < n_seg;i++)
-    {
-        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
-        {
-            printf("Segment .text found: #%lu\n", i);
-			text_seg = elf_seg;
-			//fin de seg text
-            text_end = text_seg->p_offset + text_seg->p_filesz;
-        }
-        else
-        {
-			//si gap < size du file
-          if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - text_end) < gap) 
-            {
-				gap = elf_seg->p_offset - text_end;
-              printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)elf_seg->p_offset, gap);
-            }
-		}
-		//on increment de elf_seg
-          elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
-	}
-	
-    *p = text_end;
-    *len = gap;
-
-    return (text_seg);
-}
-
-Elf64_Shdr *elf_find_section(void *ptr, char *name)
-{
-	Elf64_Ehdr *header;
-	Elf64_Shdr *section;
-	uint8_t *data;
-	char *sectname;
-
-	data = ptr;
-    header = (void *)ptr;
-    section = (void *)header + header->e_shoff;	
-	sectname = (char*)(ptr + section[header->e_shstrndx].sh_offset);
-
-	printf ("+ %d section in file. Looking for section '%s'\n", 
-		header->e_shnum, name);
-	
-	for (size_t i = 0; i < header->e_shnum; i++)
-	  {
-		if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
-			return (&section[i]);
-	  }
-	return (NULL);
-}
-
-int		elf_mem_subst(void *m, int len, long pat, long val)
-{
-  unsigned char *p = (unsigned char*)m;
-  long v;
-  int i, r;
-
-  for (i = 0; i < len; i++)
-  {
-	  v = *((long *)(p + i));
-	  r = v ^ pat;
-
-	  if (r == 0)
-	  {
-		  printf("+ Pattern %lx found at offset %d -> %lx\n", pat, i, val);
-		  *((long *)(p + i)) = val;
-		  return 0;
-	  }
-  }
-  return -1;
 }
 
 void	woody_start(void *ptr, unsigned int size, int fd)
@@ -291,7 +190,9 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, (long)header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
 
-	open_woody(ptr, size, fd, fd_infect);
+	close(fd);
+	close(fd_infect);
+	// open_woody(ptr, size, fd, fd_infect);
 }
 
 static int			is_elf64(char *ptr)
