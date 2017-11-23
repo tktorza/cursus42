@@ -26,5 +26,5 @@ _start:
   jmp rax
 
 align 8
-  msg     db 0x1b,'...Woody...',0x1b
+  msg     db "...Woody...",0x1b
   msg_end db 0x0
