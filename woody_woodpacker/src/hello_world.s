@@ -2,14 +2,6 @@ section .text
 	global _start
 	global _main
 
-hello:
-    .string db "Woody", 10
-    .len equ $ - hello.string
-
-_start:
-	call _main
-	ret
-
 _main:
     push rbp
     mov rbp, rsp
@@ -19,6 +11,16 @@ _main:
     mov rdx, hello.len
     mov rax, 0x2000004
     syscall
-    leave
+    mov rax, 0x11111111
+    jmp rax
+
+_start:
+	call _main
     ret
+
+hello:
+    .string db "Woody", 10
+    .len equ $ - hello.string
+
+
     
