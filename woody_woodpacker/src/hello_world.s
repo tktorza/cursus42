@@ -1,12 +1,12 @@
 section .text
-	global start
+	global _start
 	global _main
 
 hello:
     .string db "Woody", 10
     .len equ $ - hello.string
 
-start:
+_start:
 	call _main
 	ret
 
