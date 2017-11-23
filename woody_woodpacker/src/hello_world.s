@@ -1,26 +1,30 @@
 section .text
-	global _start
-	global _main
-
-_main:
-    push rbp
-    mov rbp, rsp
-    sub rsp, 16
-    mov rdi, 1
-    lea rsi, [rel hello.string]
-    mov rdx, hello.len
-    mov rax, 0x2000004
-    syscall
-    mov rax, 0x1111111111111111
-    jmp rax
+  global _start
 
 _start:
-	call _main
-    ret
+  ;; save cpu state
+  push rax
+  push rdi
+  push rsi
+  push rdx
 
-hello:
-    .string db "Woody", 10
-    .len equ $ - hello.string
+  ;; write msg to stdout
+  mov rax,1                     ; [1] - sys_write
+  mov rdi,1                     ; 0 = stdin / 1 = stdout / 2 = stderr
+  lea rsi,[rel msg]             ; pointer(mem address) to msg (*char[])
+  mov rdx, msg_end - msg        ; msg size
+  syscall                       ; calls the function stored in rax
 
+  ;; restore cpu state
+  pop rdx
+  pop rsi
+  pop rdi
+  pop rax
 
-    
+  ;; jump to _main
+  mov rax, 0x1111111111111111   ; address changed during injection
+  jmp rax
+
+align 8
+  msg     db 0x1b,'[31msuch infected, much wow!',0x1b,'[0m',0x0a,0
+  msg_end db 0x0
