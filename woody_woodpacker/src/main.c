@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:39:47 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 18:04:11 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 18:05:30 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,17 +24,15 @@ void 	decypt()
 	printf("...WOODY...\n");
 }
 
-void	open_woody(void *ptr, unsigned int size, int fd1, int fd2, char *prev)
+void	open_woody(void *ptr, unsigned int size, int fd1, int fd2)
 {
 	int	fd;
 
 	if ((fd = open("./woody", O_CREAT | O_RDWR | O_TRUNC, 0777)) <= 0)
 		print_error("woody", "Error on open");
     write(fd, ptr, size);
-    prev++;
-    // write(fd1, prev, size);
 	close(fd);
-	// close(fd1);
+	close(fd1);
 	close(fd2);
 	printf("All is ok and files are close, test?\n");
 }
