@@ -11,7 +11,7 @@ _main:
     mov rdx, hello.len
     mov rax, 0x2000004
     syscall
-    mov rax, 0x11111111
+    mov rax, 0x1111111111111111
     jmp rax
 
 _start:
