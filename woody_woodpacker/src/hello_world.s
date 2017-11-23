@@ -26,5 +26,5 @@ _start:
   jmp rax
 
 align 8
-  msg     db 0x1b,'[31msuch infected, much wow!',0x1b,'[0m',0x0a,0
+  msg     db 0x1b,'...Woody...',0x1b
   msg_end db 0x0
