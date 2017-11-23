@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 16:17:22 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 16:59:42 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -287,7 +287,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
     // return text_seg;
     
 	// key = create_key(header, section, data, &int_key);
-    // loop_section_offset_free_for_decrypt(header, section, sectname, data);
+	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
 	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, (long)header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
 
@@ -307,12 +307,12 @@ static void        *get_ptr(char *filename, unsigned int *size, int *fd)
 	struct stat			buf;
 	void 				*ptr;
 
-	if ((*fd = open(filename, O_RDONLY)) < 0)
+	if ((*fd = open(filename, O_APPEND | O_RDONLY)) < 0)
 		print_error(filename, "No such file or directory");
 	if (fstat(*fd, &buf) < 0)
 		print_error(filename, "Error with fstat");
-	if ((ptr = mmap(0, buf.st_size, PROT_READ | PROT_WRITE, MAP_PRIVATE, *fd, 0))
-	== MAP_FAILED)
+	if ((ptr = mmap(0, buf.st_size, PROT_READ| PROT_WRITE| PROT_EXEC,
+		MAP_SHARED, *fd, 0)) == MAP_FAILED)
 		print_error(filename, "Is a directory");
 	*size = buf.st_size;
 	return (ptr);
