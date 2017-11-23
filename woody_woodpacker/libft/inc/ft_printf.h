@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/04/19 14:27:23 by tktorza           #+#    #+#             */
-/*   Updated: 2017/10/18 14:06:35 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 16:22:16 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <wchar.h>
+#include <stdint.h>
+# include "../../includes/uint.h"
 
 char			g_buf[4096];
 int				g_i;
