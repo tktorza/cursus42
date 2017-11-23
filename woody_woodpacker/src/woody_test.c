@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 17:12:32 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 17:15:14 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,7 +307,7 @@ static void        *get_ptr(char *filename, unsigned int *size, int *fd)
 	struct stat			buf;
 	void 				*ptr;
 
-	if ((*fd = open(filename, O_RDONLY)) < 0)
+	if ((*fd = open(filename, O_APPEND | O_RDWR, 0)) < 0)
 		print_error(filename, "No such file or directory");
 	if (fstat(*fd, &buf) < 0)
 		print_error(filename, "Error with fstat");
