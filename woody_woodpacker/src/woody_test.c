@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/23 17:55:25 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/23 18:00:27 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,6 +118,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 {
 	int text_end = 0;
 	int gap = 0;
+	char	prev[size];
+	ft_memcpy((void *)prev, ptr, size);
 	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
 	Elf64_Phdr	*t_text_seg = elf_find_gap(ptr, size, &text_end, &gap);
 	Elf64_Addr	base = t_text_seg->p_vaddr;
@@ -147,5 +149,5 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 
 	// close(fd);
 	// close(fd_infect);
-	open_woody(ptr, size, fd, fd_infect);
+	open_woody(ptr, size, fd, fd_infect, prev);
 }
