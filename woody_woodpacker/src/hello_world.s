@@ -22,7 +22,7 @@ _start:
   pop rax
 
   ;; jump to _main
-  mov rax, 0x1111111111111111   ; address changed during injection
+  mov rax, 0x11111111   ; address changed during injection
   jmp rax
 
 align 8
