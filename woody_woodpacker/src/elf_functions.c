@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:41:50 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:46:57 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,21 +75,21 @@ Elf64_Shdr *elf_find_section(void *ptr, char *name)
 	return (NULL);
 }
 
-int		elf_mem_subst(void *m, int len, long pat, unsigned long long val)
+int		elf_mem_subst(void *m, int len, long pat, long val)
 {
   unsigned char *p = (unsigned char*)m;
-  unsigned long long v;
-  int r;
+  long v;
+  int i, r;
 
-  for (int i = 0; i < len; i++)
+  for (i = 0; i < len; i++)
   {
-	  v = *((unsigned long long *)(p + i));
+	  v = *((long *)(p + i));
 	  r = v ^ pat;
 
 	  if (r == 0)
 	  {
 		  printf("+ Pattern %lx found at offset %d -> %lx\n", pat, i, val);
-		  *((unsigned long long *)(p + i)) = val;
+		  *((long *)(p + i)) = val;
 		  return 0;
 	  }
   }
