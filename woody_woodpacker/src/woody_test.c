@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:39:43 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:45:32 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,14 +46,12 @@ char *ft_nimp(char *key, int nb)
 	str[i] = '\0';
 	return (str);
 }
-
 char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data, int *int_key)
 {
 	char *key;
 	char *fake_start;
 	int real_start;
 	unsigned long long rand_start = &section[header->e_shnum % 3].sh_entsize;
-
 	key =  ft_itoa_base(rand_start, 16);
 	//taille de 9 à tj checker
 	fake_start = ft_nimp(key, 0);
@@ -114,15 +112,6 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data, int *in
 }
 */
 
-void	debugg(char *str, unsigned int size)
-{
-	for (int i = 0;i<size;i++)
-	{
-		printf("%c --> &(%p) \n", str[i], &str[i]);
-	}
-	printf("\n");
-}
-
 void	woody_start(void *ptr, unsigned int size, int fd)
 {
 	int text_end = 0;
@@ -153,7 +142,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
     
 	// key = create_key(header, section, data, &int_key);
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
-	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
+	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, (long)header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
 
 	// close(fd);
