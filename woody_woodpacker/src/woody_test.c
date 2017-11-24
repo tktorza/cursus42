@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:37:41 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:39:43 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -149,11 +149,6 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	}
 	/* Copy payload in the segment padding area */
 	ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
-	printf("infection\n");
-	debugg((char *)(inf_addr + p_text_sec->sh_offset), p_text_sec->sh_size);
-	printf("\noriginal\n");
-	debugg((char *)(ptr + text_end), p_text_sec->sh_size);
-	
     // return text_seg;
     
 	// key = create_key(header, section, data, &int_key);
