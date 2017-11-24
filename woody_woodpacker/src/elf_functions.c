@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:21:51 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:24:07 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int		elf_mem_subst(void *m, int len, long pat, unsigned long long val)
 
 	  if (r == 0)
 	  {
-		  printf("+ Pattern %lx found at offset %d -> %lx\n", pat, i, val);
+		  printf("+ Pattern %lx found at offset %d -> %lx == v(#%llu)\n", pat, i, val, v);
 		  *((unsigned long long *)(p + i)) = val;
 		  return 0;
 	  }
