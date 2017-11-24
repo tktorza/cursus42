@@ -1,10 +1,6 @@
 section .text
   global _start
 
-align 8
-  msg     db "...Woody...", 10
-  msg_end db 0x0
-
 _start:
   ;; save cpu state
   push rax
@@ -26,5 +22,9 @@ _start:
   pop rax
 
   ;; jump to _main
-  mov rax, 0x11111111   ; address changed during injection
+  mov rax, 0x1111111111111111   ; address changed during injection
   jmp rax
+
+align 8
+  msg     db 0x1b,'[31msuch infected, much wow!',0x1b,'[0m',0x0a,0
+  msg_end db 0x0
