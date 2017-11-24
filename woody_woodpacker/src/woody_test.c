@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 13:06:20 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 13:08:44 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -160,7 +160,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	
 	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
 	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
-	header->e_entry = (Elf64_Addr) (base + text_end);
+	header->e_entry = (Elf64_Addr) (ptr + text_end);
 	debugg((char *)(base + text_end), p_text_sec->sh_size);
 	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	
