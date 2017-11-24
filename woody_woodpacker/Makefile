@@ -6,7 +6,7 @@
 #    By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/14 16:36:20 by tktorza           #+#    #+#              #
-#    Updated: 2017/11/23 17:47:59 by tktorza          ###   ########.fr        #
+#    Updated: 2017/11/24 13:13:17 by tktorza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,7 +14,7 @@ NAME = woody_woodpacker
 
 SRC_DIR	= ./src
 
-SRC = woody_test.c elf_functions.c main.c
+SRC = test_bug.c
 
 VPATH	= $(SRC_DIR)
 
