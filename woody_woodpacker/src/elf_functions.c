@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 13:31:50 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 13:34:05 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,43 +14,42 @@
 
 Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 {
-    Elf64_Ehdr* elf_hdr = (Elf64_Ehdr *) ptr;
-    Elf64_Phdr* elf_seg, *text_seg;
+    Elf64_Ehdr *elf_hdr = (void *)ptr;
+    Elf64_Phdr *elf_seg, *text_seg;
     int         n_seg = elf_hdr->e_phnum;
-    int         i;
-    int         text_end, gap=size;
-  
-    elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr 
-                  + (unsigned int) elf_hdr->e_phoff);
-  
-    for (i = 0; i < n_seg; i++)
-      {
+    int text_end, gap=size;
+    // struct stat buf;
+    // char    *infect_addr;
+    
+    // infect_addr = (char *)open_decrypt(&buf, &gap);
+    elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr + (unsigned int) elf_hdr->e_phoff);
+
+    for (size_t i = 0;i < n_seg;i++)
+    {
         if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
-      {
-        printf ("+ Found .text segment (#%d)\n", i);
-        text_seg = elf_seg;
-        text_end = elf_seg->p_offset + elf_seg->p_filesz;
-      }
+        {
+            printf("Segment .text found: #%lu | %llx\n", i, elf_seg->p_paddr);
+            text_seg = elf_seg;
+			//fin de seg text
+            text_end = text_seg->p_offset + text_seg->p_filesz;
+        }
         else
-      {
-        if (elf_seg->p_type == PT_LOAD && 
-            (elf_seg->p_offset - text_end) < gap) 
-          {
-            printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x)\n",
-                i, (unsigned int)elf_seg->p_offset);
-            gap = elf_seg->p_offset - text_end;
-          }
-      }
-        elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg 
-                  + (unsigned int) elf_hdr->e_phentsize);
-      }
-  
+        {
+			//si gap < size du file
+          if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - text_end) < gap) 
+            {
+				gap = elf_seg->p_offset - text_end;
+              printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)elf_seg->p_offset, gap);
+            }
+		}
+		//on increment de elf_seg
+          elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
+	}
+	
     *p = text_end;
     *len = gap;
-  
-    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
-  
-    return text_seg;
+
+    return (text_seg);
 }
 
 Elf64_Shdr *elf_find_section(void *ptr, char *name)
