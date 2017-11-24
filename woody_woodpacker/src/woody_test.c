@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:09:36 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:14:12 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	debugg(char *str, unsigned int size)
 {
 	for (int i = 0;i<size;i++)
 	{
-		printf("%c", str[i]);
+		printf("%c --> &(%p) \n", str[i], &str[i]);
 	}
 	printf("\n");
 }
