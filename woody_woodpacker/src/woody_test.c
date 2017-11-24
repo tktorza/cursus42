@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 10:44:44 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:09:36 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,6 +114,15 @@ char	*create_key(Elf64_Ehdr *header, Elf64_Shdr *section, uint8_t *data, int *in
 }
 */
 
+void	debugg(char *str, unsigned int size)
+{
+	for (int i = 0;i<size;i++)
+	{
+		printf("%c", str[i]);
+	}
+	printf("\n");
+}
+
 void	woody_start(void *ptr, unsigned int size, int fd)
 {
 	int text_end = 0;
@@ -140,6 +149,11 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	}
 	/* Copy payload in the segment padding area */
 	ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
+	printf("infection\n");
+	debugg((char *)(inf_addr + p_text_sec->sh_offset), p_text_sec->sh_size);
+	printf("\noriginal\n");
+	debugg((char *)(ptr + text_end), p_text_sec->sh_size);
+	
     // return text_seg;
     
 	// key = create_key(header, section, data, &int_key);
