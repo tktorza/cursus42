@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 10:45:27 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:21:51 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,9 +79,9 @@ int		elf_mem_subst(void *m, int len, long pat, unsigned long long val)
 {
   unsigned char *p = (unsigned char*)m;
   unsigned long long v;
-  int i, r;
+  int r;
 
-  for (i = 0; i < len; i++)
+  for (int i = 0; i < len; i++)
   {
 	  v = *((unsigned long long *)(p + i));
 	  r = v ^ pat;
@@ -93,5 +93,6 @@ int		elf_mem_subst(void *m, int len, long pat, unsigned long long val)
 		  return 0;
 	  }
   }
+  printf("+ Pattern NOT FOUND\n");  
   return -1;
 }

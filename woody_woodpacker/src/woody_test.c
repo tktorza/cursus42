@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:14:12 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:21:34 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,6 +158,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
     
 	// key = create_key(header, section, data, &int_key);
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
+	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
 	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
 
