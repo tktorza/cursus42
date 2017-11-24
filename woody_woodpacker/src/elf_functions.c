@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 11:32:37 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/24 11:38:02 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,8 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 
     for (size_t i = 0;i < n_seg;i++)
     {
-        if (elf_seg->p_type == PT_LOAD && ~(elf_seg->p_flags ^ 0x5))
+        // if (elf_seg->p_type == PT_LOAD && ~(elf_seg->p_flags ^ 0x5))
+        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
         {
             printf("Segment .text found: #%lu\n", i);
 			text_seg = elf_seg;
@@ -88,7 +89,7 @@ int		elf_mem_subst(void *m, int len, long pat, unsigned long long val)
 
 	  if (r == 0)
 	  {
-		  printf("+ Pattern %lx found at offset %d -> %lx == v(#%llx) ==? 1111111111\n", pat, i, val, v);
+		  printf("+ Pattern %lx found at offset %d -> %lx == v(#%llu) ==? 286331153\n", pat, i, val, v);
 		  *((unsigned long long *)(p + i)) = val;
 		  return 0;
 	  }
