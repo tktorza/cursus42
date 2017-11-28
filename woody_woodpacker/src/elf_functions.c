@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 14:53:32 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 14:54:57 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
             text_seg = elf_seg;
 			//fin de seg text
             text_end = text_seg->p_offset + text_seg->p_filesz;
-            printf("Segment .text found: #%lu | %p | %p | %lu\n", i, (void *)text_seg->p_paddr, (void *)text_seg->p_vaddr, text_seg->p_offset);
+            printf("Segment .text found: #%lu | %p | %p | %lu |  elf_seg->p_type = %d | %d\n", i, (void *)text_seg->p_paddr, (void *)text_seg->p_vaddr, text_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
         }
         else
         {
