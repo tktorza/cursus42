@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 14:44:21 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 14:46:55 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 {
     Elf64_Ehdr *elf_hdr = (void *)ptr;
-    Elf64_Phdr *elf_seg, *text_seg;
+    Elf64_Phdr* elf_seg, *text_seg;
     int         n_seg = elf_hdr->e_phnum;
     int text_end, gap=size;
     // struct stat buf;
