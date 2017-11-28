@@ -6,11 +6,23 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 14:54:57 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 15:16:46 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/woody.h"
+
+void    listing_seg(void *ptr)
+{
+    Elf64_Ehdr *elf_hdr = (void *)ptr;
+    Elf64_Phdr* elf_seg = (void *)ptr + (void *)elf_hdr->e_phoff;
+
+    for (size_t i = 0;i < n_seg;i++)
+    {
+            printf("SEGMENT : %s\n\n", elf_hdr->p_type);
+          elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);          
+	}
+}
 
 Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 {
@@ -31,7 +43,7 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
             text_seg = elf_seg;
 			//fin de seg text
             text_end = text_seg->p_offset + text_seg->p_filesz;
-            printf("Segment .text found: #%lu | %p | %p | %lu |  elf_seg->p_type = %d | %d\n", i, (void *)text_seg->p_paddr, (void *)text_seg->p_vaddr, text_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
+            printf("Segment .text found: #%lu | %p | %p | %lu |  elf_seg->p_type = %d | %dg\n", i, (void *)text_seg->p_paddr, (void *)text_seg->p_vaddr, text_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
         }
         else
         {

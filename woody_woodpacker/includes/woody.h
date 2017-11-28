@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:37:57 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 13:01:45 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 15:16:49 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len);
 Elf64_Shdr *elf_find_section(void *ptr, char *name);
 int		elf_mem_subst(void *m, int len, long pat, unsigned long long val);
 void	open_woody(void *ptr, unsigned int size, int fd1, int fd2);
+void    listing_seg(void *ptr);
+
 
 
 #endif
