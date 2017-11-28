@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 13:41:55 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 14:25:04 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,7 +132,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
 	Elf64_Phdr	*t_text_seg = elf_find_gap(ptr, size, &text_end, &gap);
 	Elf64_Addr	base = t_text_seg->p_vaddr;
-	printf("base == %llx | e_entry = %llx\n", base, header->e_entry);
+	printf("base == %llx | e_entry = %llx\n", t_text_seg->p_vaddr, header->e_entry);
 	
     printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
   
