@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 15:16:46 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 16:53:27 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,11 +15,11 @@
 void    listing_seg(void *ptr)
 {
     Elf64_Ehdr *elf_hdr = (void *)ptr;
-    Elf64_Phdr* elf_seg = (void *)ptr + (void *)elf_hdr->e_phoff;
+    Elf64_Phdr* elf_seg = (Elf64_Phdr *)(ptr + elf_hdr->e_phoff);
 
-    for (size_t i = 0;i < n_seg;i++)
+    for (size_t i = 0;i < elf_hdr->e_phnum;i++)
     {
-            printf("SEGMENT : %s\n\n", elf_hdr->p_type);
+            printf("SEGMENT : %d\n\n", elf_seg->p_type);
           elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);          
 	}
 }
@@ -38,12 +38,14 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 
     for (size_t i = 0;i < n_seg;i++)
     {
-        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
+        printf("Segment found: #%lu | %llu | %llu | %lu |  elf_seg->p_type = %d | %dg\n", i, elf_seg->p_paddr, elf_seg->p_vaddr, elf_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
+        
+        if (elf_seg->p_type == PT_LOAD &&  ~(elf_seg->p_flags ^ 0x5))
         {
             text_seg = elf_seg;
 			//fin de seg text
             text_end = text_seg->p_offset + text_seg->p_filesz;
-            printf("Segment .text found: #%lu | %p | %p | %lu |  elf_seg->p_type = %d | %dg\n", i, (void *)text_seg->p_paddr, (void *)text_seg->p_vaddr, text_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
+            printf("Segment .text found: #%lu | p_padrr = %llu &&p_vaddr = %llu\n", i, elf_seg->p_paddr, elf_seg->p_vaddr, elf_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
         }
         else
         {

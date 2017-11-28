@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 15:16:54 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/28 16:26:59 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	Elf64_Phdr	*t_text_seg = elf_find_gap(ptr, size, &text_end, &gap);
 	Elf64_Addr	base = t_text_seg->p_vaddr;
 	//test programme header segment
-	listing_seg(ptr);
+	// listing_seg(ptr);
 
 	printf("base == %p | e_entry = %llx\n", (void *)base, header->e_entry);
     printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
@@ -163,6 +163,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
+	header->e_shoff += p_text_sec->sh_size;
 	// close(fd);
 	// close(fd_infect);
 	open_woody(ptr, size, fd, fd_infect);
