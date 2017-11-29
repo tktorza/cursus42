@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 16:21:58 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 16:25:54 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -182,7 +182,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	
-	elf_mem_subst((void *)header->e_entry, p_text_sec->sh_size, 0x11111111, e_entry);
+	elf_mem_subst(ptr + data_end, p_text_sec->sh_size, 0x11111111, e_entry);
 	printf("It's ok 3\n");
 	
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
