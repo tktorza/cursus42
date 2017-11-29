@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 15:42:45 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 15:48:18 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -151,7 +151,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	e_entry = header->e_entry;
 	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
 	data_seg->p_flags = PF_R | PF_W | PF_X;
-	
+	printf("It's ok\n");
 	//decaller chaque offset des sections apres data de bss_size + p_text_sec->sh_size
 	// boucle_after_data_segment();
 	// write(fd, "\x48\xc7\x44\x24\x08", 5); /* movq [rsp + 8], */
@@ -167,6 +167,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	/* Copy payload in the segment padding area */
 	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	ft_memmove ((void *)header->e_entry, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
+	printf("It's ok 2\n");
+	
 	// debugg((char *)(ptr + text_end), p_text_sec->sh_size);
 	// debugg((char *)(inf_addr + p_text_sec->sh_offset), p_text_sec->sh_size);
     // return text_seg;
@@ -176,6 +178,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	
 	elf_mem_subst((void *)header->e_entry, p_text_sec->sh_size, 0x11111111, e_entry);
+	printf("It's ok 3\n");
+	
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	// header->e_entry = (Elf64_Addr) (base + text_end);
 	// header->e_shoff += p_text_sec->sh_size;
