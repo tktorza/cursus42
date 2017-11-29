@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 16:20:39 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 17:22:40 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void    listing_seg(void *ptr)
 	}
 }
 
-Elf64_Phdr      *elf_find_gap(void *ptr, int *data_end/*, int *size, int *len*/)
+Elf64_Phdr      *elf_find_gap(void *ptr, unsigned int *data_end/*, int *size, int *len*/)
 {
     Elf64_Ehdr *elf_hdr = (void *)ptr;
     Elf64_Phdr* elf_seg, *data_seg;

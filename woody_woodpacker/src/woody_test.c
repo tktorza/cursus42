@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 16:25:54 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 17:36:28 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,7 +125,7 @@ void	debugg(char *str, unsigned int size)
 
 void	woody_start(void *ptr, unsigned int size, int fd)
 {
-	int data_end = 0;
+	unsigned int data_end = 0;
 	int gap = 0;
 	char	prev[size];
 	Elf64_Addr e_entry; 
@@ -144,6 +144,10 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	int		fd_infect;
 	void		*inf_addr = open_decrypt(&buf, &fd_infect);
 	Elf64_Shdr *p_text_sec = elf_find_section(inf_addr, ".text");
+	Elf64_Shdr *bss_sec = elf_find_section(ptr, ".bss");
+	bss_sec->sh_addr += (p_text_sec->sh_size + 7);
+	bss_sec->sh_offset += (p_text_sec->sh_size + 7);
+
 	//mettre les flags sur le segment .text
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
 	p_text_sec->sh_offset, p_text_sec->sh_size);
@@ -153,13 +157,13 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	data_seg->p_filesz += p_text_sec->sh_size;
 	e_entry = header->e_entry;
 	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
-	// header->e_shoff += p_text_sec->sh_size;
+	header->e_shoff += p_text_sec->sh_size + 7;
 	//decaller chaque offset des sections apres data de bss_size + p_text_sec->sh_size
 	// boucle_after_data_segment();
 	// write(fd, "\x48\xc7\x44\x24\x08", 5); /* movq [rsp + 8], */
 
 
-	header->e_shoff += (data_seg->p_memsz - data_seg->p_filesz) + p_text_sec->sh_size;
+	// header->e_shoff += (data_seg->p_memsz - data_seg->p_filesz) + p_text_sec->sh_size;
 
 	/*if (p_text_sec->sh_size > gap)
 	{
