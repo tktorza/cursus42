@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 15:48:56 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 15:53:36 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -167,7 +167,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok\n");
 
-	ft_memmove ((void *)header->e_entry, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
+	ft_memmove (data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz),
+	inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok 2\n");
 	
 	// debugg((char *)(ptr + text_end), p_text_sec->sh_size);
