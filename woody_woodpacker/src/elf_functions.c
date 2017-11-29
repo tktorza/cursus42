@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 15:32:29 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 16:20:39 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void    listing_seg(void *ptr)
 	}
 }
 
-Elf64_Phdr      *elf_find_gap(void *ptr/*, int size, int *p, int *len*/)
+Elf64_Phdr      *elf_find_gap(void *ptr, int *data_end/*, int *size, int *len*/)
 {
     Elf64_Ehdr *elf_hdr = (void *)ptr;
     Elf64_Phdr* elf_seg, *data_seg;
@@ -45,23 +45,22 @@ Elf64_Phdr      *elf_find_gap(void *ptr/*, int size, int *p, int *len*/)
             
             data_seg = elf_seg;
             //SEG DATA
+            *data_end = data_seg->p_offset + data_seg->p_filesz;
             return (elf_seg);
-            // text_end = text_seg->p_offset + text_seg->p_filesz;
             // printf("Segment .text found: #%lu | p_padrr = %llu &&p_vaddr = %llu\n", i, elf_seg->p_paddr, elf_seg->p_vaddr, elf_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
         }
         // else
         //{
 			//si gap < size du file
-        //   if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - text_end) < gap) 
+        //   if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - data_end) < gap) 
         //     {
-		// 		gap = elf_seg->p_offset - text_end;
+		// 		gap = elf_seg->p_offset - data_end;
         //       printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)elf_seg->p_offset, gap);
         //     }
 		//}
 		//on increment de elf_seg
           elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
 	}
-    // *p = text_end;
     // *len = gap;
 
     return (data_seg);

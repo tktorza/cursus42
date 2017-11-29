@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 16:17:30 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 16:21:58 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -125,20 +125,20 @@ void	debugg(char *str, unsigned int size)
 
 void	woody_start(void *ptr, unsigned int size, int fd)
 {
-	int text_end = 0;
+	int data_end = 0;
 	int gap = 0;
 	char	prev[size];
 	Elf64_Addr e_entry; 
 
 	// ft_memcpy((void *)prev, ptr, size);
 	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
-	Elf64_Phdr	*data_seg = elf_find_gap(ptr/*, size, &text_end, &gap*/);
+	Elf64_Phdr	*data_seg = elf_find_gap(ptr, &data_end/*, size, &gap*/);
 	Elf64_Addr	base = data_seg->p_vaddr;
 	//test programme header segment
 	// listing_seg(ptr);
 
 	printf("base == %p | e_entry = %llx\n", (void *)base, header->e_entry);
-    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
+    printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", data_end, gap);
   
 	struct stat buf;
 	int		fd_infect;
@@ -170,7 +170,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok\n");
 
-	ft_memmove (data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz),
+	ft_memmove (ptr + data_end/* + (data_seg->p_memsz - data_seg->p_filesz)*/,
 	inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok 2\n");
 	
