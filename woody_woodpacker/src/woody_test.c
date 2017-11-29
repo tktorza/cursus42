@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/29 18:10:56 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 18:13:40 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,7 +144,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// listing_seg(ptr);
 	header->e_shoff += p_text_sec->sh_size/* + 7*/;
 	e_entry = header->e_entry;
-	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
+	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz /*+ (data_seg->p_memsz - data_seg->p_filesz)*/;
 	data_seg->p_memsz += p_text_sec->sh_size;
 	data_seg->p_filesz += p_text_sec->sh_size;
 	bss_sec->sh_offset += (p_text_sec->sh_size/* + 7*/);
@@ -176,7 +176,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	/* Copy payload in the segment padding area */
 	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok\n");
- data_end = data_sec->sh_offset + data_sec->sh_size;
+ 	data_end = data_sec->sh_offset + data_sec->sh_size;
 	ft_memmove (ptr + data_end/* + (data_seg->p_memsz - data_seg->p_filesz)*/,
 	inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
 	printf("It's ok 2\n");
