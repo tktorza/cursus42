@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 17:51:09 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 15:32:29 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,12 @@ void    listing_seg(void *ptr)
 	}
 }
 
-Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
+Elf64_Phdr      *elf_find_gap(void *ptr/*, int size, int *p, int *len*/)
 {
     Elf64_Ehdr *elf_hdr = (void *)ptr;
-    Elf64_Phdr* elf_seg, *text_seg;
+    Elf64_Phdr* elf_seg, *data_seg;
     int         n_seg = elf_hdr->e_phnum;
-    int text_end, gap=size;
+    // int text_end, gap=size;
     // struct stat buf;
     // char    *infect_addr;
     
@@ -43,7 +43,7 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
         {
             printf("Segment found: #%lu | %llu | %llu | %lu |  elf_seg->p_type = %d | %dg\n", i, elf_seg->p_paddr, elf_seg->p_vaddr, elf_seg->p_offset, elf_seg->p_type, elf_seg->p_flags);
             
-            text_seg = elf_seg;
+            data_seg = elf_seg;
             //SEG DATA
             return (elf_seg);
             // text_end = text_seg->p_offset + text_seg->p_filesz;
@@ -61,11 +61,10 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 		//on increment de elf_seg
           elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
 	}
-	
-    *p = text_end;
-    *len = gap;
+    // *p = text_end;
+    // *len = gap;
 
-    return (text_seg);
+    return (data_seg);
 }
 
 Elf64_Shdr *elf_find_section(void *ptr, char *name)

@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 18:13:12 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/29 15:42:45 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,8 +132,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 
 	ft_memcpy((void *)prev, ptr, size);
 	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
-	Elf64_Phdr	*t_text_seg = elf_find_gap(ptr, size, &text_end, &gap);
-	Elf64_Addr	base = t_text_seg->p_vaddr;
+	Elf64_Phdr	*data_seg = elf_find_gap(ptr/*, size, &text_end, &gap*/);
+	Elf64_Addr	base = data_seg->p_vaddr;
 	//test programme header segment
 	// listing_seg(ptr);
 
@@ -149,35 +149,36 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	p_text_sec->sh_offset, p_text_sec->sh_size);
 
 	e_entry = header->e_entry;
-	header->e_entry = t_text_seg->p_vaddr + t_text_seg->p_filesz + (t_text_seg->p_memsz - t_text_seg->p_filesz);
-	t_text_seg->p_flags = PF_R | PF_W | PF_X;
+	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz + (data_seg->p_memsz - data_seg->p_filesz);
+	data_seg->p_flags = PF_R | PF_W | PF_X;
 	
 	//decaller chaque offset des sections apres data de bss_size + p_text_sec->sh_size
-	boucle_after_data_segment();
-	write(fd, "\x48\xc7\x44\x24\x08", 5); /* movq [rsp + 8], */
+	// boucle_after_data_segment();
+	// write(fd, "\x48\xc7\x44\x24\x08", 5); /* movq [rsp + 8], */
 
 
-	header->e_shoff += (t_text_seg->p_memsz - t_text_seg->p_filesz) + p_text_sec->sh_size;
+	header->e_shoff += (data_seg->p_memsz - data_seg->p_filesz) + p_text_sec->sh_size;
 
-	if (p_text_sec->sh_size > gap)
+	/*if (p_text_sec->sh_size > gap)
 	{
 		fprintf (stderr, "- Payload to big, cannot infect file.\n");
 		exit (1);
-	}
+	}*/
 	/* Copy payload in the segment padding area */
-	ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
-	debugg((char *)(ptr + text_end), p_text_sec->sh_size);
+	// ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
+	ft_memmove ((void *)header->e_entry, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
+	// debugg((char *)(ptr + text_end), p_text_sec->sh_size);
 	// debugg((char *)(inf_addr + p_text_sec->sh_offset), p_text_sec->sh_size);
     // return text_seg;
     
 	// key = create_key(header, section, data, &int_key);
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
-	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
-	
-	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
-	header->e_entry = (Elf64_Addr) (base + text_end);
-	header->e_shoff += p_text_sec->sh_size;
+	
+	elf_mem_subst((void *)header->e_entry, p_text_sec->sh_size, 0x11111111, e_entry);
+	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
+	// header->e_entry = (Elf64_Addr) (base + text_end);
+	// header->e_shoff += p_text_sec->sh_size;
 	// close(fd);
 	// close(fd_infect);
 	open_woody(ptr, size, fd, fd_infect);
