@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/28 14:25:04 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/30 15:21:54 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,38 +127,44 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 {
 	int text_end = 0;
 	int gap = 0;
-	char	prev[size];
-	ft_memcpy((void *)prev, ptr, size);
+	// char	prev[size];
+	// ft_memcpy((void *)prev, ptr, size);
 	Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
 	Elf64_Phdr	*t_text_seg = elf_find_gap(ptr, size, &text_end, &gap);
 	Elf64_Addr	base = t_text_seg->p_vaddr;
+	Elf64_Addr	e_entry = header->e_entry;
+	struct stat buf;
+	int		fd_infect;
+	void		*inf_addr = open_decrypt(&buf, &fd_infect);
+	Elf64_Shdr *virus_text = elf_find_section(inf_addr, ".text");
+	
 	printf("base == %llx | e_entry = %llx\n", t_text_seg->p_vaddr, header->e_entry);
 	
     printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
   
-	struct stat buf;
-	int		fd_infect;
-	void		*inf_addr = open_decrypt(&buf, &fd_infect);
-	Elf64_Shdr *p_text_sec = elf_find_section(inf_addr, ".text");
+	t_text_seg->p_memsz += virus_text->sh_size;
+	t_text_seg->p_filesz += virus_text->sh_size;
+	
+	
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
-	p_text_sec->sh_offset, p_text_sec->sh_size);
+	virus_text->sh_offset, virus_text->sh_size);
 
-	if (p_text_sec->sh_size > gap)
+	if (virus_text->sh_size > gap)
 	{
 		fprintf (stderr, "- Payload to big, cannot infect file.\n");
 		exit (1);
 	}
 	/* Copy payload in the segment padding area */
-	ft_memmove (ptr + text_end, inf_addr + p_text_sec->sh_offset, p_text_sec->sh_size);
-	debugg((char *)(ptr + text_end), p_text_sec->sh_size);
-	// debugg((char *)(inf_addr + p_text_sec->sh_offset), p_text_sec->sh_size);
+	ft_memmove (ptr + text_end, inf_addr + virus_text->sh_offset, virus_text->sh_size);
+	debugg((char *)(ptr + text_end), virus_text->sh_size);
+	// debugg((char *)(inf_addr + virus_text->sh_offset), virus_text->sh_size);
     // return text_seg;
     
 	// key = create_key(header, section, data, &int_key);
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
 	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	
-	elf_mem_subst(ptr + text_end, p_text_sec->sh_size, 0x11111111, header->e_entry);
+	elf_mem_subst(ptr + text_end, virus_text->sh_size, 0x11111111, header->e_entry);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	header->e_entry = (Elf64_Addr) (base + text_end);
 	// close(fd);

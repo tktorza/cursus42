@@ -6,7 +6,7 @@
 #    By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/14 16:36:20 by tktorza           #+#    #+#              #
-#    Updated: 2017/11/24 13:17:07 by tktorza          ###   ########.fr        #
+#    Updated: 2017/11/30 15:25:43 by tktorza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -58,10 +58,16 @@ obj/%.o: %.c
 obj:
 		@mkdir -p obj/
 
+cp:
+	@make clean
+	@cp binaries/* .
+	@make
+	@./woody_woodpacker git
+
 clean:
 	@echo "\n\033[35m==> CLEANING in progress ...\033[0m\n"
 	@make clean -C libft
-	@rm -rf $(OBJ)
+	@rm -rf $(OBJ) git diff vi cat woody
 
 fclean: clean
 	@make fclean -C libft
