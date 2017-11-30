@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/30 11:36:19 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/30 11:56:01 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,7 +118,7 @@ void	debugg(char *str, unsigned int size)
 {
 	for (int i = 0;i<size;i++)
 	{
-		printf("%c", str[i], &str[i]);
+		printf("%x ", str[i], &str[i]);
 	}
 	printf("\n");
 }
@@ -150,7 +150,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz /*+ (data_seg->p_memsz - data_seg->p_filesz)*/;
 
 	data_seg->p_memsz += virus_text->sh_size;
-	data_seg->p_filesz += virus_text->sh_size;
+	// data_seg->p_filesz += virus_text->sh_size;
 	bss_sec->sh_offset += (virus_text->sh_size/* + 7*/);
 	bss_sec->sh_offset += (virus_text->sh_size/* + 7*/);
 	bss_sec->sh_addr += (virus_text->sh_size/* + 7*/);
@@ -187,7 +187,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	inf_addr + virus_text->sh_offset, virus_text->sh_size);
 	printf("It's ok 2\n");
 	
-	// debugg((char *)(ptr + text_end), virus_text->sh_size);
+	// debugg((char *)(ptr + data_end), virus_text->sh_size);
 	// debugg((char *)(inf_addr + virus_text->sh_offset), virus_text->sh_size);
     // return text_seg;
     
@@ -198,7 +198,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	elf_mem_subst(ptr + data_end, virus_text->sh_size, 0x11111111, e_entry);
 	printf("It's ok 3\n");
 	
-	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
+	printf("base + text_end == %llx | e_entry = %llx | new e_entry = %llx\n", base + data_end, e_entry, header->e_entry);
 	// header->e_entry = (Elf64_Addr) (base + text_end);
 	// header->e_shoff += virus_text->sh_size;
 	// close(fd);
