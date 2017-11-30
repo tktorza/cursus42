@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/30 11:56:01 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/30 12:00:44 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,8 +150,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz /*+ (data_seg->p_memsz - data_seg->p_filesz)*/;
 
 	data_seg->p_memsz += virus_text->sh_size;
-	// data_seg->p_filesz += virus_text->sh_size;
-	bss_sec->sh_offset += (virus_text->sh_size/* + 7*/);
+	data_seg->p_filesz += virus_text->sh_size;
 	bss_sec->sh_offset += (virus_text->sh_size/* + 7*/);
 	bss_sec->sh_addr += (virus_text->sh_size/* + 7*/);
 	data_seg->p_flags = PF_R | PF_W | PF_X;
