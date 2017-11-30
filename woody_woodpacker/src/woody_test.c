@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/30 12:28:51 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/11/30 13:49:33 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,8 +148,9 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	header->e_shoff += virus_text->sh_size/* + 7*/;
 	e_entry = header->e_entry;
 	//on change le point d'entré par l'adresse du virus --> fin du segment data
+	printf("data_sec->addr (%llx) | e_entry = %p ? p_vaddr  %p + p_filesz %llx = ", bss_sec->sh_addr, (void *)e_entry, (void *)data_seg->p_vaddr, data_seg->p_filesz);
 	header->e_entry = data_seg->p_vaddr + data_seg->p_filesz /*+ (data_seg->p_memsz - data_seg->p_filesz)*/;
-	printf("header->e_entry (%llu) + sizeofvirus(%llu) == bss e_entry section (%llu)\n\n", header->e_entry, virus_text->sh_size, bss_sec->sh_addr);
+	printf("header->e_entry (%llx) + sizeofvirus(%llu) == bss e_entry section (%llu)\n\n", header->e_entry, virus_text->sh_size, bss_sec->sh_addr);
 	data_seg->p_memsz += virus_text->sh_size;
 	data_seg->p_filesz += virus_text->sh_size;
 	bss_sec->sh_offset += virus_text->sh_size;
@@ -181,8 +182,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	}*/
 	/* Copy payload in the segment padding area */
 	// ft_memmove (ptr + text_end, inf_addr + virus_text->sh_offset, virus_text->sh_size);
-	printf("It's ok\n");
- 	data_end = data_seg->p_offset + data_seg->p_filesz;
+ 	data_end = (data_seg->p_offset + data_seg->p_filesz) - virus_text->sh_size;
+	printf("\n                DATA END OF SEG: data_end_seg = %llu    ?    bss_sec = %llu \n", ptr + data_end, ptr + bss_sec->sh_offset);
 	ft_memmove (ptr + data_end/* + (data_seg->p_memsz - data_seg->p_filesz)*/,
 	inf_addr + virus_text->sh_offset, virus_text->sh_size);
 	printf("\n header->e_entry (%llu) = data_end (%d) || ptr + data_end (%p)\n", header->e_entry, data_end, ptr + data_end);
@@ -198,7 +199,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	elf_mem_subst(ptr + data_end, virus_text->sh_size, 0x11111111, e_entry);
 	printf("It's ok 3\n");
 	
-	printf("base + text_end == %llx | e_entry = %llx | new e_entry = %llx\n", base + data_end, e_entry, header->e_entry);
+	// printf("base + text_end == %llx | e_entry = %llx | new e_entry = %llx\n", base + data_end, e_entry, header->e_entry);
 	// header->e_entry = (Elf64_Addr) (base + text_end);
 	// header->e_shoff += virus_text->sh_size;
 	// close(fd);
