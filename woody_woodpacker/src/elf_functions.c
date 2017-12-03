@@ -69,7 +69,7 @@ Elf64_Shdr *elf_find_section(void *ptr, char *name)
 	
 	for (size_t i = 0; i < header->e_shnum; i++)
 	  {
-		if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
+		if (ft_strcmp(&sectname[section[i].sh_name], name) == 0 && section[i].sh_addr)
 			return (&section[i]);
 	  }
 	return (NULL);
