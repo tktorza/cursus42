@@ -166,7 +166,7 @@ void	change_offset(void *ptr, unsigned int v_size, int sign)
 	sectname = (char*)(ptr + section[elf_hdr->e_shstrndx].sh_offset);
 	while (i < elf_hdr->e_shnum)
 	{
-		if (ft_strcmp(&sectname[section[i].sh_name], name) == 0 && section[i].sh_addr)
+		if (ft_strcmp(&sectname[section[i].sh_name], ".text") == 0 && section[i].sh_addr)
 			break;
 		i++;
 	}
