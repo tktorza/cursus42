@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 13:40:31 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 14:29:53 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,40 @@
 
 Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 {
-    Elf64_Ehdr *elf_hdr = (void *)ptr;
-    Elf64_Phdr *elf_seg, *text_seg;
-    int         n_seg = elf_hdr->e_phnum;
+    Elf64_Ehdr *header = (Elf64_Ehdr *)ptr;
+    Elf64_Phdr *seg, *text_seg;
+    int         n_seg = header->e_phnum;
     int text_end, gap=size;
     // struct stat buf;
     // char    *infect_addr;
     
     // infect_addr = (char *)open_decrypt(&buf, &gap);
-    elf_seg = (Elf64_Phdr *) (ptr + elf_hdr->e_phoff);
+    seg = (Elf64_Phdr *) (ptr + (unsigned int)header->e_phoff);
 
-    for (size_t i = 0;i < n_seg;i++)
+    for (int i = 0;i < n_seg;i++)
     {
-        if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
+            fprintf(stderr, "Segment .text found: %d | vaddr (%p) physical(%p)\n", i, seg->p_vaddr, seg->p_paddr);
+        
+        if (seg->p_type == PT_LOAD && seg->p_flags & 0x011)
         {
-            printf("Segment .text found: #%lu | %llx\n", i, elf_seg->p_vaddr);
-            text_seg = elf_seg;
+            fprintf(stderr, "Segment .text found: #%lu | vaddr (%llx) physical(%llx)\n", i, seg->p_vaddr, seg->p_paddr);
+            text_seg = seg;
 			//fin de seg text
             text_end = text_seg->p_offset + text_seg->p_filesz;
         }
-        else
+        /*else
         {
 			//si gap < size du file
-          if (elf_seg->p_type == PT_LOAD && (elf_seg->p_offset - text_end) < gap) 
+          if (seg->p_type == PT_LOAD && (seg->p_offset - text_end) < gap) 
             {
-				gap = elf_seg->p_offset - text_end;
-              printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)elf_seg->p_offset, gap);
+				gap = seg->p_offset - text_end;
+              printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)seg->p_offset, gap);
             }
-		}
-        //on increment de elf_seg
-        elf_seg++;
-        //   elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int));
+		}*/
+        //on increment de seg
+        seg++;
+        // seg = (Elf64_Phdr *) ((void *)seg + sizeof(seg));
+        //   seg = (Elf64_Phdr *) ((unsigned char*) seg + (unsigned int));
 	}
 	
     *p = text_end;
