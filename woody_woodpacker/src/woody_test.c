@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/30 15:21:54 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 12:31:05 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -237,6 +237,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz -= virus_text->sh_size;
 	t_text_seg->p_filesz -= virus_text->sh_size;
 	header->e_entry = e_entry;
+	change_offset(ptr, virus_text->sh_size, 1);
 	
 	open_woody((void *)woody, size + virus_text->sh_size, fd, fd_infect);
 	free(woody);
