@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 12:31:05 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 12:44:17 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	if (woody == NULL)
 	{
 		fprintf (stderr, "Error malloc of woody char *.\n");
-		exit (1);	
+		exit (1);
 	}
 	printf("base == %llx | e_entry = %llx\n", t_text_seg->p_vaddr, header->e_entry);
 	
@@ -206,6 +206,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz += virus_text->sh_size;
 	t_text_seg->p_filesz += virus_text->sh_size;
 	header->e_entry = (Elf64_Addr) (base + text_end);
+	header->e_shoff += virus_text->sh_size;
 	//declaller offsets des sections autres
 	change_offset(ptr, virus_text->sh_size, -1);
 	
@@ -237,8 +238,9 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz -= virus_text->sh_size;
 	t_text_seg->p_filesz -= virus_text->sh_size;
 	header->e_entry = e_entry;
+	header->e_shoff -= virus_text->sh_size;
 	change_offset(ptr, virus_text->sh_size, 1);
 	
-	open_woody((void *)woody, size + virus_text->sh_size, fd, fd_infect);
+	open_woody((void *)woody, size + virus_text->sh_size + 1, fd, fd_infect);
 	free(woody);
 }
