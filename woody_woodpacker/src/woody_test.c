@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 12:44:17 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:33:55 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -199,7 +199,10 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 		fprintf (stderr, "Error malloc of woody char *.\n");
 		exit (1);
 	}
-	printf("base == %llx | e_entry = %llx\n", t_text_seg->p_vaddr, header->e_entry);
+	
+	Elf64_Shdr *bin_text = elf_find_section(ptr, ".text");
+	
+	printf("physical == %llx base == %llx ? v_addr(.text sec) == %llx | e_entry = %llx\n", t_text_seg->p_paddr, (void *)base, bin_text->sh_addr, header->e_entry);
 	
     printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
   //on modifie ptr pour le copier dans woody pour ensuite le restaurer
@@ -210,7 +213,6 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	//declaller offsets des sections autres
 	change_offset(ptr, virus_text->sh_size, -1);
 	
-	
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
 	virus_text->sh_offset, virus_text->sh_size);
 
@@ -220,8 +222,8 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 		exit (1);
 	}
 	ft_memcpy(woody, ptr, text_end);
-	ft_memcpy(&woody[text_end], inf_addr + virus_text->sh_offset, virus_text->sh_size);
-	ft_memcpy(&woody[text_end + virus_text->sh_size], ptr + text_end, size - text_end);
+	ft_memcpy(&woody[text_end + 1], inf_addr + virus_text->sh_offset, virus_text->sh_size);
+	ft_memcpy(&woody[text_end + virus_text->sh_size + 1], ptr + text_end, size - text_end);
 	// debugg((char *)(ptr + text_end), virus_text->sh_size);
 	// debugg((char *)(inf_addr + virus_text->sh_offset), virus_text->sh_size);
     // return text_seg;
@@ -230,7 +232,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// loop_section_offset_free_for_decrypt(header, section, sectname, data);
 	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, e_entry);
 	
-	elf_mem_subst(&woody[text_end], virus_text->sh_size, 0x11111111, header->e_entry);
+	elf_mem_subst(&woody[text_end], virus_text->sh_size, 0x11111111, e_entry);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	// close(fd);
 	// close(fd_infect);

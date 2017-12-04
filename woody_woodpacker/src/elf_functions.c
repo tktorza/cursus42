@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/30 15:13:25 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 13:40:31 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
     // char    *infect_addr;
     
     // infect_addr = (char *)open_decrypt(&buf, &gap);
-    elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_hdr + (unsigned int) elf_hdr->e_phoff);
+    elf_seg = (Elf64_Phdr *) (ptr + elf_hdr->e_phoff);
 
     for (size_t i = 0;i < n_seg;i++)
     {
         if (elf_seg->p_type == PT_LOAD && elf_seg->p_flags & 0x011)
         {
-            printf("Segment .text found: #%lu | %llx\n", i, elf_seg->p_paddr);
+            printf("Segment .text found: #%lu | %llx\n", i, elf_seg->p_vaddr);
             text_seg = elf_seg;
 			//fin de seg text
             text_end = text_seg->p_offset + text_seg->p_filesz;
@@ -42,8 +42,9 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
               printf ("   * Found LOAD segment (#%d) close to .text (offset: 0x%x) --> gap(#%d)\n", i, (unsigned int)elf_seg->p_offset, gap);
             }
 		}
-		//on increment de elf_seg
-          elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int) elf_hdr->e_phentsize);
+        //on increment de elf_seg
+        elf_seg++;
+        //   elf_seg = (Elf64_Phdr *) ((unsigned char*) elf_seg + (unsigned int));
 	}
 	
     *p = text_end;
