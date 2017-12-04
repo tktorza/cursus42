@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 16:09:20 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 16:15:15 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -197,7 +197,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	int		fd_infect;
 	void		*inf_addr = open_decrypt(&buf, &fd_infect);
 	Elf64_Shdr *virus_text = elf_find_section(inf_addr, ".text");
-	char *woody = (char *)malloc(sizeof(char) * (virus_text->sh_size + 1 + size));
+	char *woody = (char *)malloc(sizeof(char) * (/*virus_text->sh_size + 1 + */size));
 	
 	if (woody == NULL)
 	{
@@ -224,7 +224,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	}
 	ft_memcpy(woody, ptr, text_end);
 	ft_memcpy(&woody[text_end], inf_addr + virus_text->sh_offset, virus_text->sh_size);
-	ft_memcpy(&woody[text_end + virus_text->sh_size + 1], ptr + text_end, size - text_end);
+	ft_memcpy(&woody[text_end + virus_text->sh_size + 1], ptr + text_end + virus_text->sh_size + 1, size - text_end + virus_text->sh_size + 1);
 	// debugg((char *)(ptr + text_end), virus_text->sh_size);
 	// debugg((char *)(inf_addr + virus_text->sh_offset), virus_text->sh_size);
     // return text_seg;
@@ -244,6 +244,6 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// header->e_shoff -= virus_text->sh_size;
 	// change_offset(ptr, virus_text->sh_size, 1);
 	
-	open_woody((void *)woody, size + virus_text->sh_size + 1, fd, fd_infect);
+	open_woody((void *)woody, size/* + virus_text->sh_size + 1*/, fd, fd_infect);
 	free(woody);
 }
