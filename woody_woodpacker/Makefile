@@ -6,7 +6,7 @@
 #    By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/14 16:36:20 by tktorza           #+#    #+#              #
-#    Updated: 2017/11/30 15:25:43 by tktorza          ###   ########.fr        #
+#    Updated: 2017/12/04 16:02:50 by tktorza          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,14 +60,14 @@ obj:
 
 cp:
 	@make clean
-	@cp binaries/* .
+	@cp binaries/x86_84-linux-gnu-g++-6 .
 	@make
-	@./woody_woodpacker git
+	@./woody_woodpacker x86_84-linux-gnu-g++-6
 
 clean:
 	@echo "\n\033[35m==> CLEANING in progress ...\033[0m\n"
 	@make clean -C libft
-	@rm -rf $(OBJ) git diff vi cat woody
+	@rm -rf $(OBJ) x86_84-linux-gnu-g++-6 woody
 
 fclean: clean
 	@make fclean -C libft
