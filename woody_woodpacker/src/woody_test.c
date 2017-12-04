@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 16:08:05 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 16:09:20 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -207,12 +207,12 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	
     printf ("+ .text segment gap at offset 0x%x(0x%x bytes available)\n", text_end, gap);
   //on modifie ptr pour le copier dans woody pour ensuite le restaurer
-	t_text_seg->p_memsz += virus_text->sh_size;
-	t_text_seg->p_filesz += virus_text->sh_size;
+	// t_text_seg->p_memsz += virus_text->sh_size;
+	// t_text_seg->p_filesz += virus_text->sh_size;
 	header->e_entry = (Elf64_Addr) (base + text_end);
 	// header->e_shoff += virus_text->sh_size;
 	//declaller offsets des sections autres
-	change_offset(ptr, virus_text->sh_size, -1);
+	// change_offset(ptr, virus_text->sh_size, -1);
 	
 	printf ("+ Payload .text section found at %llx (%llx bytes)\n", 
 	virus_text->sh_offset, virus_text->sh_size);
@@ -238,11 +238,11 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// close(fd);
 	// close(fd_infect);
 	//on restaure ptr
-	t_text_seg->p_memsz -= virus_text->sh_size;
-	t_text_seg->p_filesz -= virus_text->sh_size;
+	// t_text_seg->p_memsz -= virus_text->sh_size;
+	// t_text_seg->p_filesz -= virus_text->sh_size;
 	header->e_entry = e_entry;
 	// header->e_shoff -= virus_text->sh_size;
-	change_offset(ptr, virus_text->sh_size, 1);
+	// change_offset(ptr, virus_text->sh_size, 1);
 	
 	open_woody((void *)woody, size + virus_text->sh_size + 1, fd, fd_infect);
 	free(woody);
