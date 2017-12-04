@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 16:06:22 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 16:07:24 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz += virus_text->sh_size;
 	t_text_seg->p_filesz += virus_text->sh_size;
 	header->e_entry = (Elf64_Addr) (base + text_end);
-	header->e_shoff += virus_text->sh_size;
+	// header->e_shoff += virus_text->sh_size;
 	//declaller offsets des sections autres
 	change_offset(ptr, virus_text->sh_size, -1);
 	
@@ -223,7 +223,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 		exit (1);
 	}
 	ft_memcpy(woody, ptr, text_end);
-	ft_memcpy(&woody[text_end + 1], inf_addr + virus_text->sh_offset, virus_text->sh_size);
+	ft_memcpy(&woody[text_end], inf_addr + virus_text->sh_offset, virus_text->sh_size);
 	ft_memcpy(&woody[text_end + virus_text->sh_size + 1], ptr + text_end, size - text_end);
 	// debugg((char *)(ptr + text_end), virus_text->sh_size);
 	// debugg((char *)(inf_addr + virus_text->sh_offset), virus_text->sh_size);
