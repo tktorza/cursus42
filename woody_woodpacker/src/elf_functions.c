@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 14:29:53 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 15:56:28 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 
     for (int i = 0;i < n_seg;i++)
     {
-            fprintf(stderr, "Segment .text found: %d | vaddr (%p) physical(%p)\n", i, seg->p_vaddr, seg->p_paddr);
-        
         if (seg->p_type == PT_LOAD && seg->p_flags & 0x011)
         {
             fprintf(stderr, "Segment .text found: #%lu | vaddr (%llx) physical(%llx)\n", i, seg->p_vaddr, seg->p_paddr);
@@ -46,8 +44,6 @@ Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len)
 		}*/
         //on increment de seg
         seg++;
-        // seg = (Elf64_Phdr *) ((void *)seg + sizeof(seg));
-        //   seg = (Elf64_Phdr *) ((unsigned char*) seg + (unsigned int));
 	}
 	
     *p = text_end;

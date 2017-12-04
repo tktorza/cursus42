@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 15:54:40 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/04 16:00:09 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,7 +210,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	t_text_seg->p_memsz += virus_text->sh_size;
 	t_text_seg->p_filesz += virus_text->sh_size;
 	header->e_entry = (Elf64_Addr) (base + text_end);
-	header->e_shoff += virus_text->sh_size;
+	// header->e_shoff += virus_text->sh_size;
 	//declaller offsets des sections autres
 	change_offset(ptr, virus_text->sh_size, -1);
 	
