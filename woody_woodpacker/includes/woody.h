@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:37:57 by tktorza           #+#    #+#             */
-/*   Updated: 2017/11/24 13:01:45 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/05 12:45:42 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,8 +25,9 @@
 
 void    *open_decrypt(struct stat *buf, int *fd/*, int *gap*/);
 void    woody_start(void *ptr, unsigned int size, int fd);
-Elf64_Phdr *elf_find_gap(void *ptr, int size, int *p, int *len);
+Elf64_Phdr *elf_find_gap (void *d, int fsize, int *p, int *len);
 Elf64_Shdr *elf_find_section(void *ptr, char *name);
+char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text);
 int		elf_mem_subst(void *m, int len, long pat, unsigned long long val);
 void	open_woody(void *ptr, unsigned int size, int fd1, int fd2);
 

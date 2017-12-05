@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/23 17:18:38 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/04 15:56:28 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/05 12:52:32 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,10 +56,8 @@ Elf64_Shdr *elf_find_section(void *ptr, char *name)
 {
 	Elf64_Ehdr *header;
 	Elf64_Shdr *section;
-	uint8_t *data;
 	char *sectname;
 
-	data = ptr;
     header = (void *)ptr;
     section = (void *)header + header->e_shoff;	
 	sectname = (char*)(ptr + section[header->e_shstrndx].sh_offset);
