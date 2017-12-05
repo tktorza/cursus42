@@ -6,126 +6,11 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/15 12:02:55 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/05 12:53:11 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/05 15:12:04 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/woody.h"
-
-char *ft_nimp(char *key, int nb)
-{
-	int size = ft_strlen(key);
-	char *test = key;
-	int c;
-	char *str;
-	
-	if ((str = (char *)malloc(sizeof(char) * (size + 1))) == NULL)
-		return (NULL);
-	int i = 1;
-	if (nb == 0)
-	{
-		str[0] = key[size / 3];
-		while (i < size)
-		{
-			str[i] = key[i - 1] + 3;
-			i++;
-		}
-	}
-	else if (nb == 2)
-	{
-	i = 2;
-		str[2] = key[size / 3];
-		while (i < size)
-		{
-			c = key[i];
-			str[i] = (char)(c - 15);
-			i++;
-		}
-	}
-	str[i] = '\0';
-	return (str);
-}
-
-int	ft_strchr_index(const char *s, int c)
-{
-	int i;
-
-	i = 0;
-	while (s && s[i] && s[i] != '\0')
-	{
-		if (s[i] == c)
-			return (i);
-		i++;
-	}
-	if (!c && s != NULL && s[i] == '\0')
-		return (i);
-	return (0);
-}
-
-int		ft_atoi_hexa(char *nb)
-{
-	int		size = ft_strlen(nb);
-	int		res = 0;
-	int		fact = 1;
-	char	c[16] = "0123456789abcdef";
-
-	while (size > -1)
-	{
-		res += ft_strchr_index(c, (int)nb[size]);
-		size--;
-		fact *= 16;
-	}
-	return (res);
-}
-
-int		decrypt_key(char *key)
-{
-	char *new = ft_strsub(key, 9, 9);
-	int k = ft_atoi_hexa(new) / 500;
-
-	free(new);
-	return (k);
-}
-
-char	*create_key(Elf64_Ehdr *header)
-{
-	char *key;
-	char *fake_start;
-	int real_start;
-	Elf64_Shdr *section = (void *)header + header->e_shoff;	
-	unsigned long long rand_start = &section[header->e_shnum % 3].sh_entsize;
-
-	key =  ft_itoa_base(rand_start, 16);
-	printf("key = %s | %llu\n", key, rand_start);
-	//taille de 9 à tj checker
-	fake_start = ft_nimp(key, 0);
-	real_start = ft_strlen(fake_start);
-	printf("strlenfake = %lu\n", real_start);
-	//depart à strlen
-	key = ft_strjoin(fake_start, key);
-	
-	// fprintf(stderr, " %llu === %s | %s -- > %s\n", rand_start, fake_start, &key[real_start], key);
-	// fprintf(stderr, "key ? %s \n", key);
-	for (int i =0;i < ft_strlen(key) + 1;i++)
-	{
-		printf("%c", key[i]);
-	}
-	printf("\n");
-	fake_start = ft_nimp(fake_start, 2);
-		
-	for (int i =0;i < ft_strlen(key) + 1;i++)
-	{
-		printf("%c", key[i]);
-	}
-	printf("\n");
-	
-	// fprintf(stderr, "key=%s \n", key);
-	
-	key = ft_strjoin(key, fake_start);
-	// fprintf(stderr, " key ?%s \n", key);
-	// return (key);
-	return (key);
-}
 
 //segment
 /*void	deplace_text_section(Elf64_Shdr *section, size_t i, struct stat buf, char *ptr, uint8_t *data)
@@ -208,20 +93,6 @@ void	change_offset(void *ptr, unsigned int v_size, int sign)
 		section[i].sh_offset += size;
 		i++;
 	}
-}
-
-char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text)
-{
-    char *key = create_key(header);
-    uint8_t *data = (void *)header;
-    int val_key = decrypt_key(key);
-
-    for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
-    {
-        data[k] = (((data[k] * val_key) / 255) + ((data[k] * val_key) % 45));
-    }
-
-    return (key);
 }
 
 void	woody_start(void *ptr, unsigned int size, int fd)

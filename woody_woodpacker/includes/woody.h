@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:37:57 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/05 12:45:42 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/05 15:18:15 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,5 +31,11 @@ char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text);
 int		elf_mem_subst(void *m, int len, long pat, unsigned long long val);
 void	open_woody(void *ptr, unsigned int size, int fd1, int fd2);
 
+char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text);
+char	*create_key(Elf64_Ehdr *header);
+unsigned long long		decrypt_key(char *key);
+unsigned long long		ft_atoi_hexa(char *nb);
+int	ft_strchr_index(const char *s, int c);
+char *ft_nimp(char *key, int nb);
 
 #endif
