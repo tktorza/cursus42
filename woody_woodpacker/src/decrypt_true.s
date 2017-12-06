@@ -1,7 +1,7 @@
-global _ft_decrypt
-
 section .text
-_ft_decrypt:
+global _start
+
+_start:
 	push rbp
 	mov rbp, rsp
 	mov rdi, 0x22222222222 ; data[k]
@@ -104,3 +104,18 @@ pos:
 	jl plus
 	mov rdx, -1
 	jmp loop
+
+return:
+	mov rax,1                     ; [1] - sys_write
+	mov rdi,1                     ; 0 = stdin / 1 = stdout / 2 = stderr
+	lea rsi,[rel msg]             ; pointer(mem address) to msg (*char[])
+	mov rdx, msg_end - msg        ; msg size
+	syscall                       ; calls the function stored in rax
+	pop rbp
+	;; jump to e_entry
+	mov rax, 0x1111111111111111   ; address changed during injection
+	jmp rax
+
+align 8
+	msg     db "....WOODY....", 10
+	msg_end db 0x0
