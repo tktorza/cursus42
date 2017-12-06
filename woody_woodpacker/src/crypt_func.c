@@ -84,6 +84,21 @@ unsigned long long		ft_atoi_hexa(char *nb)
 	return (res);
 }
 
+uint8_t		ft_atoi_bit(char *nb)
+{
+	uint8_t fact = 1;
+	uint8_t	res = 0;
+	int	size = ft_strlen(nb) - 1;
+
+	while (size > -1)
+	{
+		res += (nb[size] == '1') ? fact : 0;
+		fact *= 2;
+		size--;
+	}
+	return (res);
+}
+
 unsigned long long		decrypt_key(char *key)
 {
 	char *new = ft_strsub(key, 6, 6);
@@ -135,37 +150,149 @@ char	*create_key(Elf64_Ehdr *header)
 	return (key);
 }
 
+char	*ft_itoa_bit(uint8_t nb)
+{
+	char	*str = (char *)malloc(sizeof(char) * 9);
+	if (!str)
+		return (NULL);
+	int		index = 7;
+
+	str[8] = '\0';
+	while (index > -1)
+	{
+		str[index] = ((nb % 2) + 48);
+		index--;
+		nb /= 2;
+	}
+	return (str);
+}
+
+//reverse the bit index with this next one
+uint8_t		reverse_bit_index(uint8_t nb, int index)
+{
+	char *bit = ft_itoa_bit(nb);
+	char prev;
+	int sign = (index < 0) ? -1 : 1;
+	// fprintf(stderr, "\t\t%d in bit = %s --> ", nb, bit);
+	
+	index = (index < 0) ? -index : index;
+	index = 7 - index;
+	if (sign == -1)
+	{
+		prev = bit[index + 1];
+		bit[index + 1] = bit[index];
+		bit[index] = prev;
+	}
+	else
+	{
+		prev = bit[index - 1];
+		bit[index - 1] = bit[index];
+		bit[index] = prev;	
+	}
+	// fprintf(stderr, " %s\n", bit);
+	
+	return (ft_atoi_bit(bit));
+}
+
+char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
+{
+	unsigned long long val_key = decrypt_key(key);
+	uint8_t *data = (void *)header;
+
+	while (val_key + data[bin_text->sh_offset] > 253)
+		val_key /= 10;
+
+	int index = val_key % 7;
+	int sign = 1;
+	for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
+    {
+        data[k] = reverse_bit_index(data[k], index * sign);
+		if ((k - bin_text->sh_offset) % val_key == 0)
+			index = val_key % 7;
+		else
+		{
+			if (sign > 0)
+			{
+				//on esssayer d'incrementer index
+				if (index < 6)
+					index++;
+				else
+					sign = -1;
+			}
+			else
+			{
+				if (index > 1)
+					index--;
+				else
+					sign = 1;
+			}
+		}
+	}
+
+	return ((char *)&data[bin_text->sh_offset]);
+}
+
+// void	test_decrypt(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
+// {
+//     uint8_t *data = (void *)header;
+// 	char *decrypt = decrypt_text_section(header, bin_text, key);
+// 	int i = 0;
+
+// 	for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
+// 	{
+// 		if (decrypt[i] != data[k])
+// 			printf("\t\t\t--------------->FALSE decrypt(%d) != data(%d)\n", decrypt[i], data[k]);
+// 		i++;
+// 	}
+// }
+
+// int					ft_strcmp_size(const char *s1, const char *s2, int size)
+// {
+// 	unsigned int	i;
+
+// 	i = 0;
+// 	while ( i < size && s1[i] == s2[i] && s1[i] && s2[i])
+// 		i++;
+// 	if (s1[i] == s2[i])
+// 		return (0);
+// 	else
+// 		return (i);
+// }
+
 char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text)
 {
     char *key = create_key(header);
     uint8_t *data = (void *)header;
-    unsigned long long val_key = decrypt_key(key);
-    int diff = 0;
-    uint8_t start = data[bin_text->sh_offset];
-
-    printf("val_key = %llu | data = (%d / %c) -->", val_key, (int)data[bin_text->sh_offset], data[bin_text->sh_offset]);
+	unsigned long long val_key = decrypt_key(key);
+	
     while (val_key + data[bin_text->sh_offset] > 253)
         val_key /= 10;
-    start += (uint8_t)val_key;
-    // start /= 2;
-    printf("start = %d  --> ", start, val_key);
-    // start *= 2;
-    start -= (uint8_t)val_key;
-    printf("start = %d\n", start, val_key);
-    
+	
+		int index = val_key % 7;
+		int sign = 1;
     for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
-        diff = (int)data[k -1];
-        diff += (int)data[k];
-        printf("\tdata[k] (%d / %c) -->", (int)data[k], data[k]);
-        data[k] = (diff <= 255) ? (uin8_t)diff : data[k - 1];
-
-
-        data[k] = (data[k] * val_key) / 255;
-        printf(" (%d / %c) -->", (int)data[k], data[k]);
-        data[k] = ((data[k] * 255) / val_key);
-        printf(" (%d / %c)\n", (int)data[k], data[k]);
-    }
-
+        data[k] = reverse_bit_index(data[k], index * sign);
+		if ((k - bin_text->sh_offset) % val_key == 0)
+			index = val_key % 7;
+		else
+		{
+			if (sign > 0)
+			{
+				//on esssayer d'incrementer index
+				if (index < 6)
+					index++;
+				else
+					sign = -1;
+			}
+			else
+			{
+				if (index > 1)
+					index--;
+				else
+					sign = 1;
+			}
+		}
+	}
     return (key);
 }

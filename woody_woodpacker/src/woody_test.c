@@ -141,7 +141,6 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// write(1, (void *)(ptr + bin_text->sh_offset), bin_text->sh_size);
 	key = crypt_text_section(header, bin_text);
 	// write(1, (void *)(ptr + bin_text->sh_offset), bin_text->sh_size);
-		
 	ft_memcpy(woody, ptr, text_end);
 	ft_memcpy(&woody[text_end], inf_addr + virus_text->sh_offset, virus_text->sh_size);
 	ft_memcpy(&woody[text_end + virus_text->sh_size + 1], ptr + text_end + virus_text->sh_size + 1, size - text_end + virus_text->sh_size + 1);
