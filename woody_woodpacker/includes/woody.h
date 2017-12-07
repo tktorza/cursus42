@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/14 16:37:57 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/05 15:18:15 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/07 13:27:03 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,5 +37,7 @@ unsigned long long		decrypt_key(char *key);
 unsigned long long		ft_atoi_hexa(char *nb);
 int	ft_strchr_index(const char *s, int c);
 char *ft_nimp(char *key, int nb);
+char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key);
+
 
 #endif
