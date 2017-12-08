@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/05 15:09:23 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/05 17:11:13 by tktorza          ###   ########.fr       */
+/*   Updated: 2017/12/08 17:02:02 by tktorza          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -203,7 +203,20 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 		val_key /= 10;
 
 	int index = val_key % 7;
+	printf("Hello\n");
 	int sign = 1;
+	printf("Prev: %d %d %d %d %d\n", 	data[bin_text->sh_offset], index, bin_text->sh_offset + bin_text->sh_size, bin_text->sh_offset, val_key);
+	
+		decrypt_true(
+		data,
+		index,
+		bin_text->sh_offset + bin_text->sh_size,
+		bin_text->sh_offset,
+		val_key
+		);
+	printf("Hello\n");
+
+	/*
 	for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
         data[k] = reverse_bit_index(data[k], index * sign);
@@ -228,7 +241,7 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 			}
 		}
 	}
-
+*/
 	return ((char *)&data[bin_text->sh_offset]);
 }
 
