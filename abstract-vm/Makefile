@@ -1,6 +1,8 @@
 EXEC = avm
 
-SRCC = main.cpp Abstract.cpp
+SRCC = main.cpp OperandFactory.cpp
+
+INCLUDES = includes/OperandFactory.hpp includes/IOperand.hpp
 
 SRCO = $(SRCC:%.cpp=%.o)
 
@@ -16,7 +18,7 @@ all: main
 	@echo
 
 main: $(SRCO)
-	@clang++ -o $(EXEC) $(FLAG) $(SRCO)
+	@clang++ -o $(EXEC) $(FLAG) $(SRCO) 
 
 fast: $(SRCO)
 	@clang++ $(FLAG) -o $(EXEC) $(SRCO)
