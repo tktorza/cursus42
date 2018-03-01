@@ -4,9 +4,9 @@ void Abstract::push(std::string const & str, std::string const & name)
 {
 	int ok = 0;
 	std::string type[5] = {};
-	for (int i=name.length();i<str.c_str().length();i++){
+	for (int i=name.length();i< str.c_str().length();i++){
 		if (str.c_str()[i] != ' '){
-			for (int x=0;x<5;x++;){
+			for (int x=0;x<5;x++){
 				if (strncmp(&str.c_str()[i], type[x].c_str(), type[x].length()) == 0){
 
 					ok = 1;

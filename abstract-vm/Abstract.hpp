@@ -5,6 +5,12 @@
 #include <cstdlib>
 #include <list>
 
+class Value<char, int, long, float, double>
+{
+	T type;
+	T value;
+}
+
 class Abstract 
 {
 	public:
