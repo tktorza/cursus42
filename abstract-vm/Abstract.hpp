@@ -19,6 +19,7 @@ class Abstract
 		// int meleeAttackDamage;
 		// int rangedAttackDamage;
 		// int armorDamageReduction;
+		
 		char *int8;
 		int *int16;
 		long *int32;

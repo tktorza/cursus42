@@ -15,7 +15,7 @@ _ft_puts:
     mov rdx, rax
     mov rax, SYSCALL(WRITE)    
     syscall
-    leave
+    ;leave
 
 return:
     ret

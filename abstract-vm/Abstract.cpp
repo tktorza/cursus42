@@ -11,7 +11,7 @@ void Abstract::push(std::string const & str, std::string const & name)
 
 					ok = 1;
 			}
-
+			}
 		}
 		// if (ok == 0)
 		// 	std::error << "Unknow type after push line" << this->line << std::endl;

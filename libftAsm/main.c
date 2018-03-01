@@ -17,118 +17,168 @@
 #include <unistd.h>
 #include <fcntl.h>
 
-void	test_bzero()
+
+char *ft_display_bzero(int i)
 {
-	const char *s = "dewdewde";
+	char s[101] = "salut toi !";
+	char *s2;
 
-	printf("=== TEST ft_bzero ===\n");
-	
-		char test[] = "salut";
-		int i;
-		printf("String test = salut\n");
-		for (i = 0; i < 5; i++){
-			printf("%d\n", test[i]);
-		}
-		printf("calling ft_bzero(void *, size_t)\n");
-		ft_bzero(test, 5);
-		for (i = 0; i < 5; i++){
-			printf("%d\n", test[i]);
-		}
-		printf("=== end ft_bzero ===\n");
-
-		printf("PUTS\n");
-		ft_puts(s);
-		printf("\nputs end\n");
-		printf("%d\n", ft_put("a"));
-		printf("%d\n", ft_put("a"));
-		printf("%d\n", ft_put("a"));
-		printf("%d\n", ft_put("a"));
-		printf("%d\n", ft_put("a"));
+	ft_bzero(s, i);
+	s2 = strdup(s);
+	return (s2);
 }
 
-void 	test_strlen()
+int			main(void)
 {
-	char s[200] = "aa";
-	 char s2[100] = "zzz\0";
-	// ft_puts(s);
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-	printf("STRCAT: %s\n", ft_strcat(s, s2));
-}
+	printf("\n---------------------\n");
+	printf("ft_isalpha:\n");
+	printf("'\\n' => %d\n", ft_isalpha(10));
+	printf("'@' => %d\n", ft_isalpha(64));
+	printf("'A' => %d\n", ft_isalpha(65));
+	printf("']' => %d\n", ft_isalpha(93));
+	printf("'s' => %d\n", ft_isalpha(115));
+	printf("130 => %d\n", ft_isalpha(130));
 
-void	test_mem()
-{
-	
-		char	mems[4];
-	
-		ft_bzero(mems, 4);
-		printf("str[0] = %d\n", mems[0]);
-		printf("str[1] = %d\n", mems[1]);
-		printf("str[2] = %d\n", mems[2]);
-		printf("str[3] = %d\n", mems[3]);
-		printf("--- memseting with 'a' ---\n");
-		ft_memset(mems, 'a', 4);
-		printf("str[0] = %c (%d)\n", mems[0], mems[0]);
-		printf("str[1] = %c (%d)\n", mems[1], mems[1]);
-		printf("str[2] = %c (%d)\n", mems[2], mems[2]);
-		printf("str[3] = %c (%d)\n", mems[3], mems[3]);
+	printf("\n---------------------\n");
+	printf("ft_isdigit:\n");
+	printf("'\\n' => %d\n", ft_isdigit(10));
+	printf("'/' => %d\n", ft_isdigit(47));
+	printf("'0' => %d\n", ft_isdigit(48));
+	printf("'9' => %d\n", ft_isdigit(57));
+	printf("':' => %d\n", ft_isdigit(58));
+	printf("'A' => %d\n", ft_isdigit('A'));
 
-		char * tata = strdup("yolo");
-		char * toto = ft_strdup(tata);
-		char * titi = NULL;
-	
-		printf(" original string : [%p] [%s]\n", tata, tata);
-		printf("duplicate string : [%p] [%s]\n", toto, toto);
-	
-		printf("test with null :\n");
-		printf("titi = %s\n", titi);
-		titi = ft_strdup(NULL);
-		printf("titi = %s\n", titi);
-}
-/*
-int main()
-{
-	char	num;
-	char	letter;
+	printf("\n---------------------\n");
+	printf("ft_isalnum:\n");
+	printf("'1' => %d\n", ft_isalnum(49));
+	printf("'@' => %d\n", ft_isalnum(64));
+	printf("'A' => %d\n", ft_isalnum(65));
+	printf("']' => %d\n", ft_isalnum(93));
+	printf("'s' => %d\n", ft_isalnum(115));
+	printf("1300 => %d\n", ft_isalnum(1300));
 
-	letter = 'a';
-	num = '2';
-	printf("\\0 -- > %d\n", '\0');
-	printf("%c is num? %d\n%c is num? %d\n", num, ft_isdigit(num), letter, ft_isdigit(letter));
-	printf("%c is alpha? %d\n%c is alpha? %d\n", num, ft_isalpha(num), letter, ft_isalpha(letter));
-	printf("%c is alnum? %d\n%c is alnum? %d\n", num, ft_isalnum(num), letter, ft_isalnum(letter));
-	printf("%c is ascii? %d\n%c is ascii? %d\nma== > 73242 isascii? %d\n", num, ft_isascii(num), letter, ft_isascii(letter), ft_isascii(73291));
-	printf("%c is print? %d\n%c is print? %d\nma== > \\t isprint? %d\n", num, ft_isprint(num), letter, ft_isprint(letter), ft_isprint('\t'));
-	printf("%c -toupper-> %c | %c -tolower-> %c\n", letter, ft_toupper(letter), 'A', ft_tolower('A'));
-	printf("%c -toupper-> %c | %c -tolower-> %c\n", 'z', ft_toupper('z'), 'Z', ft_tolower('Z'));
-	printf("%d -toupper-> %d | %d -tolower-> %d\n", 10, ft_toupper(10), 233, ft_tolower(233));
-	
-	test_bzero();
-	test_strlen();
-	test_mem();
-	return (0);
-}*/
+	printf("\n---------------------\n");
+	printf("ft_isascii:\n");
+	printf("'1' => %d\n", ft_isascii(49));
+	printf("'@' => %d\n", ft_isascii(64));
+	printf("'A' => %d\n", ft_isascii(65));
+	printf("']' => %d\n", ft_isascii(93));
+	printf("'s' => %d\n", ft_isascii(115));
+	printf("1300 => %d\n", ft_isascii(1300));
 
-int main(int ac, char ** av)
-{
-	// int ret = 0;
-	if (ac == 1) {
-		ft_cat(0);
-	}
-	else if (ac == 2) {
-		int fd = open(av[1], O_RDONLY);
-		ft_cat(fd);
-		if (fd != -1) {
-			close(fd);
-		} else {
-			printf("error\n");
-		}
-	}
-	else {
-		printf("usage: %s [file]\n", av[0]);
-	}
-	return (0);
+	printf("\n---------------------\n");
+	printf("ft_isprint:\n");
+	printf("1 => %d\n", ft_isprint(1));
+	printf("'@' => %d\n", ft_isprint(64));
+	printf("'A' => %d\n", ft_isprint(65));
+	printf("']' => %d\n", ft_isprint(93));
+	printf("127 => %d\n", ft_isprint(127));
+	printf("1300 => %d\n", ft_isprint(1300));
+
+	printf("\n---------------------\n");
+	printf("ft_tolower:\n");
+	printf("'a' => %c\n", ft_tolower('a'));
+	printf("'A' => %c\n", ft_tolower('A'));
+	printf("'Z' => %c\n", ft_tolower('Z'));
+	printf("'z' => %c\n", ft_tolower('z'));
+	printf("'1' => %c\n", ft_tolower('1'));
+	printf("'$' => %c\n", ft_tolower('$'));
+
+	printf("\n---------------------\n");
+	printf("ft_toupper:\n");
+	printf("'a' => %c\n", ft_toupper('a'));
+	printf("'A' => %c\n", ft_toupper('A'));
+	printf("'Z' => %c\n", ft_toupper('Z'));
+	printf("'z' => %c\n", ft_toupper('z'));
+	printf("'1' => %c\n", ft_toupper('1'));
+	printf("'$' => %c\n", ft_toupper('$'));
+	
+	printf("\n---------------------\n");
+	printf("ft_bzero:\n");
+	printf("'2' => %s\n", ft_display_bzero(2));
+	printf("'11' => %s\n", ft_display_bzero(11));
+	printf("'100' => %s\n", ft_display_bzero(100));
+	printf("'12' => %s\n", ft_display_bzero(12));
+	printf("'10' => %s\n", ft_display_bzero(10));
+
+		
+	printf("\n---------------------\n");
+	printf("ft_strcat:\n");
+	char str[50];
+	str[0] = '\0';
+	printf("'je ' => %s\n", ft_strcat(str, "je "));
+	printf("'suis ' => %s\n", ft_strcat(str, "suis "));
+	printf("'' => %s\n", ft_strcat(str, ""));
+	printf("'un ' => %s\n", ft_strcat(str, "un "));
+	printf("'TEST!' => %s\n", ft_strcat(str, "TEST!"));
+
+	printf("\n---------------------\n");
+	printf("ft_puts:\n");
+	ft_puts("je");
+	ft_puts("suis");
+	ft_puts("");
+	ft_puts("un");
+	ft_puts("TEST!");
+	ft_puts(NULL);
+
+	printf("\n---------------------\n");
+	printf("ft_strlen:\n");
+	printf("True: %zu = Mine: %zu\n", strlen("Test 1"), ft_strlen("Test 1"));
+	printf("True: %zu = Mine: %zu\n", strlen("a"), ft_strlen("a"));
+	printf("True: %zu = Mine: %zu\n", strlen(""), ft_strlen(""));
+	printf("True: %zu = Mine: %zu\n", strlen("Test 123456789"), ft_strlen("Test 123456789"));
+	printf("True: %zu = Mine: %zu\n", strlen("\0Test 123456"), ft_strlen("\0Test 123456"));
+	printf("True: %zu = Mine: %zu\n", strlen("Test 123456\0789"), ft_strlen("Test 123456\0789"));
+
+	printf("\n---------------------\n");
+	printf("ft_memset:\n");
+	char tab[3][3];
+	tab[0][0] = 15;
+	printf("%c\n\n", tab[0][0]);
+	ft_memset(tab[0], 48, 3);
+	ft_memset(tab[1], 72, 3);
+	ft_memset(tab[2], 90, 3);
+	printf("%c = %c\n", tab[0][0], tab[0][2]);
+	printf("%c = %c\n", tab[1][0], tab[1][2]);
+	printf("%c = %c\n", tab[2][0], tab[2][2]);
+
+	printf("\n---------------------\n");
+	printf("ft_memcpy:\n");
+	char dst[50] = "Sal";
+	char src1[10] = "ut, ";
+	char src2[10] = "ca va ?";
+	char src3[10] = "";
+	printf("%s\n", ft_memcpy(dst, dst, 1));
+	printf("%s\n", ft_memcpy(dst, src1, 0));
+	printf("%s\n", ft_memcpy(dst, src2, 1));
+	printf("%s\n", ft_memcpy(dst, src2, 5));
+	printf("%s\n", ft_memcpy(dst, src3, 3));
+	
+	printf("/n/n------BONUS--------/n/n");
+	char *s;
+	s = ft_strnew(0);
+	if (s)
+		printf("\nstring = %s\n\n", s);
+	else
+		printf("FALSEEE\n");
+		 s[0] = '1';
+	if (s)
+		printf("\ns[0]=1 --> string = %s\n\n", s);
+	else
+		printf("FALSEEE\n");
+
+	// ft_put("adwde");
+	char s1[] = "abe";
+	char s2[] = "abcde";
+	printf("\nstrcmp : %s and %s --> %d\n", s1, s2, ft_strcmp(s1, s2));
+
+	int a = 0;
+	int b = -3;
+	int c = 6;
+	int d = -54;
+	printf("ABS = %d -> %d\n", a, ft_abs(a));
+	printf("ABS = %d -> %d\n", b, ft_abs(b));
+	printf("ABS = %d -> %d\n", c, ft_abs(c));
+	printf("ABS = %d -> %d\n", d, ft_abs(d));
+return (0);
 }

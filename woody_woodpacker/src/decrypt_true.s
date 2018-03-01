@@ -10,51 +10,126 @@ _decrypt_true:
     mov rbp, rsp
     mov r15, 1
     mov r14, rcx
-    push rcx
-    push rdx
-    dec rcx
+   ; push rcx
+   ; push rdx
+    ;sub rcx, 1
 ;;debugg
-    push r8                ;debug
+   ; push r8                ;debug
+   ; push rcx               ;debug
+	
+	;pop rcx
+	;dec rcx
+	;mov rdi, rcx
+	;call _ft_putnbr
+
+    push r8               ;debug
     push rcx               ;debug
-    push rdx               ;debug
+    push rdx
     push rsi               ;debug
-    push rdi
-    
+	;pop rdi
+	;call _ft_putnbr
+   ; mov rax, [rdi]
+
+   mov rax, [rdi]
+   mov [rdi], rax
+    call _ft_putnbr        ;debugg
+    mov rdi, 32
+    call _ft_putchar
+    ;mov rdi, [rsi]               ;debug
+    pop rdi
+    call _ft_putnbr
+    mov rdi, 32
+    call _ft_putchar        ;debugg
     pop rdi               ;debug
+    call _ft_putnbr
+    mov rdi, 32
+    call _ft_putchar        ;debugg
+    pop rdi               ;debug
+    call _ft_putnbr
+    mov rdi, 32
+    call _ft_putchar        ;debugg
+    pop rdi               ;debug
+    call _ft_putnbr
+    mov rdi, 32
+    call _ft_putchar        ;debugg
+    pop rdi               ;debug
+    call _ft_putnbr
+    
+;;degugg
+leave
+ret
+
+
+loopincrement:
+	;dec rcx
+	;inc rdi
+	;;cmp rcx, 0
+	;;jne loopincrement
+	;xor rdi, rdi
+	;xor rcx, rcx
+	;mov rcx, rsi
+	;mov rdi, rsi
+	;call _ft_putnbr
+	;mov rdi, 32
+	;call _ft_putchar
+	;xor rdi, rdi
+	;xor rcx, rcx
+	;mov rcx, rsi
+	;;dec rcx
+	;mov rdi, rcx
+	;call _ft_putnbr
+	;leave
+	;ret
+
+	;inc rdi
+	;inc rdi
+
+loopdebug:
+	call _ft_putnbr
+	inc rdi
+	push rdi
+	mov rdi, 32
+	call _ft_putchar
+	pop rdi
+	dec rdx
+	cmp rdx, 0
+	jne loopdebug
+
     mov rdi, [rdi + rcx]
 
     call _ft_putnbr        ;debugg
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
     pop rdi               ;debug
     call _ft_putnbr
-    mov rdi, 10
+    mov rdi, 32
     call _ft_putchar        ;debugg
 ;;degugg
+leave
 loop:
     push rdi                ;debuggg
     mov rdi, rcx                ;debuggg
-    call _ft_putnbr             ;debuggg
+    ;call _ft_putnbr             ;debuggg
     pop rdi             ;debuggg
 
 

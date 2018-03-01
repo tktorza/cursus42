@@ -38,9 +38,9 @@ int		julia_interact(int keycode, t_env *e)
 	keycode == 125 ? e->esc_up += 1 : keycode;
 	keycode == 126 ? e->esc_up -= 1 : keycode;
 	keycode == 24 ? e->it_max += 1 : keycode;
-/*	keycode == 1 ? e->start = 1 : keycode;
+	keycode == 1 ? e->start = 1 : keycode;
 	keycode == 35 ? e->start = 0 : keycode;
-*/	keycode == 27 ? e->zoom -= 1 : keycode;
+	keycode == 27 ? e->zoom -= 1 : keycode;
 	keycode == 24 ? e->zoom += 1 : keycode;
 	keycode == 49 ? e_initialize(e) : keycode;
 	return (0);
