@@ -4,7 +4,9 @@
 #include <iostream>
 #include "IOperand.hpp"
 #include "OperandFactory.hpp"
-#include "errorControler.hpp"
+#include "OperatorControler.hpp"
+#include "ErrorControler.hpp"
+#include "eOperandType.hpp"
 #include <math.h>
 
 template <typename T> class OperatorControler : public IOperand {
@@ -39,7 +41,7 @@ template <typename T> class OperatorControler : public IOperand {
 
 template<typename T> OperatorControler<T>::OperatorControler(void) {
 	this->_value = std::to_string(static_cast<T>(0));
-	this->_type = eOperandType::enum_double;
+	this->_type = eOperandType::Double;
 }
 template<typename T> OperatorControler<T>::OperatorControler(T value, eOperandType type, long double max, long double min) {
 	this->_value = std::to_string(value);
@@ -47,7 +49,7 @@ template<typename T> OperatorControler<T>::OperatorControler(T value, eOperandTy
 	this->_max = max;
 	this->_min = min;
 }
-template<typename T> OperatorControler<T>::OperatorControler(OperatorControler const &src) {
+template<typename T> OperatorControler<T>::OperatorControler(OperatorControler<T> const &src) {
 	this->_value = src->_value;
 	this->_type = src->_type;
 	this->_max = src->_max;
@@ -58,7 +60,7 @@ template<typename T> OperatorControler<T>::~OperatorControler(void) {
 	return;
 }
 
-OperatorControler & OperatorControler::operator=(OperatorControler const &rhs)
+template<typename T> OperatorControler<T> & OperatorControler<T>::operator=(OperatorControler<T> const &rhs)
 {
 	this->_value = rhs._value;
 	this->_type = rhs._type;
