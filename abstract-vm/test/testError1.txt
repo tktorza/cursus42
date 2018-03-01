@@ -1,0 +1,19 @@
+push int32(1)
+push int8(2); ououou
+add;
+dump lol()
+tetst ;push(23p,)
+;sth nsotuho
+push float(34;3)
+add
+push double(4;42)
+dump
+push int32(5)
+push int32(6)
+pop
+add
+push int32()
+punt in343()
+dump
+assert double(42.42)
+exit

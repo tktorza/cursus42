@@ -1,12 +1,10 @@
 #ifndef OPERANDFACTORY_HPP
 #define OPERANDFACTORY_HPP
 
-
-#include "IOperand.hpp"
-#include "eOperandType.hpp"
 #include <iostream>
+#include "IOperand.hpp"
 
-class OperandFactory  {
+class OperandFactory{
 	public:
 		OperandFactory(void);
 		~OperandFactory(void);

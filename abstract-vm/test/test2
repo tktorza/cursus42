@@ -1,0 +1,7 @@
+push int8(0)
+push int8(2);salut toi sa va 
+push int8(43);salut toi sa va 
+push int16(84);salut toi sa va 
+;add
+dump
+exit

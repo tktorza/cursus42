@@ -1,32 +1,34 @@
-EXEC = avm
+EXEC = bin/avm
 
-SRCC = main.cpp OperandFactory.cpp
+INC	= -I includes
 
-INCLUDES = includes/OperandFactory.hpp includes/IOperand.hpp
+SRC = main.cpp ErrorControler.cpp Executioner.cpp OperandFactory.cpp OperatorControler.cpp Parseur.cpp
+OBJ	= $(SRC:%.cpp=obj/%.o)
 
-SRCO = $(SRCC:%.cpp=%.o)
-
+COMPILE = g++ -std=c++11
 FLAG = -Wall -Werror -Wextra
 
-.PHONY: all fast clean fclean
+all: $(EXEC)
 
-all: main
+$(EXEC): $(OBJ)
+	$(COMPILE) $(FLAG) -o $@ $(OBJ) $(LIB)
 
-%.o: %.c
+%.o: src/%.cpp
 	@echo -n  $< :
 	@clang++ -o $@ -c $< $(FLAG)
 	@echo
 
-main: $(SRCO)
-	@clang++ -o $(EXEC) $(FLAG) $(SRCO) 
-
-fast: $(SRCO)
-	@clang++ $(FLAG) -o $(EXEC) $(SRCO)
+obj/%.o: src/%.cpp
+		$(COMPILE) $(FLAG) $(INC) -o $@ -c $<
 
 clean:
-	@rm -f $(SRCO)
+		rm -fr obj
+		mkdir obj
+		touch obj/.gitkeep
 
 fclean: clean
-	@rm -f $(SRCO) $(EXEC)
+		rm -fr bin
+		mkdir bin
+		touch bin/.gitkeep
 
 re: fclean all
