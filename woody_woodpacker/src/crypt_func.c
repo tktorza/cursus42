@@ -210,7 +210,7 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 	// 	printf("%d ", data[x]);
 	// }
 	// printf("\nasm : (%d) offset(%d) size (%d) (%d) (%d)\n", data[bin_text->sh_offset], bin_text->sh_size, index, bin_text->sh_offset, val_key);
-	printf("\nasmTOOL : (%d) ++--> (%d)\n", &data[bin_text->sh_offset], data[bin_text->sh_offset]);
+	printf("\nasmTOOL : (%d) ++--> (%d)\n", &data[bin_text->sh_offset], data[bin_text->sh_offset + 1]);
 	// printf("Prev: %d %d %d %d %d\n", 	data[bin_text->sh_offset], index, bin_text->sh_offset + bin_text->sh_size, bin_text->sh_offset, val_key);
 	/*
 
@@ -221,14 +221,23 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 		bin_text->sh_offset,
 		val_key
 		);
+		decrypt_true = for(int i = 0;i<12;i++){
+			putchar(str[i]);
+		}
 		*/
-		decrypt_true(
-		data[bin_text->sh_offset],
-		/*bin_text->sh_offset + */bin_text->sh_size,
-		index,
-		bin_text->sh_offset,
-		val_key
-		);
+		//*data + bin_text->sh_offset = data[bin_text->sh_offset]
+		char str[56] = "abcdefghijklmnopqrstuvwxyx";
+		
+		decrypt_true(str, 12, index, bin_text->sh_offset, val_key);
+	//a recup
+		// decrypt_true(
+		// data,
+		// /*bin_text->sh_offset + */bin_text->sh_size,
+		// index,
+		// bin_text->sh_offset,
+		// val_key
+		// );
+		//a remettre preceemment
 	printf("Hello\n");
 
 	/*
