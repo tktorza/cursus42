@@ -6,7 +6,7 @@
 /*   By: tktorza <tktorza@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/12/05 15:09:23 by tktorza           #+#    #+#             */
-/*   Updated: 2017/12/08 17:02:02 by tktorza          ###   ########.fr       */
+/*   Updated: 2018/03/14 14:36:04 by ddevico          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ char *ft_nimp(char *key, int nb)
 	int c;
 	char *str;
 	int i;
-	
+
 	if (nb == 0)
 	{
 		i = 1;
@@ -114,12 +114,12 @@ char	*create_key(Elf64_Ehdr *header)
 	char **desassembly;
 	char *fake_start;
 	char *key;
-	Elf64_Shdr *section = (void *)header + header->e_shoff;	
+	Elf64_Shdr *section = (void *)header + header->e_shoff;
 	unsigned long long rand_start = (&section[header->e_shnum % 3].sh_entsize);
 
 	desassembly = (char **)malloc(sizeof(char *) * 4);
 	value =  ft_itoa_base(rand_start / 1000, 16);
-	desassembly[1] = (char *)malloc(ft_strlen(value));	
+	desassembly[1] = (char *)malloc(ft_strlen(value));
 	ft_strcpy(desassembly[1], value);
 	printf("value = (d) %llu = (hex) %s\n\n", rand_start / 1000, value);
 	//depart a 7 à tj checker 6 char
@@ -174,7 +174,7 @@ uint8_t		reverse_bit_index(uint8_t nb, int index)
 	char prev;
 	int sign = (index < 0) ? -1 : 1;
 	// fprintf(stderr, "\t\t%d in bit = %s --> ", nb, bit);
-	
+
 	index = (index < 0) ? -index : index;
 	index = 7 - index;
 	if (sign == -1)
@@ -187,10 +187,10 @@ uint8_t		reverse_bit_index(uint8_t nb, int index)
 	{
 		prev = bit[index - 1];
 		bit[index - 1] = bit[index];
-		bit[index] = prev;	
+		bit[index] = prev;
 	}
 	// fprintf(stderr, " %s\n", bit);
-	
+
 	return (ft_atoi_bit(bit));
 }
 
@@ -210,25 +210,21 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 	// 	printf("%d ", data[x]);
 	// }
 	// printf("\nasm : (%d) offset(%d) size (%d) (%d) (%d)\n", data[bin_text->sh_offset], bin_text->sh_size, index, bin_text->sh_offset, val_key);
-	printf("\nasmTOOL : (%d) ++--> (%d)\n", &data[bin_text->sh_offset], data[bin_text->sh_offset + 1]);
+	printf("\nasmTOOL : (%d) ++--> (%d)\n", *(data + bin_text->sh_offset), data[bin_text->sh_offset + 1]);
 	// printf("Prev: %d %d %d %d %d\n", 	data[bin_text->sh_offset], index, bin_text->sh_offset + bin_text->sh_size, bin_text->sh_offset, val_key);
-	/*
+
 
 		decrypt_true(
 		data,
-		index,
-		bin_text->sh_offset + bin_text->sh_size,
 		bin_text->sh_offset,
-		val_key
+		bin_text->sh_offset + bin_text->sh_size,
+		val_key,
+		index
 		);
-		decrypt_true = for(int i = 0;i<12;i++){
-			putchar(str[i]);
-		}
-		*/
 		//*data + bin_text->sh_offset = data[bin_text->sh_offset]
-		char str[56] = "abcdefghijklmnopqrstuvwxyx";
-		
-		decrypt_true(str, 12, index, bin_text->sh_offset, val_key);
+		//char str[56] = "abcdefghijklmnopqrstuvwxyx\0";
+
+		// decrypt_true(str, 3, index, bin_text->sh_offset, val_key);
 	//a recup
 		// decrypt_true(
 		// data,
@@ -238,12 +234,14 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 		// val_key
 		// );
 		//a remettre preceemment
-	printf("Hello\n");
+	printf("               \nHello\n");
 
-	/*
+/*	
 	for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
+		// a faire apres
         data[k] = reverse_bit_index(data[k], index * sign);
+	//tout de suite
 		if ((k - bin_text->sh_offset) % val_key == 0)
 			index = val_key % 7;
 		else
@@ -301,10 +299,10 @@ char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text)
     char *key = create_key(header);
     uint8_t *data = (void *)header;
 	unsigned long long val_key = decrypt_key(key);
-	
+
     while (val_key + data[bin_text->sh_offset] > 253)
         val_key /= 10;
-	
+
 		int index = val_key % 7;
 		int sign = 1;
     for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
