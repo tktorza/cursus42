@@ -3,11 +3,7 @@ global _decrypt_true
 extern _ft_putnbr
 extern _ft_putchar
 ;RDI,   RSI,   RDX, RCX, R8, R9, XMM0–7
-data, offset, size, key, index
-
-stack:
-rdx 
-rsi
+;data, offset, size, key, index
 
 _decrypt_true:
     enter 16, 0
@@ -24,14 +20,14 @@ push rsi
     jmp loop
 
 negative:
-    mov r11, r7
+    mov r11, rbx
     shr r11, 1 ;index >> 1
     jmp secondy
 
 firstbigcond:;si x=0
     cmp r12, r13
     je loopping
-    add rdi, r7 --> data[k] += bit de datak de l'index
+    add rdi, rbx; --> data[k] += bit de datak de l'index
     sub rdi, r11
     jmp loopping
 
@@ -41,16 +37,26 @@ loop:
     ;mov r10, 7
     ;sub r10, r8 ;--> index = 7 - index
     ;determine 2^index
-    mov r7, 1
-    shl r7, r8
+    mov rbx, 1
+    cmp r8, 0
+    je following
+
+;not sure of follow
+shlindex:
+    shl rbx, 1
+    dec r8
+    cmp r8, 0
+    jne shlindex
+    
+following:
     ;determine y --> rdi & index
     mov r12, rdi
-    and r12, r7
+    and r12, rbx
     cmp r15, -1; if sign == -1
     je negative
-    mov r11, r7
+    mov r11, rbx
     shl r11, 1 ;index << 1
-    ;r7 = x, r12 = y
+    ;rbx = x, r12 = y
     ;r11=x2, r13 = y2 
 
 secondy:
@@ -62,7 +68,7 @@ secondy:
 secondbigcond:;si x=1
     cmp r12, r13
     je loopping
-    sub rdi, r7 --> data[k] -= bit de datak de l'index
+    sub rdi, rbx; --> data[k] -= bit de datak de l'index
     add rdi, r11
     ;jmp loopping
 
@@ -88,7 +94,11 @@ loopping:
     ;inc rdi et index ---------------AFAIRE
     inc rdi
     inc r8
-    jmp loop
+    pop rdx
+    pop rdx
+    cmp r8, rdx 
+    jne loop
+    return
 
 sixinf:
     add r8, 1 ;inc r8
@@ -114,6 +124,6 @@ bigelse:
 return:
 ;    pop rcx
 ;   pop rdx
-    mov rsp, rbp
     pop rbp
+    mov rsp, rbp
     ret
