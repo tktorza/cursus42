@@ -22,6 +22,9 @@
 # include "../libft/inc/libft.h"
 # include "../libft/inc/ft_printf.h"
 # include "./elf.h"
+uint8_t g_decrypt[826242];
+uint8_t g_crypt[826242];
+size_t g_int;
 
 void    *open_decrypt(struct stat *buf, int *fd/*, int *gap*/);
 void    woody_start(void *ptr, unsigned int size, int fd);
@@ -42,6 +45,6 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key);
 /*
 ** ASM
 */
-void       decrypt_true(uint8_t *data, int index, int size, int k_start, int val_key);
+char *decrypt_true(uint8_t *data, uint64_t k, uint64_t size, unsigned long long val_key, uint64_t index);
 
 #endif
