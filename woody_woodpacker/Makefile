@@ -48,13 +48,14 @@ $(NAME): obj $(OBJ)
 	@echo "\n";
 	@echo "\n\033[31m==> COMPILING in progress ...\033[0m\n"
 	@make -C libft
-	@$(CC) $(WFLAGS) -o $@ $(OBJ) obj/decrypt_true.o $(HEADERS) $(LIBFT) $(I_PRINTF)
+	@$(CC) $(WFLAGS) -o $@ $(OBJ) $(HEADERS) $(LIBFT) $(I_PRINTF)
 	@echo "\033[1;34mwoody\t\t\033[1;33mCompilation\t\033[0;32m-OK-\033[0m"
 	@echo "\n\033[32m==> SUCCESS !\033[0m\n"
 
 obj/%.o: %.c
 	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
-	@nasm -f macho64 src/decrypt_true.s -o obj/decrypt_true.o
+	@nasm -f elf64 src/decrypt_true.s -o obj/hello.o
+	@ld obj/hello.o -o test
 
 obj:
 		@mkdir -p obj/
