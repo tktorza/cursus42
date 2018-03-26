@@ -198,27 +198,27 @@ uint8_t		reverse_bit_index(uint8_t nb, int index)
 	return (ft_atoi_bit(bit));
 }
 
-char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
-{
-	unsigned long long val_key = decrypt_key(key);
-	uint8_t *data = (void *)header;
+// char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
+// {
+// 	unsigned long long val_key = decrypt_key(key);
+// 	uint8_t *data = (void *)header;
 
-	while (val_key + data[bin_text->sh_offset] > 253)
-		val_key /= 10;
+// 	while (val_key + data[bin_text->sh_offset] > 253)
+// 		val_key /= 10;
 
-	int index = val_key % 7;
-	// int index = 3;
-	printf("True ---> %d | index[%d]\n", bin_text->sh_offset + bin_text->sh_size, index);
-	int sign = 1;
+// 	int index = val_key % 7;
+// 	// int index = 3;
+// 	printf("True ---> %d | index[%d]\n", bin_text->sh_offset + bin_text->sh_size, index);
+// 	int sign = 1;
 //Il faudra remplacer l'envoie de variables par des changement d'adresse ex: mov r15, x/12x/23x/34x/32
-		int ret = decrypt_true(
-		data,
-		bin_text->sh_offset,
-		bin_text->sh_offset + bin_text->sh_size,
-		val_key,
-		index
-		);
-		printf("\n\n\nICI C'est La sortie %d == %d\n\n\n",ret, bin_text->sh_offset);//*ret, &data[bin_text->sh_offset + 1]);
+		// int ret = decrypt_true(
+		// data,
+		// bin_text->sh_offset,
+		// bin_text->sh_offset + bin_text->sh_size,
+		// val_key,
+		// index
+		// );
+		// printf("\n\n\nICI C'est La sortie %d == %d\n\n\n",ret, bin_text->sh_offset);//*ret, &data[bin_text->sh_offset + 1]);
 	/*for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
 		// a faire apres
@@ -252,38 +252,38 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 			}
 		}
 	}*/
-	return ((char *)&data[bin_text->sh_offset]);
-}
+	// return ((char *)&data[bin_text->sh_offset]);
+// }
 
-void	test_decrypt(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
-{
-    uint8_t *data = (void *)header;
-	g_int = 0;
-	for (size_t ok=bin_text->sh_offset;ok < bin_text->sh_offset + bin_text->sh_size;ok++){
-		g_crypt[g_int] = data[ok];
-		g_int++;
-	}// decrypt est crypté
-	size_t ok = 0;
-	size_t nook = 0;
-	char *decrypt = decrypt_text_section(header, bin_text, key);
-printf("data---------->%d", data[826241]);
-	g_int = 0;
+// void	test_decrypt(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
+// {
+//     uint8_t *data = (void *)header;
+// 	g_int = 0;
+// 	for (size_t ok=bin_text->sh_offset;ok < bin_text->sh_offset + bin_text->sh_size;ok++){
+// 		g_crypt[g_int] = data[ok];
+// 		g_int++;
+// 	}// decrypt est crypté
+// 	size_t ok = 0;
+// 	size_t nook = 0;
+// 	char *decrypt = decrypt_text_section(header, bin_text, key);
+// printf("data---------->%d", data[826241]);
+// 	g_int = 0;
 
-	for (int i =bin_text->sh_offset; i < bin_text->sh_offset + bin_text->sh_size;i++)
-	{
-			// printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
+// 	for (int i =bin_text->sh_offset; i < bin_text->sh_offset + bin_text->sh_size;i++)
+// 	{
+// 			// printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
 		
-		if (data[i] != g_decrypt[g_int]){
-			nook++;
-			printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
+// 		if (data[i] != g_decrypt[g_int]){
+// 			nook++;
+// 			printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
 			
-		}else{
-			ok++;
-		}
-		g_int++;
-	}
-	printf("\n\n\n\t\t\t\tok[%lu]   nook[%lu]\n\n\n\n", ok, nook);
-}
+// 		}else{
+// 			ok++;
+// 		}
+// 		g_int++;
+// 	}
+// 	printf("\n\n\n\t\t\t\tok[%lu]   nook[%lu]\n\n\n\n", ok, nook);
+// }
 
 int					ft_strcmp_size(const char *s1, const char *s2, int size)
 {
@@ -339,7 +339,7 @@ char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text)
 		// }
 		
 	}
-	printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %d", g_debug);
-	test_decrypt(header, bin_text, key);
+	// printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %d", g_debug);
+	// test_decrypt(header, bin_text, key);
     return (key);
 }
