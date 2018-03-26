@@ -55,7 +55,7 @@ $(NAME): obj $(OBJ)
 obj/%.o: %.c
 	@$(CC) $(WFLAGS) $(HEADERS) -o $@ -c $< $(I_LIBFT)
 	@nasm -f elf64 src/decrypt_true.s -o obj/hello.o
-	@ld obj/hello.o -o test
+	@ld obj/hello.o -o src/test
 
 obj:
 		@mkdir -p obj/
