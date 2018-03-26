@@ -211,14 +211,14 @@ char	*decrypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 	printf("True ---> %d | index[%d]\n", bin_text->sh_offset + bin_text->sh_size, index);
 	int sign = 1;
 //Il faudra remplacer l'envoie de variables par des changement d'adresse ex: mov r15, x/12x/23x/34x/32
-		char *ret = decrypt_true(
+		int ret = decrypt_true(
 		data,
 		bin_text->sh_offset,
 		bin_text->sh_offset + bin_text->sh_size,
 		val_key,
 		index
 		);
-		printf("\n\n\nICI C'est La sortie %d\n\n\n", ret[0]);
+		printf("\n\n\nICI C'est La sortie %d == %d\n\n\n",ret, bin_text->sh_offset);//*ret, &data[bin_text->sh_offset + 1]);
 	/*for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
 		// a faire apres
@@ -269,13 +269,15 @@ void	test_decrypt(Elf64_Ehdr *header, Elf64_Shdr *bin_text, char *key)
 printf("data---------->%d", data[826241]);
 	g_int = 0;
 
-	for (int i =bin_text->sh_offset; i < bin_text->sh_offset + 11;i++)
+	for (int i =bin_text->sh_offset; i < bin_text->sh_offset + bin_text->sh_size;i++)
 	{
-			printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
+			// printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
 		
-		if (data[i] != g_crypt[g_int]){
+		if (data[i] != g_decrypt[g_int]){
 			nook++;
-		}else if (data[i]==0) {
+			printf("\t\t\ti=[%d]size[%lld]--------------->FALSE crypt(%d) != decrypt(mine) [%d]   != decrypt(%d)\n", i, bin_text->sh_size, g_crypt[g_int], data[i], g_decrypt[g_int]);
+			
+		}else{
 			ok++;
 		}
 		g_int++;
@@ -311,40 +313,31 @@ char    *crypt_text_section(Elf64_Ehdr *header, Elf64_Shdr *bin_text)
 		printf("\n\n\n\n\t\t\tInfos de base avant boucle : index[%d] ", index);
     for (size_t k = bin_text->sh_offset; k < bin_text->sh_offset + bin_text->sh_size;k++)
     {
-		if (data[k]){//hrthrthrt
-		int oki = (int)data[k];
-        data[k] = reverse_bit_index(data[k], index * sign);
-		// if (oki != data[k]){
-				// printf("\t\tDEBUGGGGG---> index[%d] sign[%d] k[%lu] data[k] [%d]\n", index, sign, k, (int)data[k]);
-				// printf("\t\tdata[k]---->%d\n\n", (int)data[k]);
-
+        // data[k] = reverse_bit_index(data[k], index * sign);
+		// if ((k - bin_text->sh_offset) % val_key == 0)
+		// 	index = val_key % 7;
+		// else
+		// {
+		// 	if (sign > 0)
+		// 	{
+		// 		//on esssaye d'incrementer index
+		// 		if (index < 6)
+		// 			index++;
+		// 		else
+		// 			sign = -1;
+		// 	}
+		// 	else
+		// 	{
+		// 		if (index > 1)
+		// 			index--;
+		// 		else
+		// 			sign = 1;
+		// 	}
 		// }
-			g_debug++;
-		}//hehtr
-		else{
-        data[k] = reverse_bit_index(data[k], index * sign);
-
-		}
-		if ((k - bin_text->sh_offset) % val_key == 0)
-			index = val_key % 7;
-		else
-		{
-			if (sign > 0)
-			{
-				//on esssaye d'incrementer index
-				if (index < 6)
-					index++;
-				else
-					sign = -1;
-			}
-			else
-			{
-				if (index > 1)
-					index--;
-				else
-					sign = 1;
-			}
-		}
+		// if (data[k] < 254 && data[k] >=0){
+			data[k]+=1;
+		// }
+		
 	}
 	printf("%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %d", g_debug);
 	test_decrypt(header, bin_text, key);

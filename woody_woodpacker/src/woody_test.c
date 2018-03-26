@@ -109,11 +109,14 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	Elf64_Addr	base = t_text_seg->p_vaddr;
 	Elf64_Addr	e_entry = header->e_entry;
 	Elf64_Shdr *bin_text = elf_find_section(ptr, ".text");
+		fprintf (stderr, "NO Errors occurs\n");
 	struct stat buf;
 	int		fd_infect;
 	void		*inf_addr = open_decrypt(&buf, &fd_infect);
 	Elf64_Shdr *virus_text = elf_find_section(inf_addr, ".text");
+	fprintf (stderr, "NO Errors occurs\n");
 	char *woody = (char *)malloc(sizeof(char) * (/*virus_text->sh_size + 1 + */size));	
+	
 	if (woody == NULL)
 	{
 		fprintf (stderr, "Error malloc of woody char *.\n");
@@ -137,6 +140,13 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	{
 		fprintf (stderr, "- Payload to big, cannot infect file.\n");
 		exit (1);
+	}
+
+	int okay=0;
+	uint8_t *data = (void*)header;
+	for (size_t oki=bin_text->sh_offset;oki<bin_text->sh_offset+bin_text->sh_size;oki++){
+		g_decrypt[okay] = data[oki];
+		okay++;
 	}
 	// write(1, (void *)(ptr + bin_text->sh_offset), bin_text->sh_size);
 	key = crypt_text_section(header, bin_text);
