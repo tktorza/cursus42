@@ -161,13 +161,15 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, e_entry);
 	
 	elf_mem_subst(&woody[text_end], virus_text->sh_size, 0x11111111, e_entry);
+	elf_mem_subst(&woody[text_end], virus_text->sh_size, 0x22222222, (void *)(header + bin_text->sh_offset));
+	elf_mem_subst(&woody[text_end], virus_text->sh_size, 0x33333333, bin_text->sh_offset + bin_text->sh_size);
 	// printf("base + text_end == %llx | e_entry = %llx\n", base + text_end, header->e_entry);
 	// close(fd);
 	// close(fd_infect);
 	//on restaure ptr
 	// t_text_seg->p_memsz -= virus_text->sh_size;
 	// t_text_seg->p_filesz -= virus_text->sh_size;
-	decrypt_text_section(header, bin_text, key);
+	// decrypt_text_section(header, bin_text, key);
 	header->e_entry = e_entry;
 	// header->e_shoff -= virus_text->sh_size;
 	// change_offset(ptr, virus_text->sh_size, 1);
